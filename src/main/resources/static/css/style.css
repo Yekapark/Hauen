@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════
-   HAVEN 인테리어 - 공통 스타일시트
+   HAUEN 인테리어 - 공통 스타일시트
    style.css
 ════════════════════════════════════════════ */
 
@@ -118,10 +118,8 @@ nav.hero-mode .nav-links a:hover { color: #fff; }
 /* 실제 배경 이미지 레이어 */
 .hero-bg {
     position: absolute; inset: 0;
-    background-image: url('/static/images/bg-interior.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #1a2e18; /* 이미지 로드 전 초록 fallback */
+    background: linear-gradient(135deg, #0e1a0c 0%, #1c2e18 40%, #243822 100%);
 }
 /* 이미지 위 어두운 오버레이 */
 .hero-bg::after {
@@ -541,7 +539,7 @@ section { padding: 100px 0; }
 #contact::before {
     content: '';
     position: absolute; inset: 0;
-    background-image: url('/static/images/bg-interior.png');
+    background-image: url('/images/bg-interior.png');
     background-size: cover;
     background-position: center 30%;
     background-repeat: no-repeat;
@@ -571,7 +569,7 @@ section { padding: 100px 0; }
     gap: 80px;
     align-items: start;
 }
-.contact-left .section-label { color: #C8842A; }
+.contact-left .section-label { color: var(--accent-light); }
 .contact-left .section-title { color: #fff; margin-bottom: 24px; }
 .contact-left > p {
     font-size: 15px;
@@ -680,7 +678,7 @@ section { padding: 100px 0; }
 .btn-submit {
     width: 100%;
     padding: 16px;
-    background: #C8842A;
+    background: var(--accent);
     color: #fff;
     border: none;
     border-radius: 10px;
