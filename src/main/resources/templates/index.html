@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HAUEN 인테리어</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="hero-mode">
+    <a href="#hero" class="nav-logo">
+        <div class="nav-logo-box">
+            <img th:src="@{/images/logo.jpg}" alt="HAUEN 하우엔 로고" />
+        </div>
+    </a>
+    <ul class="nav-links">
+        <li><a href="#about">업체소개</a></li>
+        <li><a href="#portfolio">포트폴리오</a></li>
+        <li><a href="#contact">견적상담</a></li>
+        <li><a href="#contact" class="btn-cta">무료 상담 신청</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-img-sim"></div>
+    <div class="hero-content">
+        <div class="hero-badge">DESIGN &amp; INTERIOR</div>
+        <h1 class="hero-h1">
+            당신의 공간을<br />
+            <em>예술로</em> 완성합니다
+        </h1>
+        <p class="hero-sub">
+            20년 경력의 전문 디자이너가 만드는 맞춤 인테리어.<br />
+            공간의 가치를 높이는 감각적인 디자인을 경험하세요.
+        </p>
+        <div class="hero-btns">
+            <a href="#portfolio" class="btn-outline-white">포트폴리오 보기</a>
+            <a href="#contact" class="btn-filled-accent">견적 상담하기 &nbsp;→</a>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat-item">
+                <div class="hero-stat-num">1,200+</div>
+                <div class="hero-stat-label">완료 프로젝트</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="hero-stat-num">20년+</div>
+                <div class="hero-stat-label">업계 경력</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="hero-stat-num">98%</div>
+                <div class="hero-stat-label">고객 만족도</div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <span>SCROLL</span>
+        <div class="scroll-arrow"></div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-text reveal">
+                <div class="section-label">ABOUT US</div>
+                <h2 class="section-title">공간의 가치를<br />높이는 전문가</h2>
+                <br />
+                <p>저희는 2004년 창립 이래 주거공간부터 상업공간까지 폭넓은 인테리어 디자인 경험을 쌓아온 전문 업체입니다. 단순한 시공을 넘어, 공간에 이야기와 감성을 담아 삶의 질을 높이는 디자인을 추구합니다.</p>
+                <p>클라이언트의 라이프스타일과 취향을 깊이 이해하고, 최적의 동선과 조화로운 색채·소재 계획을 통해 기능성과 아름다움을 동시에 실현합니다.</p>
+                <div class="about-nums">
+                    <div class="about-num-item">
+                        <div class="about-num-val">1,200+</div>
+                        <div class="about-num-label">완료 프로젝트</div>
+                    </div>
+                    <div class="about-num-item">
+                        <div class="about-num-val">20년+</div>
+                        <div class="about-num-label">업계 경력</div>
+                    </div>
+                    <div class="about-num-item">
+                        <div class="about-num-val">500+</div>
+                        <div class="about-num-label">단골 고객사</div>
+                    </div>
+                </div>
+                <a href="#contact" class="btn-primary">상담 문의하기 &nbsp;→</a>
+            </div>
+            <div class="about-image-wrap reveal reveal-delay-2">
+                <div class="about-img-main" style="min-height:460px;"></div>
+                <div class="about-award-badge">
+                    <h4>2024 인테리어 대상 수상</h4>
+                    <p>한국 인테리어 디자인 협회 선정</p>
+                </div>
+            </div>
+        </div>
+        <div class="about-feature-cards">
+            <div class="feature-card reveal reveal-delay-1">
+                <div class="feature-icon">🏆</div>
+                <h3>수상 경력</h3>
+                <p>2024 인테리어 대상 수상을 비롯해 다수의 업계 공인 시상에서 인정받은 실력</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-2">
+                <div class="feature-icon">👥</div>
+                <h3>전문 디자이너 팀</h3>
+                <p>10명 이상의 공간 디자인 전문가가 프로젝트마다 직접 참여</p>
+            </div>
+            <div class="feature-card reveal reveal-delay-3">
+                <div class="feature-icon">🛡️</div>
+                <h3>A/S 보장</h3>
+                <p>시공 완료 후 2년간 무상 AS 및 유지보수 서비스 제공</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+    <div class="container">
+        <div class="portfolio-header reveal">
+            <div>
+                <div class="section-label">PORTFOLIO</div>
+                <h2 class="section-title">우리의 작품들</h2>
+            </div>
+            <p>다양한 공간에서 완성된 감각적인 디자인을 확인해 보세요.</p>
+        </div>
+        <div class="filter-tabs reveal">
+            <button class="filter-tab active" data-filter="all">전체</button>
+            <button class="filter-tab" data-filter="아파트">아파트</button>
+            <button class="filter-tab" data-filter="주택">주택</button>
+            <button class="filter-tab" data-filter="상업공간">상업공간</button>
+            <button class="filter-tab" data-filter="오피스">오피스</button>
+        </div>
+        <div class="portfolio-grid">
+            <div class="portfolio-card reveal reveal-delay-1" data-category="아파트">
+                <div class="portfolio-thumb">
+                    <div class="portfolio-thumb-img pt-1"></div>
+                    <span class="portfolio-badge badge-new">NEW</span>
+                </div>
+                <div class="portfolio-info">
+                    <h3>모던 미니멀 아파트</h3>
+                    <div class="portfolio-meta">아파트 · 84㎡</div>
+                </div>
+            </div>
+            <div class="portfolio-card reveal reveal-delay-2" data-category="주택">
+                <div class="portfolio-thumb">
+                    <div class="portfolio-thumb-img pt-2"></div>
+                </div>
+                <div class="portfolio-info">
+                    <h3>내추럴 빈티지 주택</h3>
+                    <div class="portfolio-meta">주택 · 132㎡</div>
+                </div>
+            </div>
+            <div class="portfolio-card reveal reveal-delay-3" data-category="상업공간">
+                <div class="portfolio-thumb">
+                    <div class="portfolio-thumb-img pt-3"></div>
+                </div>
+                <div class="portfolio-info">
+                    <h3>감성 카페 인테리어</h3>
+                    <div class="portfolio-meta">상업공간 · 60㎡</div>
+                </div>
+            </div>
+            <div class="portfolio-card reveal reveal-delay-1" data-category="오피스">
+                <div class="portfolio-thumb">
+                    <div class="portfolio-thumb-img pt-4"></div>
+                    <span class="portfolio-badge badge-best">BEST</span>
+                </div>
+                <div class="portfolio-info">
+                    <h3>럭셔리 오피스 리모델링</h3>
+                    <div class="portfolio-meta">오피스 · 200㎡</div>
+                </div>
+            </div>
+            <div class="portfolio-card reveal reveal-delay-2" data-category="아파트">
+                <div class="portfolio-thumb">
+                    <div class="portfolio-thumb-img pt-5"></div>
+                </div>
+                <div class="portfolio-info">
+                    <h3>스칸디나비안 아파트</h3>
+                    <div class="portfolio-meta">아파트 · 105㎡</div>
+                </div>
+            </div>
+            <div class="portfolio-card reveal reveal-delay-3" data-category="상업공간">
+                <div class="portfolio-thumb">
+                    <div class="portfolio-thumb-img pt-6"></div>
+                </div>
+                <div class="portfolio-info">
+                    <h3>모던 레스토랑 설계</h3>
+                    <div class="portfolio-meta">상업공간 · 150㎡</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <div class="container">
+        <div class="contact-grid">
+            <div class="contact-left reveal">
+                <div class="section-label">CONTACT US</div>
+                <h2 class="section-title">무료 견적 상담</h2>
+                <p>전문 디자이너가 직접 방문하여 맞춤 견적을 제공해드립니다.<br />상담 신청 후 24시간 이내에 연락드리겠습니다.</p>
+                <div class="contact-info-list">
+                    <div class="contact-info-item">
+                        <div class="contact-icon">📞</div>
+                        <div><h4>전화 문의</h4><p>02-1234-5678</p></div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon">📍</div>
+                        <div><h4>방문 상담</h4><p>서울특별시 강남구 테헤란로 123</p></div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon">🕐</div>
+                        <div><h4>상담 시간</h4><p>평일 09:00 ~ 18:00 (주말 예약 가능)</p></div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon">💬</div>
+                        <div><h4>카카오 채널</h4><p>@디자인인테리어</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form-card reveal reveal-delay-2">
+                <h3>상담 신청서</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>성함 <span class="req">*</span></label>
+                        <input type="text" placeholder="홍길동" />
+                    </div>
+                    <div class="form-group">
+                        <label>연락처 <span class="req">*</span></label>
+                        <input type="tel" placeholder="010-0000-0000" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>이메일</label>
+                    <input type="email" placeholder="example@email.com" />
+                </div>
+                <div class="form-group">
+                    <label>공간 유형 <span class="req">*</span></label>
+                    <select>
+                        <option value="" disabled selected>선택해 주세요</option>
+                        <option>아파트</option>
+                        <option>주택</option>
+                        <option>상업공간</option>
+                        <option>오피스</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>면적 (㎡)</label>
+                        <input type="text" placeholder="예: 84㎡" />
+                    </div>
+                    <div class="form-group">
+                        <label>희망 예산</label>
+                        <input type="text" placeholder="예: 3,000만원" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>문의 내용</label>
+                    <textarea id="msgArea" placeholder="원하시는 스타일이나 특별한 요청 사항을 자유롭게 작성해 주세요."></textarea>
+                    <div class="form-char-count" id="charCount">0/500</div>
+                </div>
+                <button class="btn-submit" onclick="handleSubmit(this)">상담 신청하기 &nbsp;→</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="nav-logo-box" style="width:80px;height:44px;">
+                    <img th:src="@{/images/logo.jpg}" alt="HAUEN 하우엔 로고" style="width:100%;height:100%;object-fit:contain;border-radius:6px;" />
+                </div>
+                <p>20년 경력의 인테리어 전문가 팀이 당신의 공간을 아름답게 완성합니다. 주거·상업·오피스 전 공간 설계 및 시공.</p>
+                <div class="footer-socials">
+                    <a class="social-btn" aria-label="인스타그램">📸</a>
+                    <a class="social-btn" aria-label="카카오">💬</a>
+                    <a class="social-btn" aria-label="유튜브">▶️</a>
+                    <a class="social-btn" aria-label="페이스북">👍</a>
+                </div>
+            </div>
+            <div class="footer-nav">
+                <h4>메뉴</h4>
+                <ul>
+                    <li><a href="#about">업체소개</a></li>
+                    <li><a href="#portfolio">포트폴리오</a></li>
+                    <li><a href="#contact">견적상담</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>연락처</h4>
+                <div class="footer-contact-list">
+                    <div class="footer-contact-item"><span>📞</span><span>02-1234-5678</span></div>
+                    <div class="footer-contact-item"><span>✉️</span><span>info@design-interior.kr</span></div>
+                    <div class="footer-contact-item"><span>📍</span><span>서울 강남구 테헤란로 123</span></div>
+                    <div class="footer-contact-item"><span>🕐</span><span>평일 09:00 ~ 18:00</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Design Interior. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
