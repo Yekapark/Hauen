@@ -8,6 +8,21 @@ public class MainController {
 
     @GetMapping("/")
     public String index() {
-        return "index"; // templates/index.html 반환
+        return "index";
+    }
+
+    @GetMapping("/about")
+    public String about() {
+        return "about";
+    }
+
+    @GetMapping("/portfolio")
+    public String portfolio() {
+        return "portfolio";
+    }
+
+    @GetMapping("/contact")
+    public String contact() {
+        return "contact";
     }
 }

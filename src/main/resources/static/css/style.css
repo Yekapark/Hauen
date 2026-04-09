@@ -43,7 +43,7 @@ nav {
     align-items: center;
     justify-content: space-between;
     padding: 0 60px;
-    height: 72px;
+    height: 88px;
     transition: background 0.4s var(--transition), box-shadow 0.4s var(--transition);
 }
 nav.scrolled {
@@ -58,18 +58,21 @@ nav.scrolled {
     text-decoration: none;
 }
 .nav-logo-box {
-    width: 80px;
-    height: 44px;
+    width: 160px;
+    height: 88px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.nav-logo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: 6px;
-}
+.nav-logo-box img { width: 100%; height: 100%; object-fit: contain; border-radius: 6px; }
+
+/* 로고 전환 */
+.logo-light { display: none; }
+.logo-dark  { display: block; }
+nav.hero-mode .logo-dark  { display: none; }
+nav.hero-mode .logo-light { display: block; }
+nav.sub-mode .logo-dark   { display: none; }
+nav.sub-mode .logo-light  { display: block; }
 .nav-links {
     display: flex;
     align-items: center;
@@ -826,6 +829,183 @@ footer {
 }
 .floating-kakao     { background: #FEE500; padding: 6px; }
 .floating-instagram { background: transparent; padding: 0; }
+
+/* ════════════════════════════════════════════
+   서브 페이지 공통
+════════════════════════════════════════════ */
+
+/* 페이지 헤더 (서브 페이지 상단 배너) */
+.page-header {
+    position: relative;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    margin-top: 0;
+    padding-top: 88px;
+}
+.page-header-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #0e1a0c 0%, #1c2e18 40%, #243822 100%);
+}
+.page-header-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.45);
+}
+.page-header-content {
+    position: relative;
+    z-index: 1;
+}
+.page-header-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    color: #fff;
+    margin: 12px 0 8px;
+}
+.page-header-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+}
+
+/* 서브 페이지 네비 (초록 고정 배경) */
+nav.sub-mode {
+    background:
+        linear-gradient(to bottom, rgba(10,8,4,0.45) 0%, rgba(10,8,4,0.60) 60%, rgba(10,8,4,0.75) 100%),
+        linear-gradient(135deg, #0e1a0c 0%, #1c2e18 40%, #243822 100%);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+}
+nav.sub-mode .nav-links a { color: rgba(255,255,255,0.85); }
+nav.sub-mode .nav-links a:hover { color: #fff; }
+nav.sub-mode .nav-links a.active { color: #8FB080 !important; font-weight: 600; }
+
+/* 프로세스 섹션 */
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+.process-item {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 24px;
+    border: 1px solid var(--border);
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+.process-item:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); transform: translateY(-4px); }
+.process-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--accent);
+    opacity: 0.4;
+    line-height: 1;
+    margin-bottom: 16px;
+}
+.process-item h3 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-dark);
+}
+.process-item p {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* 상담 페이지 섹션 */
+.contact-page {
+    background: var(--bg-cream);
+    padding-top: 80px;
+    margin-top: 55px;
+}
+@media (max-width: 900px) {
+    .contact-page { margin-top: 40px; padding-top: 60px; }
+}
+@media (max-width: 600px) {
+    .contact-page { margin-top: 20px; padding-top: 40px; }
+}
+
+/* footer 로고 */
+.footer-logo-wrap {
+    width: 240px;
+    height: 44px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.footer-logo-wrap img {
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:6px;
+}
+
+/* 상담 페이지 밝은 폼 카드 */
+.contact-form-card-light {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+.contact-form-card-light h3 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 28px;
+}
+.contact-form-card-light .form-group label {
+    color: var(--text-mid);
+}
+.contact-form-card-light .form-group input,
+.contact-form-card-light .form-group select,
+.contact-form-card-light .form-group textarea {
+    background: var(--bg-cream);
+    border: 1px solid var(--border);
+    color: var(--text-dark);
+}
+.contact-form-card-light .form-group input::placeholder,
+.contact-form-card-light .form-group textarea::placeholder {
+    color: var(--text-light);
+}
+.contact-form-card-light .form-group input:focus,
+.contact-form-card-light .form-group select:focus,
+.contact-form-card-light .form-group textarea:focus {
+    border-color: #C8842A;
+    background: #fff;
+}
+.contact-form-card-light .form-group select {
+    color: var(--text-light);
+}
+.contact-form-card-light .form-group select option {
+    background: #fff;
+    color: var(--text-dark);
+}
+.form-char-count-light {
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 6px;
+}
+
+/* 반응형 - 서브 페이지 */
+@media (max-width: 900px) {
+    .process-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+    .page-header { height: 220px; }
+    .process-grid { grid-template-columns: 1fr; }
+    .contact-form-card-light { padding: 24px 16px; }
+}
 
 /* ════════════════════════════════════════════
    반응형

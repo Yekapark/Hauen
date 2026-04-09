@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>상담신청 | HAUEN 인테리어</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="hero-mode">
+    <a th:href="@{/}" class="nav-logo">
+        <div class="nav-logo-box">
+            <img class="logo-dark" th:src="@{/images/logo-dark.png}" alt="HAUEN 하우엔 로고" />
+            <img class="logo-light" th:src="@{/images/logo-light.png}" alt="HAUEN 하우엔 로고" />
+        </div>
+    </a>
+    <ul class="nav-links">
+        <li><a th:href="@{/about}">업체소개</a></li>
+        <li><a th:href="@{/portfolio}">포트폴리오</a></li>
+        <li><a th:href="@{/contact}" class="btn-cta active">무료 상담 신청</a></li>
+    </ul>
+</nav>
+
+<!-- 페이지 헤더 -->
+<!--<section class="page-header">-->
+<!--    <div class="page-header-bg"></div>-->
+<!--    <div class="page-header-overlay"></div>-->
+<!--    <div class="page-header-content">-->
+<!--        <div class="section-label" style="color:#C8842A;">CONTACT US</div>-->
+<!--        <h1 class="page-header-title">무료 견적 상담</h1>-->
+<!--        <p class="page-header-sub">전문 디자이너가 직접 방문하여 맞춤 견적을 제공해드립니다</p>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!-- CONTACT 메인 -->
+<section id="contact" class="contact-page">
+    <div class="container">
+        <div class="contact-grid">
+            <div class="contact-left reveal">
+                <div class="section-label">CONTACT US</div>
+                <h2 class="section-title">무료 견적 상담</h2>
+                <p>전문 디자이너가 직접 방문하여 맞춤 견적을 제공해드립니다.<br />상담 신청 후 24시간 이내에 연락드리겠습니다.</p>
+                <div class="contact-info-list">
+                    <div class="contact-info-item">
+                        <div class="contact-icon">📞</div>
+                        <div><h4>전화 문의</h4><p>02-1234-5678</p></div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon">📍</div>
+                        <div><h4>방문 상담</h4><p>서울시 동작구 시흥대로 606,<br>동작협성휴포레시그니처 상가 227호</p></div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon">🕐</div>
+                        <div><h4>상담 시간</h4><p>평일 09:00 ~ 18:00 (주말 예약 가능)</p></div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-icon">💬</div>
+                        <div><h4>카카오 채널</h4><p>@디자인인테리어</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 폼 카드 (밝은 버전) -->
+            <div class="contact-form-card-light reveal reveal-delay-2">
+                <h3>상담 신청서</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>성함 <span class="req">*</span></label>
+                        <input type="text" placeholder="홍길동" />
+                    </div>
+                    <div class="form-group">
+                        <label>연락처 <span class="req">*</span></label>
+                        <input type="tel" placeholder="010-0000-0000" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>이메일</label>
+                    <input type="email" placeholder="example@email.com" />
+                </div>
+                <div class="form-group">
+                    <label>공간 유형 <span class="req">*</span></label>
+                    <select>
+                        <option value="" disabled selected>선택해 주세요</option>
+                        <option>아파트</option>
+                        <option>주택</option>
+                        <option>상업공간</option>
+                        <option>오피스</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>면적 (㎡)</label>
+                        <input type="text" placeholder="예: 84㎡" />
+                    </div>
+                    <div class="form-group">
+                        <label>희망 예산</label>
+                        <input type="text" placeholder="예: 3,000만원" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>문의 내용</label>
+                    <textarea id="msgArea" placeholder="원하시는 스타일이나 특별한 요청 사항을 자유롭게 작성해 주세요."></textarea>
+                    <div class="form-char-count-light" id="charCount">0/500</div>
+                </div>
+                <button class="btn-submit" onclick="handleSubmit(this)">상담 신청하기 &nbsp;→</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo-wrap">
+                    <img th:src="@{/images/footer-logo.png}" alt="HAUEN 하우엔 로고" />
+                </div>
+                <p>20년 경력의 인테리어 전문가 팀이 당신의 공간을 아름답게 완성합니다. 주거·상업·오피스 전 공간 설계 및 시공.</p>
+                <div class="footer-socials">
+                    <a class="social-btn" aria-label="인스타그램">📸</a>
+                    <a class="social-btn" aria-label="카카오">💬</a>
+                    <a class="social-btn" aria-label="유튜브">▶️</a>
+                    <a class="social-btn" aria-label="페이스북">👍</a>
+                </div>
+            </div>
+            <div class="footer-nav">
+                <h4>메뉴</h4>
+                <ul>
+                    <li><a th:href="@{/about}">업체소개</a></li>
+                    <li><a th:href="@{/portfolio}">포트폴리오</a></li>
+                    <li><a th:href="@{/contact}">견적상담</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>연락처</h4>
+                <div class="footer-contact-list">
+                    <div class="footer-contact-item"><span>📞</span><span>02-1234-5678</span></div>
+                    <div class="footer-contact-item"><span>✉️</span><span>info@design-interior.kr</span></div>
+                    <div class="footer-contact-item"><span>📍</span><span>서울시 동작구 시흥대로 606,<br>동작협성휴포레시그니처 상가 227호</span></div>
+                    <div class="footer-contact-item"><span>🕐</span><span>평일 09:00 ~ 18:00</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Design Interior. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- 플로팅 버튼 -->
+<div class="floating-buttons">
+    <a href="#" class="floating-btn floating-kakao" aria-label="카카오톡 문의">
+        <img th:src="@{/images/kakao.png}" alt="카카오톡" />
+    </a>
+    <a href="#" class="floating-btn floating-instagram" aria-label="인스타그램">
+        <img th:src="@{/images/instagram.png}" alt="인스타그램" />
+    </a>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
