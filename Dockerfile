@@ -7,6 +7,9 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 
+# mvnw 실행 권한 부여
+RUN chmod +x mvnw
+
 # 의존성 먼저 다운로드 (캐시 활용)
 RUN ./mvnw dependency:go-offline -B
 
