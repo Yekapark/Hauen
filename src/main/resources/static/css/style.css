@@ -830,24 +830,88 @@ footer {
 /* ════════════════════════════════════════════
    반응형
 ════════════════════════════════════════════ */
+
+/* ── 태블릿 (900px 이하) ── */
 @media (max-width: 900px) {
     nav { padding: 0 24px; }
     .nav-links { gap: 20px; }
     .container { padding: 0 24px; }
+
+    /* Hero */
+    #hero { min-height: 600px; }
+    .hero-stats { gap: 32px; }
+
+    /* About */
     .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-image-wrap { max-width: 480px; margin: 0 auto; }
     .about-feature-cards { grid-template-columns: 1fr 1fr; }
+
+    /* Portfolio */
     .portfolio-header { grid-template-columns: 1fr; }
     .portfolio-header p { text-align: left; }
     .portfolio-grid { grid-template-columns: 1fr 1fr; }
+
+    /* Contact */
     .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .contact-form-card { padding: 28px 24px; }
+
+    /* Footer */
     .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
 }
+
+/* ── 모바일 (600px 이하) ── */
 @media (max-width: 600px) {
+    /* 공통 */
+    section { padding: 64px 0; }
+    .container { padding: 0 20px; }
+
+    /* Navbar */
+    nav { padding: 0 20px; height: 60px; }
     .nav-links { display: none; }
-    .hero-stats { gap: 30px; }
-    .about-nums { gap: 24px; }
-    .about-feature-cards { grid-template-columns: 1fr; }
-    .portfolio-grid { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    .footer-grid { grid-template-columns: 1fr; }
+    .nav-logo-box { width: 64px; height: 36px; }
+
+    /* Hero */
+    #hero { min-height: 100svh; }
+    .hero-h1 { font-size: clamp(32px, 9vw, 48px); }
+    .hero-sub { font-size: 14px; padding: 0 8px; }
+    .hero-btns { flex-direction: column; align-items: center; gap: 12px; }
+    .btn-outline-white,
+    .btn-filled-accent { width: 100%; max-width: 280px; justify-content: center; padding: 13px 24px; }
+    .hero-stats { gap: 20px; }
+    .hero-stat-num { font-size: 30px; }
+    .hero-stat-label { font-size: 11px; }
+    .hero-scroll { display: none; }
+
+    /* About */
+    .about-grid { gap: 32px; }
+    .about-nums { gap: 20px; flex-wrap: wrap; }
+    .about-num-val { font-size: 28px; }
+    .about-feature-cards { grid-template-columns: 1fr; gap: 14px; margin-top: 40px; }
+    .feature-card { padding: 22px 18px; }
+
+    /* Section 제목 */
+    .section-title { font-size: clamp(26px, 7vw, 36px); }
+
+    /* Portfolio */
+    .portfolio-header { gap: 12px; margin-bottom: 24px; }
+    .filter-tabs { gap: 8px; margin-bottom: 24px; }
+    .filter-tab { padding: 7px 16px; font-size: 12px; }
+    .portfolio-grid { grid-template-columns: 1fr; gap: 16px; }
+
+    /* Contact */
+    #contact { padding: 64px 0; }
+    .contact-grid { gap: 32px; }
+    .contact-form-card { padding: 24px 16px; border-radius: 16px; }
+    .contact-form-card h3 { font-size: 18px; margin-bottom: 20px; }
+    .form-row { grid-template-columns: 1fr; gap: 0; }
+    .contact-info-list { gap: 16px; }
+
+    /* Footer */
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    .footer-bottom-links { gap: 16px; }
+
+    /* 플로팅 버튼 */
+    .floating-buttons { bottom: 20px; right: 16px; gap: 10px; }
+    .floating-btn { width: 48px; height: 48px; }
 }
