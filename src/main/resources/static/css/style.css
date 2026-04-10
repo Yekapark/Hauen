@@ -947,31 +947,63 @@ nav.sub-mode .nav-links a.active { color: #8FB080 !important; font-weight: 600; 
     border-radius:6px;
 }
 
-/* 라디오 버튼 그룹 */
+/* 라디오 버튼 그룹 - 커스텀 태그 스타일 */
 .radio-group {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     flex-wrap: wrap;
 }
 .radio-label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    position: relative;
     cursor: pointer;
-    font-size: 14px;
-    font-family: 'Noto Sans KR', sans-serif;
 }
 .radio-label input[type="radio"] {
-    width: 16px;
-    height: 16px;
-    accent-color: #C8842A;
-    cursor: pointer;
-    flex-shrink: 0;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
-/* 밝은 폼에서 라디오 텍스트 색 */
-.contact-form-card-light .radio-label { color: var(--text-mid); }
-/* 어두운 폼에서 라디오 텍스트 색 */
-.contact-form-card .radio-label { color: rgba(255,255,255,0.8); }
+.radio-label span {
+    display: inline-block;
+    padding: 7px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Noto Sans KR', sans-serif;
+    border: 1.5px solid var(--border);
+    color: var(--text-mid);
+    background: #fff;
+    transition: all 0.2s var(--transition);
+    user-select: none;
+}
+.radio-label input[type="radio"]:checked + span {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 600;
+}
+.radio-label:hover span {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.radio-label input[type="radio"]:checked + span:hover {
+    color: #fff;
+}
+/* 어두운 폼용 라디오 */
+.contact-form-card .radio-label span {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+}
+.contact-form-card .radio-label input[type="radio"]:checked + span {
+    background: #C8842A;
+    border-color: #C8842A;
+    color: #fff;
+}
+.contact-form-card .radio-label:hover span {
+    border-color: #C8842A;
+    color: #C8842A;
+}
 
 /* 달력(date) input */
 input[type="date"] {
@@ -1108,7 +1140,7 @@ input[type="date"] {
     /* Navbar */
     nav { padding: 0 20px; height: 60px; }
     .nav-links { display: none; }
-    .nav-logo-box { width: 64px; height: 36px; }
+    .nav-logo-box { width: 96px; height: 54px; }
 
     /* Hero */
     #hero { min-height: 100svh; }
@@ -1139,7 +1171,7 @@ input[type="date"] {
     .portfolio-grid { grid-template-columns: 1fr; gap: 16px; }
 
     /* Contact */
-    #contact { padding: 64px 0; }
+    #contact { padding: 64px 0; margin-top: 0 }
     .contact-grid { gap: 32px; }
     .contact-form-card { padding: 24px 16px; border-radius: 16px; }
     .contact-form-card h3 { font-size: 18px; margin-bottom: 20px; }

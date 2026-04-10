@@ -8,6 +8,76 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <!-- Flatpickr 달력 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <style>
+        /* Flatpickr 커스텀 테마 */
+        .flatpickr-calendar {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .flatpickr-months .flatpickr-month {
+            background: var(--accent);
+            border-radius: 10px 10px 0 0;
+            color: #fff;
+            fill: #fff;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months,
+        .flatpickr-current-month input.cur-year {
+            color: #fff;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 600;
+        }
+        .flatpickr-months .flatpickr-prev-month,
+        .flatpickr-months .flatpickr-next-month {
+            fill: #fff;
+            color: #fff;
+        }
+        .flatpickr-months .flatpickr-prev-month:hover svg,
+        .flatpickr-months .flatpickr-next-month:hover svg { fill: rgba(255,255,255,0.7); }
+        .flatpickr-weekday {
+            background: var(--bg-cream);
+            color: var(--text-light);
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 600;
+            font-size: 11px;
+        }
+        .flatpickr-weekdays { background: var(--bg-cream); }
+        .flatpickr-day {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 13px;
+            color: var(--text-dark);
+            border-radius: 8px;
+        }
+        .flatpickr-day:hover,
+        .flatpickr-day.prevMonthDay:hover,
+        .flatpickr-day.nextMonthDay:hover {
+            background: var(--bg-cream);
+            border-color: var(--border);
+        }
+        .flatpickr-day.selected,
+        .flatpickr-day.selected:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .flatpickr-day.today {
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .flatpickr-day.today:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+        .flatpickr-day.prevMonthDay,
+        .flatpickr-day.nextMonthDay { color: var(--text-light); }
+        .flatpickr-input { cursor: pointer; }
+        .flatpickr-input.active { border-color: var(--accent) !important; }
+    </style>
 </head>
 <body>
 
@@ -111,15 +181,15 @@
                     <div class="form-group">
                         <label>중문</label>
                         <div class="radio-group">
-                            <label class="radio-label"><input type="radio" name="jungmun" value="필요" /> 필요</label>
-                            <label class="radio-label"><input type="radio" name="jungmun" value="불필요" /> 불필요</label>
+                            <label class="radio-label"><input type="radio" name="jungmun" value="필요" /><span>필요</span></label>
+                            <label class="radio-label"><input type="radio" name="jungmun" value="불필요" /><span>불필요</span></label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>확장</label>
                         <div class="radio-group">
-                            <label class="radio-label"><input type="radio" name="expansion" value="필요" /> 필요</label>
-                            <label class="radio-label"><input type="radio" name="expansion" value="불필요" /> 불필요</label>
+                            <label class="radio-label"><input type="radio" name="expansion" value="필요" /><span>필요</span></label>
+                            <label class="radio-label"><input type="radio" name="expansion" value="불필요" /><span>불필요</span></label>
                         </div>
                     </div>
                 </div>
@@ -129,16 +199,16 @@
                     <div class="form-group">
                         <label>욕실</label>
                         <div class="radio-group">
-                            <label class="radio-label"><input type="radio" name="bathroom" value="욕조" /> 욕조</label>
-                            <label class="radio-label"><input type="radio" name="bathroom" value="파티션" /> 파티션</label>
+                            <label class="radio-label"><input type="radio" name="bathroom" value="욕조" /><span>욕조</span></label>
+                            <label class="radio-label"><input type="radio" name="bathroom" value="파티션" /><span>파티션</span></label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>싱크대</label>
                         <div class="radio-group">
-                            <label class="radio-label"><input type="radio" name="sink" value="ㅡ자" /> ㅡ자</label>
-                            <label class="radio-label"><input type="radio" name="sink" value="ㄱ자" /> ㄱ자</label>
-                            <label class="radio-label"><input type="radio" name="sink" value="ㄷ자" /> ㄷ자</label>
+                            <label class="radio-label"><input type="radio" name="sink" value="ㅡ자" /><span>ㅡ자</span></label>
+                            <label class="radio-label"><input type="radio" name="sink" value="ㄱ자" /><span>ㄱ자</span></label>
+                            <label class="radio-label"><input type="radio" name="sink" value="ㄷ자" /><span>ㄷ자</span></label>
                         </div>
                     </div>
                 </div>
@@ -147,8 +217,8 @@
                 <div class="form-group">
                     <label>붙박이</label>
                     <div class="radio-group">
-                        <label class="radio-label"><input type="radio" name="builtin" value="필요" /> 필요</label>
-                        <label class="radio-label"><input type="radio" name="builtin" value="불필요" /> 불필요</label>
+                        <label class="radio-label"><input type="radio" name="builtin" value="필요" /><span>필요</span></label>
+                        <label class="radio-label"><input type="radio" name="builtin" value="불필요" /><span>불필요</span></label>
                     </div>
                 </div>
 
@@ -169,11 +239,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>공사시작 희망일</label>
-                        <input type="date" />
+                        <input type="text" id="startDate" placeholder="날짜를 선택해 주세요" />
                     </div>
                     <div class="form-group">
                         <label>입주예정일</label>
-                        <input type="date" />
+                        <input type="text" id="moveInDate" placeholder="날짜를 선택해 주세요" />
                     </div>
                 </div>
 
@@ -245,5 +315,24 @@
 </div>
 
 <script th:src="@{/js/main.js}"></script>
+    <!-- Flatpickr -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+    <script>
+        flatpickr("#startDate", {
+            locale: "ko",
+            dateFormat: "Y년 m월 d일",
+            minDate: "today",
+            allowInput: false,
+            disableMobile: false
+        });
+        flatpickr("#moveInDate", {
+            locale: "ko",
+            dateFormat: "Y년 m월 d일",
+            minDate: "today",
+            allowInput: false,
+            disableMobile: false
+        });
+    </script>
 </body>
 </html>
