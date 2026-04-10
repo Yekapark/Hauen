@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>포트폴리오 수정 | HAUEN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        body { background: #f5f0e8; }
+        .edit-wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+        .edit-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 48px 52px;
+            width: 100%;
+            max-width: 720px;
+            border: 1px solid #e0d8cc;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.07);
+        }
+        .edit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+        }
+        .edit-header h1 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a16;
+        }
+        .edit-header p { font-size: 13px; color: #8a8a7a; margin-top: 4px; }
+
+        /* 삭제 버튼 */
+        .btn-delete {
+            padding: 10px 20px;
+            background: #fff;
+            color: #c0392b;
+            border: 1.5px solid #c0392b;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Noto Sans KR', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-delete:hover { background: #c0392b; color: #fff; }
+
+        .divider { border: none; border-top: 1px solid #e0d8cc; margin: 28px 0; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a4a40;
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
+        }
+        .form-group label .req { color: #c8842a; margin-left: 2px; }
+        .form-group input {
+            width: 100%;
+            background: #f5f0e8;
+            border: 1px solid #e0d8cc;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #1a1a16;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+            box-sizing: border-box;
+        }
+        .form-group input:focus { border-color: #4a5e40; background: #fff; }
+        .form-group input::placeholder { color: #b0a898; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        /* 기존 이미지 그리드 */
+        .section-label-sm {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a4a40;
+            margin-bottom: 12px;
+            letter-spacing: 0.3px;
+        }
+        .existing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .existing-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e0d8cc;
+        }
+        .existing-item img { width: 100%; height: 100%; object-fit: cover; }
+        .existing-item.marked-delete { opacity: 0.35; }
+        .existing-item .delete-overlay {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(192,57,43,0.15);
+            cursor: pointer;
+        }
+        .delete-overlay-btn {
+            width: 28px; height: 28px;
+            background: rgba(192,57,43,0.85);
+            color: #fff;
+            border: none; border-radius: 50%;
+            font-size: 13px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .order-badge {
+            position: absolute; bottom: 4px; left: 4px;
+            background: rgba(74,94,64,0.85);
+            color: #fff; font-size: 10px;
+            padding: 2px 6px; border-radius: 4px;
+        }
+        .delete-badge {
+            position: absolute; bottom: 4px; left: 4px;
+            background: rgba(192,57,43,0.85);
+            color: #fff; font-size: 10px;
+            padding: 2px 6px; border-radius: 4px;
+        }
+        .no-image-msg { font-size: 13px; color: #b0a898; padding: 16px 0; }
+
+        /* 새 이미지 드롭존 */
+        .dropzone {
+            border: 2px dashed #c8b89a;
+            border-radius: 12px;
+            padding: 28px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            background: #f5f0e8;
+        }
+        .dropzone:hover, .dropzone.dragover { border-color: #4a5e40; background: #eee8dc; }
+        .dropzone input[type="file"] { display: none; }
+        .dropzone-text { font-size: 13px; color: #8a8a7a; }
+        .dropzone-text strong { color: #4a5e40; }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .preview-item {
+            position: relative; aspect-ratio: 1;
+            border-radius: 8px; overflow: hidden;
+            border: 2px dashed #4a5e40;
+        }
+        .preview-item img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-item .remove-btn {
+            position: absolute; top: 4px; right: 4px;
+            width: 20px; height: 20px;
+            background: rgba(0,0,0,0.55); color: #fff;
+            border: none; border-radius: 50%;
+            font-size: 11px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .preview-count { font-size: 12px; color: #8a8a7a; margin-top: 8px; }
+
+        /* 버튼 */
+        .btn-row { display: flex; gap: 12px; margin-top: 12px; }
+        .btn-submit {
+            flex: 1; padding: 15px;
+            background: #4a5e40; color: #fff;
+            border: none; border-radius: 10px;
+            font-size: 15px; font-weight: 600;
+            font-family: 'Noto Sans KR', sans-serif;
+            cursor: pointer; transition: background 0.2s, transform 0.15s;
+        }
+        .btn-submit:hover { background: #2d3e2a; transform: translateY(-1px); }
+        .btn-cancel {
+            display: block; text-align: center;
+            margin-top: 14px; font-size: 13px;
+            color: #8a8a7a; text-decoration: none;
+        }
+        .btn-cancel:hover { color: #4a5e40; }
+
+        @media (max-width: 600px) {
+            .edit-card { padding: 32px 20px; }
+            .form-row { grid-template-columns: 1fr; }
+            .edit-header { flex-direction: column; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="edit-wrap">
+    <div class="edit-card">
+
+        <!-- 헤더 + 삭제 버튼 -->
+        <div class="edit-header">
+            <div>
+                <h1>포트폴리오 수정</h1>
+                <p th:text="'#' + ${portfolio.id} + ' · ' + ${portfolio.title}"></p>
+            </div>
+            <!-- 삭제 폼 -->
+            <form th:action="@{/edit/portfolio/delete}" method="post"
+                  onsubmit="return confirm('정말 삭제하시겠습니까? 모든 이미지도 함께 삭제됩니다.')">
+                <input type="hidden" name="pk" th:value="${portfolio.id}" />
+                <button type="submit" class="btn-delete">🗑 삭제</button>
+            </form>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- 수정 폼 -->
+        <form th:action="@{/edit/portfolio/edit(pk=${portfolio.id})}"
+              th:object="${portfolio}" method="post" enctype="multipart/form-data">
+
+            <!-- 제목 -->
+            <div class="form-group">
+                <label>제목 <span class="req">*</span></label>
+                <input type="text" th:field="*{title}" required />
+            </div>
+
+            <!-- 평형 / 준공연도 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>평형 <span class="req">*</span></label>
+                    <input type="number" th:field="*{areaPyeong}" min="1" required />
+                </div>
+                <div class="form-group">
+                    <label>준공연도 <span class="req">*</span></label>
+                    <input type="number" th:field="*{completionYear}" min="2000" max="2100" required />
+                </div>
+            </div>
+
+            <!-- 시공일 / 시공기간 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>시공일 <span class="req">*</span></label>
+                    <input type="date" th:field="*{constructionStartDate}" required />
+                </div>
+                <div class="form-group">
+                    <label>시공기간 (일)</label>
+                    <input type="number" th:field="*{constructionDurationDays}" min="1" />
+                </div>
+            </div>
+
+            <hr class="divider" />
+
+            <!-- 기존 이미지 -->
+            <div class="section-label-sm">기존 이미지 <span style="font-weight:400;color:#b0a898;">(클릭하면 삭제 표시)</span></div>
+            <div class="existing-grid" id="existingGrid">
+                <div th:if="${portfolio.images.isEmpty()}" class="no-image-msg">등록된 이미지가 없습니다.</div>
+                <div th:each="img, stat : ${portfolio.images}"
+                     class="existing-item" th:id="'img-' + ${img.id}">
+                    <img th:src="${img.imageUrl}" th:alt="'이미지 ' + ${stat.index + 1}" />
+                    <div class="order-badge" th:id="'badge-' + ${img.id}"
+                         th:text="${stat.index == 0} ? '썸네일' : ${stat.index + 1}"></div>
+                    <div class="delete-overlay" th:onclick="'toggleDelete(' + ${img.id} + ')'">
+                        <button type="button" class="delete-overlay-btn">✕</button>
+                    </div>
+                    <!-- 삭제 대상 hidden input (JS로 동적 추가/제거) -->
+                </div>
+            </div>
+
+            <!-- 새 이미지 추가 -->
+            <div class="section-label-sm" style="margin-top:8px;">새 이미지 추가</div>
+            <div class="dropzone" id="dropzone">
+                <input type="file" name="imageFiles" id="imageInput" accept="image/*" multiple />
+                <div class="dropzone-text"><strong>클릭</strong>하거나 이미지를 끌어다 놓으세요</div>
+            </div>
+            <div class="preview-grid" id="previewGrid"></div>
+            <div class="preview-count" id="previewCount"></div>
+
+            <div class="btn-row">
+                <button type="submit" class="btn-submit">수정 저장</button>
+            </div>
+        </form>
+
+        <a th:href="@{/portfolio}" class="btn-cancel">← 목록으로 돌아가기</a>
+    </div>
+</div>
+
+<script>
+    // ── 기존 이미지 삭제 토글 ──
+    const deleteIds = new Set();
+    const form = document.querySelector('form[enctype]');
+
+    function toggleDelete(imgId) {
+        const item = document.getElementById('img-' + imgId);
+        const badge = document.getElementById('badge-' + imgId);
+        const existingInput = document.getElementById('del-input-' + imgId);
+
+        if (deleteIds.has(imgId)) {
+            deleteIds.delete(imgId);
+            item.classList.remove('marked-delete');
+            badge.className = 'order-badge';
+            if (existingInput) existingInput.remove();
+        } else {
+            deleteIds.add(imgId);
+            item.classList.add('marked-delete');
+            badge.className = 'delete-badge';
+            badge.textContent = '삭제';
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'deleteImageIds';
+            input.value = imgId;
+            input.id = 'del-input-' + imgId;
+            form.appendChild(input);
+        }
+    }
+
+    // ── 새 이미지 드롭존 ──
+    const dropzone    = document.getElementById('dropzone');
+    const imageInput  = document.getElementById('imageInput');
+    const previewGrid = document.getElementById('previewGrid');
+    const previewCount = document.getElementById('previewCount');
+    let selectedFiles = [];
+
+    dropzone.addEventListener('click', () => imageInput.click());
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        addFiles(Array.from(e.dataTransfer.files));
+    });
+    imageInput.addEventListener('change', () => {
+        addFiles(Array.from(imageInput.files));
+        imageInput.value = '';
+    });
+
+    function addFiles(files) {
+        selectedFiles = [...selectedFiles, ...files.filter(f => f.type.startsWith('image/'))];
+        renderPreviews();
+    }
+
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        renderPreviews();
+    }
+
+    function renderPreviews() {
+        previewGrid.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+            const item = document.createElement('div');
+            item.className = 'preview-item';
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            const btn = document.createElement('button');
+            btn.className = 'remove-btn';
+            btn.type = 'button';
+            btn.textContent = '✕';
+            btn.onclick = () => removeFile(index);
+            item.appendChild(img);
+            item.appendChild(btn);
+            previewGrid.appendChild(item);
+        });
+        previewCount.textContent = selectedFiles.length > 0 ? `${selectedFiles.length}장 추가 예정` : '';
+    }
+
+    form.addEventListener('submit', () => {
+        if (selectedFiles.length > 0) {
+            const dt = new DataTransfer();
+            selectedFiles.forEach(f => dt.items.add(f));
+            imageInput.files = dt.files;
+        }
+    });
+</script>
+</body>
+</html>

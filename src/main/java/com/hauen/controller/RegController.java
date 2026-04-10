@@ -5,10 +5,10 @@ import com.hauen.service.PortFolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequestMapping("/reg")
 @RequiredArgsConstructor
@@ -17,17 +17,17 @@ public class RegController {
 
     private final PortFolioService portFolioService;
 
-    // 등록 화면
     @GetMapping("/portfolio")
     public String portfolioForm(Model model) {
         model.addAttribute("portfolio", new Portfolio());
         return "reg/portfolio-form";
     }
 
-    // 등록 처리
     @PostMapping("/portfolio")
-    public String portfolioSave(@ModelAttribute Portfolio portfolio) {
-        portFolioService.save(portfolio);
+    public String portfolioSave(@ModelAttribute Portfolio portfolio,
+                                @RequestParam(value = "imageFiles", required = false) List<MultipartFile> images) throws Exception {
+        if (images == null) images = List.of();
+        portFolioService.save(portfolio, images);
         return "redirect:/portfolio";
     }
 }

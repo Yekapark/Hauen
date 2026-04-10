@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,40 +19,41 @@ public class Portfolio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // 제목
     @Column(name = "title", nullable = false)
     private String title;
 
-    // 평형
     @Column(name = "area_pyeong", nullable = false)
     private int areaPyeong;
 
-    // 시공일
     @Column(name = "construction_start_date", nullable = false)
     private LocalDate constructionStartDate;
 
-    // 준공연월
     @Column(name = "completion_year", nullable = false)
     private int completionYear;
 
-    // 시공기간
-    @Column(name = "construction_duration_days", nullable = false)
-    private int constructionDurationDays;
+    @Column(name = "construction_duration_days")
+    private Integer constructionDurationDays;
 
-    // 등록일
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    // 썸네일
-    @Column(name = "thumbnail_url", updatable = false)
-    private String thumbnailUrl;
+    // 이미지 목록 (portfolio_image 테이블)
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("sortOrder ASC")
+    private List<PortfolioImage> images = new ArrayList<>();
+
+    // 첫 번째 이미지를 썸네일로 사용
+    public String getThumbnailUrl() {
+        if (images == null || images.isEmpty()) return null;
+        return images.get(0).getImageUrl();
+    }
 
     public boolean hasThumbnail() {
-        return thumbnailUrl != null && !thumbnailUrl.isEmpty();
+        return images != null && !images.isEmpty();
     }
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();  // 자동 설정
+        this.createdAt = LocalDateTime.now();
     }
 }
