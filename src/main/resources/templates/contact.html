@@ -68,6 +68,8 @@
             <!-- 폼 카드 (밝은 버전) -->
             <div class="contact-form-card-light reveal reveal-delay-2">
                 <h3>상담 신청서</h3>
+
+                <!-- 성함 / 연락처 -->
                 <div class="form-row">
                     <div class="form-group">
                         <label>성함 <span class="req">*</span></label>
@@ -78,35 +80,110 @@
                         <input type="tel" placeholder="010-0000-0000" />
                     </div>
                 </div>
+
+                <!-- 현장주소 -->
                 <div class="form-group">
-                    <label>이메일</label>
-                    <input type="email" placeholder="example@email.com" />
+                    <label>현장주소 <span class="req">*</span></label>
+                    <input type="text" placeholder="예: 서울시 강남구 테헤란로 123" />
                 </div>
+
+                <!-- 건물유형 -->
                 <div class="form-group">
-                    <label>공간 유형 <span class="req">*</span></label>
+                    <label>건물유형 <span class="req">*</span></label>
+                    <input type="text" placeholder="예: 아파트, 주택, 오피스텔 등" />
+                </div>
+
+                <!-- 면적 -->
+                <div class="form-group">
+                    <label>면적 <span class="req">*</span></label>
                     <select>
                         <option value="" disabled selected>선택해 주세요</option>
-                        <option>아파트</option>
-                        <option>주택</option>
-                        <option>상업공간</option>
-                        <option>오피스</option>
+                        <option>10평대 (33~49㎡)</option>
+                        <option>20평대 (50~66㎡)</option>
+                        <option>30평대 (67~99㎡)</option>
+                        <option>40평대 (100~132㎡)</option>
+                        <option>50평대 이상 (133㎡~)</option>
                     </select>
                 </div>
+
+                <!-- 중문 / 확장 -->
                 <div class="form-row">
                     <div class="form-group">
-                        <label>면적 (㎡)</label>
-                        <input type="text" placeholder="예: 84㎡" />
+                        <label>중문</label>
+                        <div class="radio-group">
+                            <label class="radio-label"><input type="radio" name="jungmun" value="필요" /> 필요</label>
+                            <label class="radio-label"><input type="radio" name="jungmun" value="불필요" /> 불필요</label>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>희망 예산</label>
-                        <input type="text" placeholder="예: 3,000만원" />
+                        <label>확장</label>
+                        <div class="radio-group">
+                            <label class="radio-label"><input type="radio" name="expansion" value="필요" /> 필요</label>
+                            <label class="radio-label"><input type="radio" name="expansion" value="불필요" /> 불필요</label>
+                        </div>
                     </div>
                 </div>
+
+                <!-- 욕실 / 싱크대 -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>욕실</label>
+                        <div class="radio-group">
+                            <label class="radio-label"><input type="radio" name="bathroom" value="욕조" /> 욕조</label>
+                            <label class="radio-label"><input type="radio" name="bathroom" value="파티션" /> 파티션</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>싱크대</label>
+                        <div class="radio-group">
+                            <label class="radio-label"><input type="radio" name="sink" value="ㅡ자" /> ㅡ자</label>
+                            <label class="radio-label"><input type="radio" name="sink" value="ㄱ자" /> ㄱ자</label>
+                            <label class="radio-label"><input type="radio" name="sink" value="ㄷ자" /> ㄷ자</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 붙박이 -->
                 <div class="form-group">
-                    <label>문의 내용</label>
+                    <label>붙박이</label>
+                    <div class="radio-group">
+                        <label class="radio-label"><input type="radio" name="builtin" value="필요" /> 필요</label>
+                        <label class="radio-label"><input type="radio" name="builtin" value="불필요" /> 불필요</label>
+                    </div>
+                </div>
+
+                <!-- 예산 -->
+                <div class="form-group">
+                    <label>예산 <span class="req">*</span></label>
+                    <select>
+                        <option value="" disabled selected>선택해 주세요</option>
+                        <option>3,000만원 미만</option>
+                        <option>3,000 ~ 5,000만원</option>
+                        <option>5,000 ~ 7,000만원</option>
+                        <option>7,000만원 ~ 1억</option>
+                        <option>1억 이상</option>
+                    </select>
+                </div>
+
+                <!-- 공사시작희망일 / 입주예정일 -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>공사시작 희망일</label>
+                        <input type="date" />
+                    </div>
+                    <div class="form-group">
+                        <label>입주예정일</label>
+                        <input type="date" />
+                    </div>
+                </div>
+
+                <!-- 요청사항 -->
+                <div class="form-group">
+                    <label>요청사항</label>
                     <textarea id="msgArea" placeholder="원하시는 스타일이나 특별한 요청 사항을 자유롭게 작성해 주세요."></textarea>
                     <div class="form-char-count-light" id="charCount">0/500</div>
                 </div>
+
                 <button class="btn-submit" onclick="handleSubmit(this)">상담 신청하기 &nbsp;→</button>
             </div>
         </div>

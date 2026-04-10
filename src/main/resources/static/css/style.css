@@ -922,7 +922,6 @@ nav.sub-mode .nav-links a.active { color: #8FB080 !important; font-weight: 600; 
 .contact-page {
     background: var(--bg-cream);
     padding-top: 80px;
-    margin-top: 55px;
 }
 @media (max-width: 900px) {
     .contact-page { margin-top: 40px; padding-top: 60px; }
@@ -946,6 +945,67 @@ nav.sub-mode .nav-links a.active { color: #8FB080 !important; font-weight: 600; 
     height:100%;
     object-fit:contain;
     border-radius:6px;
+}
+
+/* 라디오 버튼 그룹 */
+.radio-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.radio-label input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #C8842A;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+/* 밝은 폼에서 라디오 텍스트 색 */
+.contact-form-card-light .radio-label { color: var(--text-mid); }
+/* 어두운 폼에서 라디오 텍스트 색 */
+.contact-form-card .radio-label { color: rgba(255,255,255,0.8); }
+
+/* 달력(date) input */
+input[type="date"] {
+    color-scheme: light;
+}
+.contact-form-card input[type="date"] {
+    color-scheme: dark;
+}
+
+/* 라디오 버튼 그룹 */
+.radio-group {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 4px;
+}
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-mid);
+    cursor: pointer;
+    font-weight: 400;
+}
+.radio-label input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #C8842A;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
 }
 
 /* 상담 페이지 밝은 폼 카드 */
