@@ -1288,3 +1288,52 @@ nav.sub-mode .hamburger span  { background: #fff; }
     .floating-buttons { bottom: 20px; right: 16px; gap: 10px; }
     .floating-btn { width: 48px; height: 48px; }
 }
+
+/* ════════════════════════════════════════════
+   포트폴리오 슬라이더 (화살표 페이징)
+════════════════════════════════════════════ */
+.portfolio-slider-wrap {
+    display: flex;
+    align-items: center;
+}
+@keyframes float-updown {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
+.slider-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    padding: 0;
+    opacity: 0.85;
+    transition: opacity 0.25s;
+    text-decoration: none;
+}
+.slider-arrow:hover {
+    opacity: 1;
+    animation: float-updown 1.2s ease-in-out infinite;
+}
+.slider-arrow.disabled {
+    opacity: 0.2;
+    pointer-events: none;
+    animation: none;
+}
+.slider-arrow svg { width: 52px; height: 82px; }
+.portfolio-slider-wrap .portfolio-grid { flex: 1; min-width: 0; }
+.page-indicator {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 13px;
+    color: var(--text-light);
+    letter-spacing: 1px;
+}
+a.filter-tab { display: inline-block; text-decoration: none; }
+
+@media (max-width: 600px) {
+    .slider-arrow { width: 40px; }
+    .slider-arrow svg { width: 32px; height: 54px; }
+}

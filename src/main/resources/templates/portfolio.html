@@ -8,6 +8,37 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        @keyframes float-updown {
+            0%   { transform: translateY(0); }
+            50%  { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        .slider-arrow {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            padding: 0 18px;
+            opacity: 0.8;
+            transition: opacity 0.25s;
+            line-height: 0;
+            text-decoration: none;
+        }
+        .slider-arrow svg {
+            width: 38px;
+            height: 64px;
+        }
+        .slider-arrow:hover {
+            opacity: 1;
+            animation: float-updown 1.2s ease-in-out infinite;
+        }
+        .slider-arrow.disabled {
+            opacity: 0.2;
+            pointer-events: none;
+            animation: none;
+        }
+    </style>
 </head>
 <body>
 
@@ -61,60 +92,78 @@
             </div>
             <p>다양한 공간에서 완성된 감각적인 디자인을 확인해 보세요.</p>
         </div>
+
+        <!-- 필터 탭 -->
         <div class="filter-tabs reveal">
-            <button class="filter-tab active" data-filter="all">전체</button>
-            <button class="filter-tab" data-filter="20평대">20평대</button>
-            <button class="filter-tab" data-filter="30평대">30평대</button>
-            <button class="filter-tab" data-filter="40평대 이상">40평대 이상</button>
+            <a th:href="@{/portfolio(filter='all', page=0)}"
+               th:classappend="${filter == 'all'} ? ' active'" class="filter-tab">전체</a>
+            <a th:href="@{/portfolio(filter='20', page=0)}"
+               th:classappend="${filter == '20'} ? ' active'" class="filter-tab">20평대</a>
+            <a th:href="@{/portfolio(filter='30', page=0)}"
+               th:classappend="${filter == '30'} ? ' active'" class="filter-tab">30평대</a>
+            <a th:href="@{/portfolio(filter='40', page=0)}"
+               th:classappend="${filter == '40'} ? ' active'" class="filter-tab">40평대 이상</a>
         </div>
-        <div class="portfolio-grid">
-            <div class="portfolio-card reveal reveal-delay-1" data-category="20평대">
-                <div class="portfolio-thumb">
-                    <div class="portfolio-thumb-img pt-1"></div>
-                    <span class="portfolio-badge badge-new">NEW</span>
+
+        <!-- 슬라이더 영역 -->
+        <div class="portfolio-slider-wrap">
+
+            <!-- 이전 화살표 -->
+            <a th:href="@{/portfolio(filter=${filter}, page=${currentPage - 1})}"
+               th:classappend="${currentPage == 0} ? ' disabled'"
+               class="slider-arrow arrow-prev"
+               aria-label="이전">
+                <svg viewBox="0 0 40 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M32 8 C22 18, 10 28, 8 35 C10 42, 22 52, 32 62" stroke="#6B8060" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                    <path d="M24 4 C14 16, 4 26, 2 35 C4 44, 14 54, 24 66" stroke="#2D3E2A" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+                </svg>
+            </a>
+
+            <!-- 카드 그리드 -->
+            <div class="portfolio-grid">
+                <!-- DB 데이터가 있을 때 -->
+                <div th:each="p : ${portfolios}" class="portfolio-card reveal">
+                    <div class="portfolio-thumb">
+                        <img th:if="${p.thumbnailUrl != null}"
+                             th:src="${p.thumbnailUrl}"
+                             th:alt="${p.title}"
+                             class="portfolio-thumb-img" />
+                        <div th:if="${p.thumbnailUrl == null}" class="portfolio-thumb-img pt-1"></div>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3 th:text="${p.title}">제목</h3>
+                        <div class="portfolio-meta"
+                             th:text="${p.areaPyeong} + '평대'">
+<!--                            · ' + ${p.areaSqm} + '㎡'">-->
+                            정보
+                        </div>
+                    </div>
                 </div>
-                <div class="portfolio-info">
-                    <h3>모던 미니멀 20평대</h3>
-                    <div class="portfolio-meta">20평대 · 84㎡</div>
-                </div>
-            </div>
-            <div class="portfolio-card reveal reveal-delay-2" data-category="30평대">
-                <div class="portfolio-thumb">
-                    <div class="portfolio-thumb-img pt-2"></div>
-                </div>
-                <div class="portfolio-info">
-                    <h3>내추럴 빈티지 30평대</h3>
-                    <div class="portfolio-meta">30평대 · 132㎡</div>
-                </div>
-            </div>
-            <div class="portfolio-card reveal reveal-delay-3" data-category="40평대 이상">
-                <div class="portfolio-thumb">
-                    <div class="portfolio-thumb-img pt-3"></div>
-                </div>
-                <div class="portfolio-info">
-                    <h3>감성 카페 인테리어</h3>
-                    <div class="portfolio-meta">40평대 이상 · 60㎡</div>
-                </div>
-            </div>
-            <div class="portfolio-card reveal reveal-delay-2" data-category="20평대">
-                <div class="portfolio-thumb">
-                    <div class="portfolio-thumb-img pt-5"></div>
-                </div>
-                <div class="portfolio-info">
-                    <h3>스칸디나비안 20평대</h3>
-                    <div class="portfolio-meta">20평대 · 105㎡</div>
-                </div>
-            </div>
-            <div class="portfolio-card reveal reveal-delay-3" data-category="40평대 이상">
-                <div class="portfolio-thumb">
-                    <div class="portfolio-thumb-img pt-6"></div>
-                </div>
-                <div class="portfolio-info">
-                    <h3>모던 레스토랑 설계</h3>
-                    <div class="portfolio-meta">40평대 이상 · 150㎡</div>
+
+                <!-- DB 데이터가 없을 때 -->
+                <div th:if="${#lists.isEmpty(portfolios)}"
+                     style="grid-column: 1/-1; text-align:center; padding: 80px 0; color: #999;">
+                    등록된 포트폴리오가 없습니다.
                 </div>
             </div>
+
+            <!-- 다음 화살표 -->
+            <a th:href="@{/portfolio(filter=${filter}, page=${currentPage + 1})}"
+               th:classappend="${currentPage + 1 >= totalPages} ? ' disabled'"
+               class="slider-arrow arrow-next"
+               aria-label="다음">
+                <svg viewBox="0 0 40 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 8 C18 18, 30 28, 32 35 C30 42, 18 52, 8 62" stroke="#6B8060" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                    <path d="M16 4 C26 16, 36 26, 38 35 C36 44, 26 54, 16 66" stroke="#2D3E2A" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+                </svg>
+            </a>
         </div>
+
+        <!-- 페이지 표시 -->
+        <div class="page-indicator" th:if="${totalPages > 0}">
+            <span th:text="${currentPage + 1} + ' / ' + ${totalPages}">1 / 3</span>
+        </div>
+
     </div>
 </section>
 

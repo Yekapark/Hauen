@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>포트폴리오 등록 | HAUEN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        body { background: #f5f0e8; }
+
+        .reg-wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+        .reg-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 48px 52px;
+            width: 100%;
+            max-width: 640px;
+            border: 1px solid #e0d8cc;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.07);
+        }
+        .reg-card h1 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a16;
+            margin-bottom: 8px;
+        }
+        .reg-card .reg-sub {
+            font-size: 13px;
+            color: #8a8a7a;
+            margin-bottom: 36px;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a4a40;
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
+        }
+        .form-group label .req { color: #c8842a; margin-left: 2px; }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            background: #f5f0e8;
+            border: 1px solid #e0d8cc;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #1a1a16;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4a5e40;
+            background: #fff;
+        }
+        .form-group input::placeholder { color: #b0a898; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: #4a5e40;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: 'Noto Sans KR', sans-serif;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .btn-submit:hover { background: #2d3e2a; transform: translateY(-1px); }
+        .btn-cancel {
+            display: block;
+            text-align: center;
+            margin-top: 14px;
+            font-size: 13px;
+            color: #8a8a7a;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .btn-cancel:hover { color: #4a5e40; }
+        @media (max-width: 600px) {
+            .reg-card { padding: 32px 24px; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="reg-wrap">
+    <div class="reg-card">
+        <h1>포트폴리오 등록</h1>
+        <p class="reg-sub">새로운 시공 사례를 등록합니다.</p>
+
+        <form th:action="@{/reg/portfolio}" th:object="${portfolio}" method="post">
+
+            <!-- 제목 -->
+            <div class="form-group">
+                <label>제목 <span class="req">*</span></label>
+                <input type="text" th:field="*{title}" placeholder="예) 모던 미니멀 30평대 아파트" required />
+            </div>
+
+            <!-- 평형 / 준공연도 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>평형 <span class="req">*</span></label>
+                    <input type="number" th:field="*{areaPyeong}" placeholder="예) 32" min="1" required />
+                </div>
+                <div class="form-group">
+                    <label>준공연도 <span class="req">*</span></label>
+                    <input type="number" th:field="*{completionYear}" placeholder="예) 2024" min="2000" max="2100" required />
+                </div>
+            </div>
+
+            <!-- 시공일 / 시공기간 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>시공일 <span class="req">*</span></label>
+                    <input type="date" th:field="*{constructionStartDate}" required />
+                </div>
+                <div class="form-group">
+                    <label>시공기간 (일)</label>
+                    <input type="number" th:field="*{constructionDurationDays}" placeholder="예) 45" min="1" />
+                </div>
+            </div>
+
+            <!-- 썸네일 URL -->
+            <div class="form-group">
+                <label>썸네일 URL</label>
+                <input type="text" th:field="*{thumbnailUrl}" placeholder="예) https://..." />
+            </div>
+
+            <button type="submit" class="btn-submit">등록하기</button>
+        </form>
+
+        <a th:href="@{/portfolio}" class="btn-cancel">← 목록으로 돌아가기</a>
+    </div>
+</div>
+
+</body>
+</html>
