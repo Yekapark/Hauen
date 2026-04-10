@@ -136,6 +136,36 @@ function handleSubmit(btn) {
 }
 
 /* ─────────────────────────────────────────
+   6. 햄버거 메뉴
+───────────────────────────────────────── */
+function initHamburger() {
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (!hamburger || !mobileMenu) return;
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+    });
+
+    // 메뉴 링크 클릭 시 닫기
+    mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('open');
+            mobileMenu.classList.remove('open');
+        });
+    });
+
+    // 외부 클릭 시 닫기
+    document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+            hamburger.classList.remove('open');
+            mobileMenu.classList.remove('open');
+        }
+    });
+}
+
+/* ─────────────────────────────────────────
    초기화 진입점
 ───────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -143,4 +173,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollReveal();
     initPortfolioFilter();
     initCharCounter();
+    initHamburger();
 });

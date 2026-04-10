@@ -24,7 +24,21 @@
         <li><a th:href="@{/portfolio}" class="active">포트폴리오</a></li>
         <li><a th:href="@{/contact}" class="btn-cta">무료 상담 신청</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="메뉴">
+        <span></span><span></span><span></span>
+    </button>
 </nav>
+
+<!-- 모바일 메뉴 -->
+<div class="mobile-menu" id="mobileMenu">
+    <ul>
+        <li><a th:href="@{/about}">업체소개</a></li>
+        <li><a th:href="@{/portfolio}">포트폴리오</a></li>
+    </ul>
+    <div class="mobile-cta">
+        <a th:href="@{/contact}">무료 상담 신청</a>
+    </div>
+</div>
 
 <!-- 페이지 헤더 -->
 <section class="page-header">
@@ -49,66 +63,55 @@
         </div>
         <div class="filter-tabs reveal">
             <button class="filter-tab active" data-filter="all">전체</button>
-            <button class="filter-tab" data-filter="아파트">아파트</button>
-            <button class="filter-tab" data-filter="주택">주택</button>
-            <button class="filter-tab" data-filter="상업공간">상업공간</button>
-            <button class="filter-tab" data-filter="오피스">오피스</button>
+            <button class="filter-tab" data-filter="20평대">20평대</button>
+            <button class="filter-tab" data-filter="30평대">30평대</button>
+            <button class="filter-tab" data-filter="40평대 이상">40평대 이상</button>
         </div>
         <div class="portfolio-grid">
-            <div class="portfolio-card reveal reveal-delay-1" data-category="아파트">
+            <div class="portfolio-card reveal reveal-delay-1" data-category="20평대">
                 <div class="portfolio-thumb">
                     <div class="portfolio-thumb-img pt-1"></div>
                     <span class="portfolio-badge badge-new">NEW</span>
                 </div>
                 <div class="portfolio-info">
-                    <h3>모던 미니멀 아파트</h3>
-                    <div class="portfolio-meta">아파트 · 84㎡</div>
+                    <h3>모던 미니멀 20평대</h3>
+                    <div class="portfolio-meta">20평대 · 84㎡</div>
                 </div>
             </div>
-            <div class="portfolio-card reveal reveal-delay-2" data-category="주택">
+            <div class="portfolio-card reveal reveal-delay-2" data-category="30평대">
                 <div class="portfolio-thumb">
                     <div class="portfolio-thumb-img pt-2"></div>
                 </div>
                 <div class="portfolio-info">
-                    <h3>내추럴 빈티지 주택</h3>
-                    <div class="portfolio-meta">주택 · 132㎡</div>
+                    <h3>내추럴 빈티지 30평대</h3>
+                    <div class="portfolio-meta">30평대 · 132㎡</div>
                 </div>
             </div>
-            <div class="portfolio-card reveal reveal-delay-3" data-category="상업공간">
+            <div class="portfolio-card reveal reveal-delay-3" data-category="40평대 이상">
                 <div class="portfolio-thumb">
                     <div class="portfolio-thumb-img pt-3"></div>
                 </div>
                 <div class="portfolio-info">
                     <h3>감성 카페 인테리어</h3>
-                    <div class="portfolio-meta">상업공간 · 60㎡</div>
+                    <div class="portfolio-meta">40평대 이상 · 60㎡</div>
                 </div>
             </div>
-            <div class="portfolio-card reveal reveal-delay-1" data-category="오피스">
-                <div class="portfolio-thumb">
-                    <div class="portfolio-thumb-img pt-4"></div>
-                    <span class="portfolio-badge badge-best">BEST</span>
-                </div>
-                <div class="portfolio-info">
-                    <h3>럭셔리 오피스 리모델링</h3>
-                    <div class="portfolio-meta">오피스 · 200㎡</div>
-                </div>
-            </div>
-            <div class="portfolio-card reveal reveal-delay-2" data-category="아파트">
+            <div class="portfolio-card reveal reveal-delay-2" data-category="20평대">
                 <div class="portfolio-thumb">
                     <div class="portfolio-thumb-img pt-5"></div>
                 </div>
                 <div class="portfolio-info">
-                    <h3>스칸디나비안 아파트</h3>
-                    <div class="portfolio-meta">아파트 · 105㎡</div>
+                    <h3>스칸디나비안 20평대</h3>
+                    <div class="portfolio-meta">20평대 · 105㎡</div>
                 </div>
             </div>
-            <div class="portfolio-card reveal reveal-delay-3" data-category="상업공간">
+            <div class="portfolio-card reveal reveal-delay-3" data-category="40평대 이상">
                 <div class="portfolio-thumb">
                     <div class="portfolio-thumb-img pt-6"></div>
                 </div>
                 <div class="portfolio-info">
                     <h3>모던 레스토랑 설계</h3>
-                    <div class="portfolio-meta">상업공간 · 150㎡</div>
+                    <div class="portfolio-meta">40평대 이상 · 150㎡</div>
                 </div>
             </div>
         </div>

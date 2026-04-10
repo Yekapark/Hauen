@@ -24,7 +24,21 @@
         <li><a th:href="@{/portfolio}">포트폴리오</a></li>
         <li><a th:href="@{/contact}" class="btn-cta">무료 상담 신청</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="메뉴">
+        <span></span><span></span><span></span>
+    </button>
 </nav>
+
+<!-- 모바일 메뉴 -->
+<div class="mobile-menu" id="mobileMenu">
+    <ul>
+        <li><a th:href="@{/about}">업체소개</a></li>
+        <li><a th:href="@{/portfolio}">포트폴리오</a></li>
+    </ul>
+    <div class="mobile-cta">
+        <a th:href="@{/contact}">무료 상담 신청</a>
+    </div>
+</div>
 
 <!-- HERO -->
 <section id="hero">
