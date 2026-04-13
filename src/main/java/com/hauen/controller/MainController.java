@@ -5,10 +5,14 @@ import com.hauen.service.PortFolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,6 +55,36 @@ public class MainController {
         model.addAttribute("filter", filter);
 
         return "portfolio";
+    }
+
+    // 포트폴리오 AJAX API (필터+페이징)
+    @GetMapping("/api/portfolios")
+    @ResponseBody
+    public ResponseEntity<?> portfolioApi(
+            @RequestParam(defaultValue = "all") String filter,
+            @RequestParam(defaultValue = "0") int page) {
+
+        Page<Portfolio> result = portfolioService.findByFilter(filter, PageRequest.of(page, SIZE));
+
+        var items = result.getContent().stream().map(p -> java.util.Map.of(
+                "id", p.getId(),
+                "title", p.getTitle(),
+                "areaPyeong", p.getAreaPyeong(),
+                "thumbnailUrl", p.getThumbnailUrl() != null ? p.getThumbnailUrl() : ""
+        )).toList();
+
+        return ResponseEntity.ok(java.util.Map.of(
+                "items", items,
+                "currentPage", result.getNumber(),
+                "totalPages", result.getTotalPages()
+        ));
+    }
+
+    @GetMapping("/portfolio/{id}")
+    public String portfolioDetail(@PathVariable int id, Model model) {
+        Portfolio portfolio = portfolioService.findById(id);
+        model.addAttribute("portfolio", portfolio);
+        return "portfolio-detail";
     }
 
     @GetMapping("/contact")

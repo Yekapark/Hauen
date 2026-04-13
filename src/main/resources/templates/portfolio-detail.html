@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${portfolio.title} + ' | HAUEN 인테리어'">포트폴리오 상세 | HAUEN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        /* ── 헤더 섹션 ── */
+        .detail-header {
+            padding: 120px 0 60px;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+        }
+        .detail-header-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+        .detail-title {
+            font-family: 'Noto Serif KR', serif;
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+        .detail-title span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.65em;
+            font-weight: 400;
+            color: var(--text-light);
+            display: inline-block;
+            margin-left: 8px;
+        }
+        .detail-desc {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 28px;
+        }
+        .detail-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 28px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .detail-cta:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* 스펙 테이블 */
+        .spec-table {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .spec-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid var(--border);
+        }
+        .spec-row:last-child { border-bottom: none; }
+        .spec-cell {
+            padding: 16px 0;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .spec-cell:first-child { border-right: 1px solid var(--border); padding-right: 24px; }
+        .spec-cell:last-child { padding-left: 24px; }
+        .spec-label {
+            font-size: 11px;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .spec-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* ── 이미지 섹션 ── */
+        .detail-gallery {
+            padding: 60px 0 100px;
+            background: var(--bg-white);
+        }
+
+        /* 카테고리 필터 탭 */
+        .cat-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+        .cat-btn {
+            padding: 8px 18px;
+            border-radius: 100px;
+            border: 1.5px solid var(--border);
+            background: transparent;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-mid);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .cat-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .cat-btn.active { background: var(--text-dark); color: #fff; border-color: var(--text-dark); }
+        .cat-count {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-left: 2px;
+        }
+
+        /* 이미지 그리드 */
+        .gallery-grid {
+            columns: 3;
+            gap: 12px;
+        }
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+        .gallery-item img {
+            width: 100%;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .gallery-item:hover img { transform: scale(1.03); }
+        .gallery-item .cat-label {
+            position: absolute;
+            bottom: 10px; left: 10px;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .gallery-item:hover .cat-label { opacity: 1; }
+
+        /* 그룹 헤더 */
+        .gallery-group { margin-bottom: 48px; }
+        .gallery-group-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .gallery-group-title .icon { font-size: 16px; }
+        .gallery-group-title .gcount {
+            font-size: 11px;
+            background: var(--bg-cream);
+            padding: 2px 8px;
+            border-radius: 100px;
+            color: var(--text-mid);
+        }
+
+        /* 라이트박스 */
+        .lightbox {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox-img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .lightbox-close {
+            position: absolute; top: 24px; right: 24px;
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.15);
+            color: #fff; border: none; border-radius: 50%;
+            font-size: 18px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.3); }
+        .lightbox-nav {
+            position: absolute;
+            top: 50%; transform: translateY(-50%);
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,0.15);
+            color: #fff; border: none; border-radius: 50%;
+            font-size: 20px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+        .lightbox-prev { left: 24px; }
+        .lightbox-next { right: 24px; }
+        .lightbox-counter {
+            position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+            color: rgba(255,255,255,0.6); font-size: 13px;
+        }
+
+        /* 빈 카테고리 숨김 */
+        .gallery-group.hidden { display: none; }
+
+        @media (max-width: 900px) {
+            .detail-header-inner { grid-template-columns: 1fr; gap: 40px; }
+            .gallery-grid { columns: 2; }
+        }
+        @media (max-width: 600px) {
+            .detail-header { padding: 100px 0 40px; }
+            .spec-row { grid-template-columns: 1fr; }
+            .spec-cell:first-child { border-right: none; padding-right: 0; border-bottom: 1px solid var(--border); }
+            .spec-cell:last-child { padding-left: 0; }
+            .gallery-grid { columns: 2; gap: 8px; }
+            .gallery-item { margin-bottom: 8px; }
+            .lightbox-prev { left: 8px; }
+            .lightbox-next { right: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="sub-mode">
+    <a th:href="@{/}" class="nav-logo">
+        <div class="nav-logo-box">
+            <img class="logo-light" th:src="@{/images/logo-light.png}" alt="HAUEN 하우엔 로고" />
+        </div>
+    </a>
+    <ul class="nav-links">
+        <li><a th:href="@{/about}">업체소개</a></li>
+        <li><a th:href="@{/portfolio}" class="active">포트폴리오</a></li>
+        <li><a th:href="@{/contact}" class="btn-cta">무료 상담 신청</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- 모바일 메뉴 -->
+<div class="mobile-menu" id="mobileMenu">
+    <ul>
+        <li><a th:href="@{/about}">업체소개</a></li>
+        <li><a th:href="@{/portfolio}">포트폴리오</a></li>
+    </ul>
+    <div class="mobile-cta"><a th:href="@{/contact}">무료 상담 신청</a></div>
+</div>
+
+<!-- 헤더 섹션 -->
+<section class="detail-header">
+    <div class="container">
+        <div class="detail-header-inner">
+
+            <!-- 좌측: 제목 + 설명 + CTA -->
+            <div>
+                <div class="section-label" style="margin-bottom:16px;">PORTFOLIO</div>
+                <h1 class="detail-title">
+                    <span th:text="${portfolio.title}">제목</span>
+                    <span th:text="${portfolio.areaPyeong} + 'PY'"></span>
+                </h1>
+                <p class="detail-desc">
+                    위 프로젝트와 유사한 인테리어를 원하시나요?<br/>
+                    간편 상담 신청을 통해 HAUEN과 함께 인테리어의 모든 순간을 함께 하시기 바랍니다.
+                </p>
+                <a th:href="@{/contact}" class="detail-cta">이 프로젝트로 상담신청 →</a>
+            </div>
+
+            <!-- 우측: 스펙 테이블 -->
+            <div class="spec-table">
+                <div class="spec-row">
+                    <div class="spec-cell">
+                        <span class="spec-label">평형</span>
+                        <span class="spec-value" th:text="${portfolio.areaPyeong} + '평형'"></span>
+                    </div>
+                    <div class="spec-cell">
+                        <span class="spec-label">준공연도</span>
+                        <span class="spec-value" th:text="${portfolio.completionYear} + '년'"></span>
+                    </div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-cell">
+                        <span class="spec-label">시공일</span>
+                        <span class="spec-value" th:text="${portfolio.constructionStartDate}"></span>
+                    </div>
+                    <div class="spec-cell">
+                        <span class="spec-label">시공기간</span>
+                        <span class="spec-value"
+                              th:text="${portfolio.constructionDurationDays != null} ? ${portfolio.constructionDurationDays} + '일' : '-'"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 갤러리 섹션 -->
+<section class="detail-gallery">
+    <div class="container">
+
+        <!-- 카테고리 필터 탭 -->
+        <div class="cat-filter" id="catFilter">
+            <button class="cat-btn active" data-cat="all">
+                전체
+                <span class="cat-count" th:text="'(' + ${portfolio.images.size()} + ')'"></span>
+            </button>
+            <button class="cat-btn" data-cat="before"
+                    th:if="${!portfolio.getImagesByCategory('before').isEmpty()}">
+                시공 전
+                <span class="cat-count" th:text="'(' + ${portfolio.getImagesByCategory('before').size()} + ')'"></span>
+            </button>
+            <button class="cat-btn" data-cat="entrance"
+                    th:if="${!portfolio.getImagesByCategory('entrance').isEmpty()}">
+                현관
+                <span class="cat-count" th:text="'(' + ${portfolio.getImagesByCategory('entrance').size()} + ')'"></span>
+            </button>
+            <button class="cat-btn" data-cat="living"
+                    th:if="${!portfolio.getImagesByCategory('living').isEmpty()}">
+                거실
+                <span class="cat-count" th:text="'(' + ${portfolio.getImagesByCategory('living').size()} + ')'"></span>
+            </button>
+            <button class="cat-btn" data-cat="kitchen"
+                    th:if="${!portfolio.getImagesByCategory('kitchen').isEmpty()}">
+                주방
+                <span class="cat-count" th:text="'(' + ${portfolio.getImagesByCategory('kitchen').size()} + ')'"></span>
+            </button>
+            <button class="cat-btn" data-cat="room"
+                    th:if="${!portfolio.getImagesByCategory('room').isEmpty()}">
+                방
+                <span class="cat-count" th:text="'(' + ${portfolio.getImagesByCategory('room').size()} + ')'"></span>
+            </button>
+            <button class="cat-btn" data-cat="bathroom"
+                    th:if="${!portfolio.getImagesByCategory('bathroom').isEmpty()}">
+                욕실
+                <span class="cat-count" th:text="'(' + ${portfolio.getImagesByCategory('bathroom').size()} + ')'"></span>
+            </button>
+        </div>
+
+        <!-- 카테고리별 이미지 그룹 -->
+        <div id="galleryContainer">
+
+            <th:block th:each="group : ${ {'before','entrance','living','kitchen','room','bathroom'} }">
+                <th:block th:with="imgs=${portfolio.getImagesByCategory(group)}">
+                    <div class="gallery-group"
+                         th:if="${!imgs.isEmpty()}"
+                         th:data-cat="${group}">
+                        <div class="gallery-group-title">
+                            <span class="icon"
+                                  th:text="${group == 'before'} ? '🏚️' :
+                                           (${group == 'entrance'} ? '🚪' :
+                                           (${group == 'living'} ? '🛋️' :
+                                           (${group == 'kitchen'} ? '🍳' :
+                                           (${group == 'room'} ? '🛏️' : '🚿'))))">
+                            </span>
+                            <span th:text="${group == 'before'} ? '시공 전' :
+                                          (${group == 'entrance'} ? '현관' :
+                                          (${group == 'living'} ? '거실' :
+                                          (${group == 'kitchen'} ? '주방' :
+                                          (${group == 'room'} ? '방' : '욕실'))))">
+                            </span>
+                            <span class="gcount" th:text="${imgs.size()} + '장'"></span>
+                        </div>
+                        <div class="gallery-grid">
+                            <div class="gallery-item"
+                                 th:each="img, stat : ${imgs}"
+                                 th:data-src="${img.imageUrl}"
+                                 th:data-cat="${group}"
+                                 th:data-index="${stat.index}"
+                                 onclick="openLightbox(this)">
+                                <img th:src="${img.imageUrl}" th:alt="${group} + ' ' + ${stat.index+1}" loading="lazy" />
+                                <span class="cat-label"
+                                      th:text="${group == 'before'} ? '시공 전' :
+                                               (${group == 'entrance'} ? '현관' :
+                                               (${group == 'living'} ? '거실' :
+                                               (${group == 'kitchen'} ? '주방' :
+                                               (${group == 'room'} ? '방' : '욕실'))))">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </th:block>
+
+        </div>
+    </div>
+</section>
+
+<!-- 라이트박스 -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">‹</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="" />
+    <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">›</button>
+    <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo-wrap">
+                    <img th:src="@{/images/footer-logo.png}" alt="HAUEN 하우엔 로고" />
+                </div>
+                <p>20년 경력의 인테리어 전문가 팀이 당신의 공간을 아름답게 완성합니다.</p>
+                <div class="footer-socials">
+                    <a class="social-btn" aria-label="인스타그램">📸</a>
+                    <a class="social-btn" aria-label="카카오">💬</a>
+                    <a class="social-btn" aria-label="유튜브">▶️</a>
+                    <a class="social-btn" aria-label="페이스북">👍</a>
+                </div>
+            </div>
+            <div class="footer-nav">
+                <h4>메뉴</h4>
+                <ul>
+                    <li><a th:href="@{/about}">업체소개</a></li>
+                    <li><a th:href="@{/portfolio}">포트폴리오</a></li>
+                    <li><a th:href="@{/contact}">견적상담</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>연락처</h4>
+                <div class="footer-contact-list">
+                    <div class="footer-contact-item"><span>📞</span><span>02-1234-5678</span></div>
+                    <div class="footer-contact-item"><span>✉️</span><span>info@design-interior.kr</span></div>
+                    <div class="footer-contact-item"><span>📍</span><span>서울시 동작구 시흥대로 606</span></div>
+                    <div class="footer-contact-item"><span>🕐</span><span>평일 09:00 ~ 18:00</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Design Interior. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- 플로팅 버튼 -->
+<div class="floating-buttons">
+    <a href="#" class="floating-btn floating-kakao" aria-label="카카오톡 문의">
+        <img th:src="@{/images/kakao.png}" alt="카카오톡" />
+    </a>
+    <a href="#" class="floating-btn floating-instagram" aria-label="인스타그램">
+        <img th:src="@{/images/instagram.png}" alt="인스타그램" />
+    </a>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+<script>
+    // ── 카테고리 필터 ──
+    const catBtns = document.querySelectorAll('.cat-btn');
+    const groups  = document.querySelectorAll('.gallery-group');
+
+    catBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            catBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const cat = btn.dataset.cat;
+
+            groups.forEach(group => {
+                if (cat === 'all') {
+                    group.classList.remove('hidden');
+                } else {
+                    group.dataset.cat === cat
+                        ? group.classList.remove('hidden')
+                        : group.classList.add('hidden');
+                }
+            });
+        });
+    });
+
+    // ── 라이트박스 ──
+    let allImages = [];
+    let currentIndex = 0;
+
+    function buildImageList() {
+        // 현재 보이는 그룹의 이미지만
+        const visibleItems = document.querySelectorAll('.gallery-group:not(.hidden) .gallery-item');
+        allImages = Array.from(visibleItems).map(el => el.dataset.src);
+    }
+
+    function openLightbox(el) {
+        buildImageList();
+        const src = el.dataset.src;
+        currentIndex = allImages.indexOf(src);
+        showLightboxImage();
+        document.getElementById('lightbox').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function lightboxNav(dir) {
+        buildImageList();
+        currentIndex = (currentIndex + dir + allImages.length) % allImages.length;
+        showLightboxImage();
+    }
+
+    function showLightboxImage() {
+        document.getElementById('lightboxImg').src = allImages[currentIndex];
+        document.getElementById('lightboxCounter').textContent = (currentIndex + 1) + ' / ' + allImages.length;
+    }
+
+    // 배경 클릭 시 닫기
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+        if (e.target === this) closeLightbox();
+    });
+
+    // 키보드 네비게이션
+    document.addEventListener('keydown', e => {
+        if (!document.getElementById('lightbox').classList.contains('open')) return;
+        if (e.key === 'ArrowLeft')  lightboxNav(-1);
+        if (e.key === 'ArrowRight') lightboxNav(1);
+        if (e.key === 'Escape')     closeLightbox();
+    });
+</script>
+</body>
+</html>
