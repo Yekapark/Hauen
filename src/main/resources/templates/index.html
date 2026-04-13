@@ -162,7 +162,9 @@
             <!-- 카드 그리드 -->
             <div class="portfolio-grid">
                 <!-- DB 데이터가 있을 때 -->
-                <div th:each="p : ${portfolios}" class="portfolio-card reveal">
+                <div th:each="p : ${portfolios}" class="portfolio-card reveal"
+                     th:onclick="|location.href='/portfolio/' + ${p.id}|"
+                     style="cursor:pointer;">
                     <div class="portfolio-thumb">
                         <img th:if="${p.thumbnailUrl != null}"
                              th:src="${p.thumbnailUrl}"
