@@ -238,17 +238,17 @@
 </div>
 
 <script>
-    // ── 카테고리별 파일 저장소 ──
     const fileStore = { before: [], entrance: [], living: [], kitchen: [], room: [], bathroom: [] };
-
-    // ── 썸네일 (1장) ──
+    const categories = ['before', 'entrance', 'living', 'kitchen', 'room', 'bathroom'];
     let thumbnailFile = null;
-    const dzThumb = document.getElementById('dz-thumbnail');
+
+    // ── 썸네일 ──
     const inputThumb = document.getElementById('input-thumbnail');
     const previewThumb = document.getElementById('preview-thumbnail');
     const thumbImg = document.getElementById('thumb-img');
+    const submitBtn = document.getElementById('submitBtn');
 
-    dzThumb.addEventListener('click', () => inputThumb.click());
+    document.getElementById('dz-thumbnail').addEventListener('click', () => inputThumb.click());
     inputThumb.addEventListener('change', () => {
         const file = inputThumb.files[0];
         if (!file) return;
@@ -264,29 +264,19 @@
         thumbImg.src = '';
     }
 
-    // ── 카테고리 드롭존 공통 초기화 ──
-    const categories = ['before', 'entrance', 'living', 'kitchen', 'room', 'bathroom'];
-
+    // ── 카테고리 드롭존 ──
     categories.forEach(cat => {
         const dz = document.getElementById('dz-' + cat);
         const input = document.getElementById('input-' + cat);
-
         dz.addEventListener('click', () => input.click());
         dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
         dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
-        dz.addEventListener('drop', e => {
-            e.preventDefault(); dz.classList.remove('dragover');
-            addFiles(cat, Array.from(e.dataTransfer.files));
-        });
-        input.addEventListener('change', () => {
-            addFiles(cat, Array.from(input.files));
-            input.value = '';
-        });
+        dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('dragover'); addFiles(cat, Array.from(e.dataTransfer.files)); });
+        input.addEventListener('change', () => { addFiles(cat, Array.from(input.files)); input.value = ''; });
     });
 
     function addFiles(cat, files) {
-        const imageFiles = files.filter(f => f.type.startsWith('image/'));
-        fileStore[cat] = [...fileStore[cat], ...imageFiles];
+        fileStore[cat] = [...fileStore[cat], ...files.filter(f => f.type.startsWith('image/'))];
         renderPreviews(cat);
     }
 
@@ -298,8 +288,6 @@
     function renderPreviews(cat) {
         const grid = document.getElementById('preview-' + cat);
         const count = document.getElementById('count-' + cat);
-        const input = document.getElementById('input-' + cat);
-
         grid.innerHTML = '';
         fileStore[cat].forEach((file, i) => {
             const item = document.createElement('div');
@@ -312,28 +300,29 @@
             item.appendChild(img); item.appendChild(btn);
             grid.appendChild(item);
         });
-
         count.textContent = fileStore[cat].length > 0 ? `${fileStore[cat].length}장 선택됨` : '';
-
-        // FileList 동기화
-        const dt = new DataTransfer();
-        fileStore[cat].forEach(f => dt.items.add(f));
-        input.files = dt.files;
     }
 
-    // ── 폼 제출 시 썸네일 FileList 동기화 ──
+    // ── 폼 제출 ──
     document.getElementById('regForm').addEventListener('submit', function(e) {
         if (!thumbnailFile) {
             e.preventDefault();
             alert('썸네일 이미지를 선택해주세요.');
             return;
         }
+        // 썸네일 동기화
+        const dtThumb = new DataTransfer();
+        dtThumb.items.add(thumbnailFile);
+        inputThumb.files = dtThumb.files;
+        // 카테고리 동기화
+        categories.forEach(cat => {
+            const input = document.getElementById('input-' + cat);
+            const dt = new DataTransfer();
+            fileStore[cat].forEach(f => dt.items.add(f));
+            input.files = dt.files;
+        });
         submitBtn.disabled = true;
         submitBtn.textContent = '업로드 중...';
-
-        const dt = new DataTransfer();
-        dt.items.add(thumbnailFile);
-        inputThumb.files = dt.files;
     });
 </script>
 </body>

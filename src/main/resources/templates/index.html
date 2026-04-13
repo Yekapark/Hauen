@@ -159,18 +159,6 @@
 
         <!-- 슬라이더 영역 -->
         <div class="portfolio-slider-wrap">
-
-            <!-- 이전 화살표 -->
-            <a th:href="@{/portfolio(filter=${filter}, page=${currentPage - 1})}"
-               th:classappend="${currentPage == 0} ? ' disabled'"
-               class="slider-arrow arrow-prev"
-               aria-label="이전">
-                <svg viewBox="0 0 40 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M32 8 C22 18, 10 28, 8 35 C10 42, 22 52, 32 62" stroke="#6B8060" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-                    <path d="M24 4 C14 16, 4 26, 2 35 C4 44, 14 54, 24 66" stroke="#2D3E2A" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8"/>
-                </svg>
-            </a>
-
             <!-- 카드 그리드 -->
             <div class="portfolio-grid">
                 <!-- DB 데이터가 있을 때 -->
@@ -198,17 +186,6 @@
                     등록된 포트폴리오가 없습니다.
                 </div>
             </div>
-
-            <!-- 다음 화살표 -->
-            <a th:href="@{/portfolio(filter=${filter}, page=${currentPage + 1})}"
-               th:classappend="${currentPage + 1 >= totalPages} ? ' disabled'"
-               class="slider-arrow arrow-next"
-               aria-label="다음">
-                <svg viewBox="0 0 40 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 8 C18 18, 30 28, 32 35 C30 42, 18 52, 8 62" stroke="#6B8060" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-                    <path d="M16 4 C26 16, 36 26, 38 35 C36 44, 26 54, 16 66" stroke="#2D3E2A" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8"/>
-                </svg>
-            </a>
         </div>
 
         <!-- 페이지 표시 -->
