@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -36,27 +37,26 @@ public class PortFolioService {
                 .orElseThrow(() -> new IllegalArgumentException("포트폴리오 없음: " + id));
     }
 
-    // 신규 등록
+    // 신규 등록 (카테고리별)
     @Transactional
-    public void save(Portfolio portfolio, List<MultipartFile> files) throws IOException {
-        // 먼저 저장해서 PK 확보
+    public void save(Portfolio portfolio, Map<String, List<MultipartFile>> categoryFiles) throws IOException {
         portfolioRepository.save(portfolio);
-        uploadImages(portfolio, files, portfolio.getImages().size());
+        for (Map.Entry<String, List<MultipartFile>> entry : categoryFiles.entrySet()) {
+            uploadImagesByCategory(portfolio, entry.getValue(), entry.getKey());
+        }
     }
 
     // 수정 (기존 정보 업데이트 + 새 이미지 추가)
     @Transactional
-    public void update(int id, Portfolio form, List<MultipartFile> newFiles, List<Integer> deleteImageIds) throws IOException {
+    public void update(int id, Portfolio form, Map<String, List<MultipartFile>> categoryFiles, List<Integer> deleteImageIds) throws IOException {
         Portfolio portfolio = findById(id);
 
-        // 기본 정보 업데이트
         portfolio.setTitle(form.getTitle());
         portfolio.setAreaPyeong(form.getAreaPyeong());
         portfolio.setConstructionStartDate(form.getConstructionStartDate());
         portfolio.setCompletionYear(form.getCompletionYear());
         portfolio.setConstructionDurationDays(form.getConstructionDurationDays());
 
-        // 선택한 이미지 삭제
         if (deleteImageIds != null && !deleteImageIds.isEmpty()) {
             List<PortfolioImage> toDelete = portfolio.getImages().stream()
                     .filter(img -> deleteImageIds.contains(img.getId()))
@@ -66,9 +66,10 @@ public class PortFolioService {
             portfolioImageRepository.deleteAllById(deleteImageIds);
         }
 
-        // 새 이미지 추가
-        if (newFiles != null && !newFiles.isEmpty()) {
-            uploadImages(portfolio, newFiles, portfolio.getImages().size());
+        if (categoryFiles != null) {
+            for (Map.Entry<String, List<MultipartFile>> entry : categoryFiles.entrySet()) {
+                uploadImagesByCategory(portfolio, entry.getValue(), entry.getKey());
+            }
         }
     }
 
@@ -85,16 +86,16 @@ public class PortFolioService {
         portfolioRepository.delete(portfolio);
     }
 
-    // 공통 이미지 업로드 처리
-    private void uploadImages(Portfolio portfolio, List<MultipartFile> files, int startOrder) throws IOException {
-        int order = startOrder;
+    // 카테고리별 이미지 업로드
+    private void uploadImagesByCategory(Portfolio portfolio, List<MultipartFile> files, String category) throws IOException {
+        if (files == null) return;
+        int order = (int) portfolio.getImages().stream().filter(img -> category.equals(img.getCategory())).count();
         for (MultipartFile file : files) {
             if (file.isEmpty()) continue;
-
-            R2Service.UploadResult result = r2Service.uploadWithKey(file, portfolio.getId(), portfolio.getTitle());
-
+            R2Service.UploadResult result = r2Service.uploadWithKey(file, portfolio.getId(), portfolio.getTitle(), category);
             PortfolioImage image = new PortfolioImage();
             image.setPortfolio(portfolio);
+            image.setCategory(category);
             image.setImageKey(result.key());
             image.setImageUrl(result.url());
             image.setSortOrder(order++);

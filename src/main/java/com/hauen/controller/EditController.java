@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/edit")
 @RequiredArgsConstructor
@@ -17,7 +18,6 @@ public class EditController {
 
     private final PortFolioService portFolioService;
 
-    // 수정 화면
     @GetMapping("/portfolio")
     public String editForm(@RequestParam("pk") int pk, Model model) {
         Portfolio portfolio = portFolioService.findById(pk);
@@ -25,20 +25,41 @@ public class EditController {
         return "edit/portfolio-edit";
     }
 
-    // 수정 처리
     @PostMapping("/portfolio/edit")
-    public String editSave(@RequestParam("pk") int pk,
-                           @ModelAttribute Portfolio form,
-                           @RequestParam(value = "imageFiles", required = false) List<MultipartFile> newImages,
-                           @RequestParam(value = "deleteImageIds", required = false) List<Integer> deleteImageIds) throws Exception {
-        portFolioService.update(pk, form, newImages, deleteImageIds);
+    public String editSave(
+            @RequestParam("pk") int pk,
+            @ModelAttribute Portfolio form,
+            @RequestParam(value = "thumbnail", required = false) List<MultipartFile> thumbnail,
+            @RequestParam(value = "before",    required = false) List<MultipartFile> before,
+            @RequestParam(value = "entrance",  required = false) List<MultipartFile> entrance,
+            @RequestParam(value = "living",    required = false) List<MultipartFile> living,
+            @RequestParam(value = "kitchen",   required = false) List<MultipartFile> kitchen,
+            @RequestParam(value = "room",      required = false) List<MultipartFile> room,
+            @RequestParam(value = "bathroom",  required = false) List<MultipartFile> bathroom,
+            @RequestParam(value = "deleteImageIds", required = false) List<Integer> deleteImageIds
+    ) throws Exception {
+
+        Map<String, List<MultipartFile>> categoryFiles = Map.of(
+                "thumbnail", orEmpty(thumbnail),
+                "before",    orEmpty(before),
+                "entrance",  orEmpty(entrance),
+                "living",    orEmpty(living),
+                "kitchen",   orEmpty(kitchen),
+                "room",      orEmpty(room),
+                "bathroom",  orEmpty(bathroom)
+        );
+
+        portFolioService.update(pk, form, categoryFiles, deleteImageIds);
         return "redirect:/portfolio";
     }
 
-    // 삭제 처리
     @PostMapping("/portfolio/delete")
     public String delete(@RequestParam("pk") int pk) {
         portFolioService.delete(pk);
         return "redirect:/portfolio";
+    }
+
+    private List<MultipartFile> orEmpty(List<MultipartFile> list) {
+        return list == null ? List.of() : list;
     }
 }

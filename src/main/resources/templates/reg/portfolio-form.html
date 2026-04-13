@@ -10,150 +10,108 @@
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <style>
         body { background: #f5f0e8; }
-        .reg-wrap {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 20px;
-        }
+        .reg-wrap { min-height:100vh; display:flex; justify-content:center; padding:60px 20px; }
         .reg-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 48px 52px;
-            width: 100%;
-            max-width: 700px;
-            border: 1px solid #e0d8cc;
-            box-shadow: 0 4px 32px rgba(0,0,0,0.07);
+            background:#fff; border-radius:20px; padding:48px 52px;
+            width:100%; max-width:780px;
+            border:1px solid #e0d8cc; box-shadow:0 4px 32px rgba(0,0,0,0.07);
+            height: fit-content;
         }
-        .reg-card h1 {
-            font-family: 'Noto Serif KR', serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a1a16;
-            margin-bottom: 8px;
-        }
-        .reg-sub { font-size: 13px; color: #8a8a7a; margin-bottom: 36px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: #4a4a40;
-            margin-bottom: 8px;
-            letter-spacing: 0.3px;
-        }
-        .form-group label .req { color: #c8842a; margin-left: 2px; }
+        .reg-card h1 { font-family:'Noto Serif KR',serif; font-size:24px; font-weight:700; color:#1a1a16; margin-bottom:8px; }
+        .reg-sub { font-size:13px; color:#8a8a7a; margin-bottom:36px; }
+        .divider { border:none; border-top:1px solid #e0d8cc; margin:28px 0; }
+        .form-group { margin-bottom:20px; }
+        .form-group label { display:block; font-size:12px; font-weight:600; color:#4a4a40; margin-bottom:8px; letter-spacing:0.3px; }
+        .form-group label .req { color:#c8842a; margin-left:2px; }
         .form-group input {
-            width: 100%;
-            background: #f5f0e8;
-            border: 1px solid #e0d8cc;
-            border-radius: 10px;
-            padding: 12px 16px;
-            font-size: 14px;
-            font-family: 'Noto Sans KR', sans-serif;
-            color: #1a1a16;
-            outline: none;
-            transition: border-color 0.2s, background 0.2s;
-            box-sizing: border-box;
+            width:100%; background:#f5f0e8; border:1px solid #e0d8cc;
+            border-radius:10px; padding:12px 16px; font-size:14px;
+            font-family:'Noto Sans KR',sans-serif; color:#1a1a16;
+            outline:none; transition:border-color 0.2s; box-sizing:border-box;
         }
-        .form-group input:focus { border-color: #4a5e40; background: #fff; }
-        .form-group input::placeholder { color: #b0a898; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group input:focus { border-color:#4a5e40; background:#fff; }
+        .form-group input::placeholder { color:#b0a898; }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 
-        /* 이미지 업로드 드롭존 */
+        /* 카테고리 섹션 */
+        .category-section-title {
+            font-size:14px; font-weight:600; color:#1a1a16;
+            margin-bottom:16px; padding-bottom:10px;
+            border-bottom:2px solid #4a5e40;
+            display:flex; align-items:center; gap:8px;
+        }
+        .category-section-title .badge {
+            font-size:10px; padding:2px 8px; border-radius:100px;
+            background:#4a5e40; color:#fff; font-weight:500;
+        }
+        .category-section-title .badge.required { background:#c8842a; }
+
+        /* 드롭존 */
         .dropzone {
-            border: 2px dashed #c8b89a;
-            border-radius: 12px;
-            padding: 32px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-            background: #f5f0e8;
+            border:2px dashed #c8b89a; border-radius:10px;
+            padding:20px; text-align:center; cursor:pointer;
+            background:#f5f0e8; transition:border-color 0.2s, background 0.2s;
         }
-        .dropzone:hover, .dropzone.dragover { border-color: #4a5e40; background: #eee8dc; }
-        .dropzone input[type="file"] { display: none; }
-        .dropzone-icon { font-size: 32px; margin-bottom: 8px; }
-        .dropzone-text { font-size: 14px; color: #8a8a7a; }
-        .dropzone-text strong { color: #4a5e40; }
-        .dropzone-hint { font-size: 11px; color: #b0a898; margin-top: 4px; }
+        .dropzone:hover, .dropzone.dragover { border-color:#4a5e40; background:#eee8dc; }
+        .dropzone input[type="file"] { display:none; }
+        .dropzone-text { font-size:13px; color:#8a8a7a; }
+        .dropzone-text strong { color:#4a5e40; }
+        .dropzone-hint { font-size:11px; color:#b0a898; margin-top:4px; }
 
-        /* 미리보기 그리드 */
+        /* 미리보기 */
         .preview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 14px;
+            display:grid; grid-template-columns:repeat(auto-fill, minmax(90px, 1fr));
+            gap:8px; margin-top:10px;
         }
         .preview-item {
-            position: relative;
-            aspect-ratio: 1;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #e0d8cc;
+            position:relative; aspect-ratio:1;
+            border-radius:8px; overflow:hidden;
+            border:1px solid #e0d8cc;
         }
-        .preview-item img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
+        .preview-item img { width:100%; height:100%; object-fit:cover; }
         .preview-item .remove-btn {
-            position: absolute;
-            top: 4px; right: 4px;
-            width: 20px; height: 20px;
-            background: rgba(0,0,0,0.55);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 11px;
-            display: flex; align-items: center; justify-content: center;
-            line-height: 1;
+            position:absolute; top:3px; right:3px;
+            width:18px; height:18px;
+            background:rgba(0,0,0,0.6); color:#fff;
+            border:none; border-radius:50%; font-size:10px;
+            cursor:pointer; display:flex; align-items:center; justify-content:center;
         }
-        .preview-item .order-badge {
-            position: absolute;
-            bottom: 4px; left: 4px;
-            background: rgba(74,94,64,0.85);
-            color: #fff;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
+        .preview-count { font-size:11px; color:#8a8a7a; margin-top:6px; }
+
+        /* 썸네일은 1장만 */
+        .thumbnail-preview {
+            width:100%; aspect-ratio:16/9;
+            border-radius:10px; overflow:hidden;
+            border:1px solid #e0d8cc; margin-top:10px;
+            display:none; position:relative;
         }
-        .preview-count { font-size: 12px; color: #8a8a7a; margin-top: 8px; }
+        .thumbnail-preview img { width:100%; height:100%; object-fit:cover; }
+        .thumbnail-preview .remove-btn {
+            position:absolute; top:8px; right:8px;
+            width:24px; height:24px;
+            background:rgba(0,0,0,0.6); color:#fff;
+            border:none; border-radius:50%; font-size:12px;
+            cursor:pointer; display:flex; align-items:center; justify-content:center;
+        }
 
         .btn-submit {
-            width: 100%;
-            padding: 15px;
-            background: #4a5e40;
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            font-family: 'Noto Sans KR', sans-serif;
-            cursor: pointer;
-            margin-top: 12px;
-            transition: background 0.2s, transform 0.15s;
+            width:100%; padding:15px; background:#4a5e40; color:#fff;
+            border:none; border-radius:10px; font-size:15px; font-weight:600;
+            font-family:'Noto Sans KR',sans-serif; cursor:pointer;
+            margin-top:12px; transition:background 0.2s, transform 0.15s;
         }
-        .btn-submit:hover { background: #2d3e2a; transform: translateY(-1px); }
-        .btn-submit:disabled { background: #b0a898; cursor: not-allowed; transform: none; }
-        .btn-cancel {
-            display: block;
-            text-align: center;
-            margin-top: 14px;
-            font-size: 13px;
-            color: #8a8a7a;
-            text-decoration: none;
-        }
-        .btn-cancel:hover { color: #4a5e40; }
+        .btn-submit:hover { background:#2d3e2a; transform:translateY(-1px); }
+        .btn-submit:disabled { background:#b0a898; cursor:not-allowed; transform:none; }
+        .btn-cancel { display:block; text-align:center; margin-top:14px; font-size:13px; color:#8a8a7a; text-decoration:none; }
+        .btn-cancel:hover { color:#4a5e40; }
 
-        @media (max-width: 600px) {
-            .reg-card { padding: 32px 20px; }
-            .form-row { grid-template-columns: 1fr; }
+        @media (max-width:600px) {
+            .reg-card { padding:32px 20px; }
+            .form-row { grid-template-columns:1fr; }
         }
     </style>
 </head>
 <body>
-
 <div class="reg-wrap">
     <div class="reg-card">
         <h1>포트폴리오 등록</h1>
@@ -162,13 +120,11 @@
         <form id="regForm" th:action="@{/reg/portfolio}" th:object="${portfolio}"
               method="post" enctype="multipart/form-data">
 
-            <!-- 제목 -->
+            <!-- 기본 정보 -->
             <div class="form-group">
                 <label>제목 <span class="req">*</span></label>
                 <input type="text" th:field="*{title}" placeholder="예) 모던 미니멀 30평대 아파트" required />
             </div>
-
-            <!-- 평형 / 준공연도 -->
             <div class="form-row">
                 <div class="form-group">
                     <label>평형 <span class="req">*</span></label>
@@ -179,8 +135,6 @@
                     <input type="number" th:field="*{completionYear}" placeholder="예) 2024" min="2000" max="2100" required />
                 </div>
             </div>
-
-            <!-- 시공일 / 시공기간 -->
             <div class="form-row">
                 <div class="form-group">
                     <label>시공일 <span class="req">*</span></label>
@@ -192,18 +146,89 @@
                 </div>
             </div>
 
-            <!-- 이미지 업로드 -->
-            <div class="form-group">
-                <label>이미지 <span class="req">*</span> <span style="font-weight:400;color:#b0a898;">(첫 번째 사진이 썸네일)</span></label>
-                <div class="dropzone" id="dropzone">
-                    <input type="file" name="imageFiles" id="imageInput" accept="image/*" multiple />
-                    <div class="dropzone-icon">🖼️</div>
-                    <div class="dropzone-text"><strong>클릭</strong>하거나 이미지를 여기에 끌어다 놓으세요</div>
-                    <div class="dropzone-hint">jpg, png, webp · 파일당 최대 20MB</div>
-                </div>
-                <div class="preview-grid" id="previewGrid"></div>
-                <div class="preview-count" id="previewCount"></div>
+            <hr class="divider" />
+
+            <!-- 썸네일 -->
+            <div class="category-section-title">
+                🖼️ 썸네일 <span class="badge required">필수 1장</span>
             </div>
+            <div class="dropzone" id="dz-thumbnail" data-category="thumbnail" data-single="true">
+                <input type="file" name="thumbnail" id="input-thumbnail" accept="image/*" />
+                <div class="dropzone-text"><strong>클릭</strong>하여 썸네일 이미지 선택</div>
+                <div class="dropzone-hint">목록에 표시되는 대표 이미지 · 1장만 등록</div>
+            </div>
+            <div class="thumbnail-preview" id="preview-thumbnail">
+                <img id="thumb-img" src="" alt="썸네일 미리보기" />
+                <button type="button" class="remove-btn" onclick="removeThumbnail()">✕</button>
+            </div>
+
+            <hr class="divider" />
+
+            <!-- 시공 전 -->
+            <div class="category-section-title">🏚️ 시공 전 <span class="badge">선택</span></div>
+            <div class="dropzone" id="dz-before" data-category="before">
+                <input type="file" name="before" id="input-before" accept="image/*" multiple />
+                <div class="dropzone-text"><strong>클릭</strong>하거나 이미지를 끌어다 놓으세요</div>
+            </div>
+            <div class="preview-grid" id="preview-before"></div>
+            <div class="preview-count" id="count-before"></div>
+
+            <hr class="divider" />
+
+            <!-- 현관 -->
+            <div class="category-section-title">🚪 현관 <span class="badge">선택</span></div>
+            <div class="dropzone" id="dz-entrance" data-category="entrance">
+                <input type="file" name="entrance" id="input-entrance" accept="image/*" multiple />
+                <div class="dropzone-text"><strong>클릭</strong>하거나 이미지를 끌어다 놓으세요</div>
+            </div>
+            <div class="preview-grid" id="preview-entrance"></div>
+            <div class="preview-count" id="count-entrance"></div>
+
+            <hr class="divider" />
+
+            <!-- 거실 -->
+            <div class="category-section-title">🛋️ 거실 <span class="badge">선택</span></div>
+            <div class="dropzone" id="dz-living" data-category="living">
+                <input type="file" name="living" id="input-living" accept="image/*" multiple />
+                <div class="dropzone-text"><strong>클릭</strong>하거나 이미지를 끌어다 놓으세요</div>
+            </div>
+            <div class="preview-grid" id="preview-living"></div>
+            <div class="preview-count" id="count-living"></div>
+
+            <hr class="divider" />
+
+            <!-- 주방 -->
+            <div class="category-section-title">🍳 주방 <span class="badge">선택</span></div>
+            <div class="dropzone" id="dz-kitchen" data-category="kitchen">
+                <input type="file" name="kitchen" id="input-kitchen" accept="image/*" multiple />
+                <div class="dropzone-text"><strong>클릭</strong>하거나 이미지를 끌어다 놓으세요</div>
+            </div>
+            <div class="preview-grid" id="preview-kitchen"></div>
+            <div class="preview-count" id="count-kitchen"></div>
+
+            <hr class="divider" />
+
+            <!-- 방 -->
+            <div class="category-section-title">🛏️ 방 <span class="badge">선택</span></div>
+            <div class="dropzone" id="dz-room" data-category="room">
+                <input type="file" name="room" id="input-room" accept="image/*" multiple />
+                <div class="dropzone-text"><strong>클릭</strong>하거나 이미지를 끌어다 놓으세요</div>
+            </div>
+            <div class="preview-grid" id="preview-room"></div>
+            <div class="preview-count" id="count-room"></div>
+
+            <hr class="divider" />
+
+            <!-- 욕실 -->
+            <div class="category-section-title">🚿 욕실 <span class="badge">선택</span></div>
+            <div class="dropzone" id="dz-bathroom" data-category="bathroom">
+                <input type="file" name="bathroom" id="input-bathroom" accept="image/*" multiple />
+                <div class="dropzone-text"><strong>클릭</strong>하거나 이미지를 끌어다 놓으세요</div>
+            </div>
+            <div class="preview-grid" id="preview-bathroom"></div>
+            <div class="preview-count" id="count-bathroom"></div>
+
+            <hr class="divider" />
 
             <button type="submit" class="btn-submit" id="submitBtn">등록하기</button>
         </form>
@@ -213,88 +238,102 @@
 </div>
 
 <script>
-    const dropzone    = document.getElementById('dropzone');
-    const imageInput  = document.getElementById('imageInput');
-    const previewGrid = document.getElementById('previewGrid');
-    const previewCount = document.getElementById('previewCount');
-    const submitBtn   = document.getElementById('submitBtn');
+    // ── 카테고리별 파일 저장소 ──
+    const fileStore = { before: [], entrance: [], living: [], kitchen: [], room: [], bathroom: [] };
 
-    let selectedFiles = [];  // File 객체 배열
+    // ── 썸네일 (1장) ──
+    let thumbnailFile = null;
+    const dzThumb = document.getElementById('dz-thumbnail');
+    const inputThumb = document.getElementById('input-thumbnail');
+    const previewThumb = document.getElementById('preview-thumbnail');
+    const thumbImg = document.getElementById('thumb-img');
 
-    // 드롭존 클릭 → 파일 선택
-    dropzone.addEventListener('click', () => imageInput.click());
-
-    // 드래그 앤 드롭
-    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
-    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-    dropzone.addEventListener('drop', e => {
-        e.preventDefault();
-        dropzone.classList.remove('dragover');
-        addFiles(Array.from(e.dataTransfer.files));
+    dzThumb.addEventListener('click', () => inputThumb.click());
+    inputThumb.addEventListener('change', () => {
+        const file = inputThumb.files[0];
+        if (!file) return;
+        thumbnailFile = file;
+        thumbImg.src = URL.createObjectURL(file);
+        previewThumb.style.display = 'block';
     });
 
-    // 파일 선택
-    imageInput.addEventListener('change', () => {
-        addFiles(Array.from(imageInput.files));
-        imageInput.value = '';  // 같은 파일 재선택 가능하도록 초기화
+    function removeThumbnail() {
+        thumbnailFile = null;
+        inputThumb.value = '';
+        previewThumb.style.display = 'none';
+        thumbImg.src = '';
+    }
+
+    // ── 카테고리 드롭존 공통 초기화 ──
+    const categories = ['before', 'entrance', 'living', 'kitchen', 'room', 'bathroom'];
+
+    categories.forEach(cat => {
+        const dz = document.getElementById('dz-' + cat);
+        const input = document.getElementById('input-' + cat);
+
+        dz.addEventListener('click', () => input.click());
+        dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+        dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+        dz.addEventListener('drop', e => {
+            e.preventDefault(); dz.classList.remove('dragover');
+            addFiles(cat, Array.from(e.dataTransfer.files));
+        });
+        input.addEventListener('change', () => {
+            addFiles(cat, Array.from(input.files));
+            input.value = '';
+        });
     });
 
-    function addFiles(files) {
-        selectedFiles = [...selectedFiles, ...files.filter(f => f.type.startsWith('image/'))];
-        renderPreviews();
+    function addFiles(cat, files) {
+        const imageFiles = files.filter(f => f.type.startsWith('image/'));
+        fileStore[cat] = [...fileStore[cat], ...imageFiles];
+        renderPreviews(cat);
     }
 
-    function removeFile(index) {
-        selectedFiles.splice(index, 1);
-        renderPreviews();
+    function removeFile(cat, index) {
+        fileStore[cat].splice(index, 1);
+        renderPreviews(cat);
     }
 
-    function renderPreviews() {
-        previewGrid.innerHTML = '';
+    function renderPreviews(cat) {
+        const grid = document.getElementById('preview-' + cat);
+        const count = document.getElementById('count-' + cat);
+        const input = document.getElementById('input-' + cat);
 
-        selectedFiles.forEach((file, index) => {
+        grid.innerHTML = '';
+        fileStore[cat].forEach((file, i) => {
             const item = document.createElement('div');
             item.className = 'preview-item';
-
             const img = document.createElement('img');
             img.src = URL.createObjectURL(file);
-
-            const badge = document.createElement('div');
-            badge.className = 'order-badge';
-            badge.textContent = index === 0 ? '썸네일' : (index + 1);
-
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'remove-btn';
-            removeBtn.type = 'button';
-            removeBtn.textContent = '✕';
-            removeBtn.onclick = () => removeFile(index);
-
-            item.appendChild(img);
-            item.appendChild(badge);
-            item.appendChild(removeBtn);
-            previewGrid.appendChild(item);
+            const btn = document.createElement('button');
+            btn.className = 'remove-btn'; btn.type = 'button'; btn.textContent = '✕';
+            btn.onclick = () => removeFile(cat, i);
+            item.appendChild(img); item.appendChild(btn);
+            grid.appendChild(item);
         });
 
-        previewCount.textContent = selectedFiles.length > 0
-            ? `총 ${selectedFiles.length}장 선택됨`
-            : '';
+        count.textContent = fileStore[cat].length > 0 ? `${fileStore[cat].length}장 선택됨` : '';
+
+        // FileList 동기화
+        const dt = new DataTransfer();
+        fileStore[cat].forEach(f => dt.items.add(f));
+        input.files = dt.files;
     }
 
-    // 폼 제출 시 selectedFiles를 실제 input에 동기화
+    // ── 폼 제출 시 썸네일 FileList 동기화 ──
     document.getElementById('regForm').addEventListener('submit', function(e) {
-        if (selectedFiles.length === 0) {
+        if (!thumbnailFile) {
             e.preventDefault();
-            alert('이미지를 최소 1장 이상 선택해주세요.');
+            alert('썸네일 이미지를 선택해주세요.');
             return;
         }
-
         submitBtn.disabled = true;
         submitBtn.textContent = '업로드 중...';
 
-        // DataTransfer로 FileList 재구성
         const dt = new DataTransfer();
-        selectedFiles.forEach(f => dt.items.add(f));
-        imageInput.files = dt.files;
+        dt.items.add(thumbnailFile);
+        inputThumb.files = dt.files;
     });
 </script>
 </body>

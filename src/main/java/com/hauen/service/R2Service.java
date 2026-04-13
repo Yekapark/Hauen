@@ -25,9 +25,9 @@ public class R2Service {
     @Value("${cloudflare.r2.public-url}")
     private String publicUrl;
 
-    // 파일 업로드 → UploadResult 반환 (디렉토리: {pk}_{title})
-    public UploadResult uploadWithKey(MultipartFile file, int portfolioId, String portfolioTitle) throws IOException {
-        String dir = buildDir(portfolioId, portfolioTitle);
+    // 파일 업로드 → UploadResult 반환 (디렉토리: {pk}_{title}/{category})
+    public UploadResult uploadWithKey(MultipartFile file, int portfolioId, String portfolioTitle, String category) throws IOException {
+        String dir = buildDir(portfolioId, portfolioTitle) + "/" + category;
         String key = dir + "/" + UUID.randomUUID() + "." + getExtension(file.getOriginalFilename());
 
         s3Client.putObject(
@@ -39,6 +39,11 @@ public class R2Service {
                 RequestBody.fromBytes(file.getBytes())
         );
         return new UploadResult(key, publicUrl + "/" + key);
+    }
+
+    // 하위 호환 (category 없는 버전)
+    public UploadResult uploadWithKey(MultipartFile file, int portfolioId, String portfolioTitle) throws IOException {
+        return uploadWithKey(file, portfolioId, portfolioTitle, "etc");
     }
 
     // 단일 삭제

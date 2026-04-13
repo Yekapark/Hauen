@@ -42,14 +42,24 @@ public class Portfolio {
     @OrderBy("sortOrder ASC")
     private List<PortfolioImage> images = new ArrayList<>();
 
-    // 첫 번째 이미지를 썸네일로 사용
+    // 썸네일
     public String getThumbnailUrl() {
-        if (images == null || images.isEmpty()) return null;
-        return images.get(0).getImageUrl();
+        return images.stream()
+                .filter(img -> "thumbnail".equals(img.getCategory()))
+                .findFirst()
+                .map(PortfolioImage::getImageUrl)
+                .orElse(null);
     }
 
     public boolean hasThumbnail() {
-        return images != null && !images.isEmpty();
+        return getThumbnailUrl() != null;
+    }
+
+    // 카테고리별 이미지 필터
+    public List<PortfolioImage> getImagesByCategory(String category) {
+        return images.stream()
+                .filter(img -> category.equals(img.getCategory()))
+                .toList();
     }
 
     @PrePersist
