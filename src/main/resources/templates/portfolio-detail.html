@@ -245,28 +245,10 @@
 <body>
 
 <!-- NAVBAR -->
-<nav id="navbar" class="sub-mode">
-    <a th:href="@{/}" class="nav-logo">
-        <div class="nav-logo-box">
-            <img class="logo-light" th:src="@{/images/logo-light.png}" alt="HAUEN 하우엔 로고" />
-        </div>
-    </a>
-    <ul class="nav-links">
-        <li><a th:href="@{/about}">업체소개</a></li>
-        <li><a th:href="@{/portfolio}" class="active">포트폴리오</a></li>
-        <li><a th:href="@{/contact}" class="btn-cta">무료 상담 신청</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="메뉴"><span></span><span></span><span></span></button>
-</nav>
+<nav th:replace="~{fragments/layout :: navbar('sub-mode', 'portfolio')}"></nav>
 
 <!-- 모바일 메뉴 -->
-<div class="mobile-menu" id="mobileMenu">
-    <ul>
-        <li><a th:href="@{/about}">업체소개</a></li>
-        <li><a th:href="@{/portfolio}">포트폴리오</a></li>
-    </ul>
-    <div class="mobile-cta"><a th:href="@{/contact}">무료 상담 신청</a></div>
-</div>
+<div th:replace="~{fragments/layout :: mobile-menu}"></div>
 
 <!-- 헤더 섹션 -->
 <section class="detail-header">
@@ -360,7 +342,7 @@
         <!-- 카테고리별 이미지 그룹 -->
         <div id="galleryContainer">
 
-            <th:block th:each="group : ${ {'before','entrance','living','kitchen','room','bathroom'} }">
+            <th:block th:each="group : ${ {'before'or'entrance'or'living'or'kitchen'or'room'or'bathroom'} }">
                 <th:block th:with="imgs=${portfolio.getImagesByCategory(group)}">
                     <div class="gallery-group"
                          th:if="${!imgs.isEmpty()}"
@@ -416,58 +398,10 @@
 </div>
 
 <!-- FOOTER -->
-<footer>
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <div class="footer-logo-wrap">
-                    <img th:src="@{/images/footer-logo.png}" alt="HAUEN 하우엔 로고" />
-                </div>
-                <p>20년 경력의 인테리어 전문가 팀이 당신의 공간을 아름답게 완성합니다.</p>
-                <div class="footer-socials">
-                    <a class="social-btn" aria-label="인스타그램">📸</a>
-                    <a class="social-btn" aria-label="카카오">💬</a>
-                    <a class="social-btn" aria-label="유튜브">▶️</a>
-                    <a class="social-btn" aria-label="페이스북">👍</a>
-                </div>
-            </div>
-            <div class="footer-nav">
-                <h4>메뉴</h4>
-                <ul>
-                    <li><a th:href="@{/about}">업체소개</a></li>
-                    <li><a th:href="@{/portfolio}">포트폴리오</a></li>
-                    <li><a th:href="@{/contact}">견적상담</a></li>
-                </ul>
-            </div>
-            <div class="footer-contact">
-                <h4>연락처</h4>
-                <div class="footer-contact-list">
-                    <div class="footer-contact-item"><span>📞</span><span>02-1234-5678</span></div>
-                    <div class="footer-contact-item"><span>✉️</span><span>info@design-interior.kr</span></div>
-                    <div class="footer-contact-item"><span>📍</span><span>서울시 동작구 시흥대로 606</span></div>
-                    <div class="footer-contact-item"><span>🕐</span><span>평일 09:00 ~ 18:00</span></div>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2024 Design Interior. All rights reserved.</p>
-            <div class="footer-bottom-links">
-                <a href="#">개인정보처리방침</a>
-                <a href="#">이용약관</a>
-            </div>
-        </div>
-    </div>
-</footer>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
 
 <!-- 플로팅 버튼 -->
-<div class="floating-buttons">
-    <a href="#" class="floating-btn floating-kakao" aria-label="카카오톡 문의">
-        <img th:src="@{/images/kakao.png}" alt="카카오톡" />
-    </a>
-    <a href="#" class="floating-btn floating-instagram" aria-label="인스타그램">
-        <img th:src="@{/images/instagram.png}" alt="인스타그램" />
-    </a>
-</div>
+<div th:replace="~{fragments/layout :: floating-buttons}"></div>
 
 <script th:src="@{/js/main.js}"></script>
 <script>

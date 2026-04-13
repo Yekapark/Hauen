@@ -822,13 +822,15 @@ footer {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
 }
 .floating-btn img {
-    width: 100%;
-    height: 100%;
+    width: 64px;
+    /*height: 140px;*/
     object-fit: cover;
     display: block;
+    border-radius: 50%;
 }
-.floating-kakao     { background: #FEE500; padding: 6px; }
-.floating-instagram { background: transparent; padding: 0; }
+.floating-kakao     { background: transparent; margin-bottom: 15px; }
+.floating-instagram { background: transparent; margin-bottom: 15px; }
+.floating-blog      { background: transparent; }
 
 /* ════════════════════════════════════════════
    서브 페이지 공통
@@ -1287,6 +1289,7 @@ nav.sub-mode .hamburger span  { background: #fff; }
     /* 플로팅 버튼 */
     .floating-buttons { bottom: 20px; right: 16px; gap: 10px; }
     .floating-btn { width: 48px; height: 48px; }
+    .floating-btn img { width: 48px; height: 48px; }
 }
 
 /* ════════════════════════════════════════════
