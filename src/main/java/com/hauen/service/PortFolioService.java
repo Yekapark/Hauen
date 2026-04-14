@@ -27,7 +27,7 @@ public class PortFolioService {
     public Page<Portfolio> findByFilter(String filter, Pageable pageable) {
         // 1단계: 페이징으로 ID만 조회
         Page<Portfolio> page = switch (filter) {
-            case "20" -> portfolioRepository.findByAreaPyeongBetween(20, 29, pageable);
+            case "20" -> portfolioRepository.findByAreaPyeongBetween(0, 29, pageable);
             case "30" -> portfolioRepository.findByAreaPyeongBetween(30, 39, pageable);
             case "40" -> portfolioRepository.findByAreaPyeongGreaterThanEqual(40, pageable);
             default   -> portfolioRepository.findAll(pageable);
