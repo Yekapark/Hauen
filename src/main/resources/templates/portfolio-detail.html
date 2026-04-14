@@ -342,7 +342,7 @@
         <!-- 카테고리별 이미지 그룹 -->
         <div id="galleryContainer">
 
-            <th:block th:each="group : ${ {'before'or'entrance'or'living'or'kitchen'or'room'or'bathroom'} }">
+            <th:block th:each="group : ${groups}">
                 <th:block th:with="imgs=${portfolio.getImagesByCategory(group)}">
                     <div class="gallery-group"
                          th:if="${!imgs.isEmpty()}"

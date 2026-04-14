@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class MainController {
@@ -84,6 +86,7 @@ public class MainController {
     public String portfolioDetail(@PathVariable int id, Model model) {
         Portfolio portfolio = portfolioService.findById(id);
         model.addAttribute("portfolio", portfolio);
+        model.addAttribute("groups", List.of("before","entrance","living","kitchen","room","bathroom"));
         return "portfolio-detail";
     }
 
