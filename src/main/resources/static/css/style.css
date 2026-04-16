@@ -121,7 +121,7 @@ nav.hero-mode .nav-links a:hover { color: #fff; }
 /* 실제 배경 이미지 레이어 */
 .hero-bg {
     position: absolute; inset: 0;
-    background-color: #1a2e18; /* 이미지 로드 전 초록 fallback */
+    background-color: #1a2e18;
     background: linear-gradient(135deg, #0e1a0c 0%, #1c2e18 40%, #243822 100%);
 }
 /* 이미지 위 어두운 오버레이 */
@@ -484,8 +484,14 @@ section { padding: 100px 0; }
     overflow: hidden;
 }
 .portfolio-thumb-img {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;          /* 꽉 채우되 비율 유지 */
+    object-position: center;
+    display: block;
     transition: transform 0.5s var(--transition);
+    image-rendering: -webkit-optimize-contrast; /* 크롬 선명도 개선 */
+    image-rendering: crisp-edges;
 }
 .portfolio-card:hover .portfolio-thumb-img { transform: scale(1.06); }
 
@@ -1298,7 +1304,7 @@ nav.sub-mode .hamburger span  { background: #fff; }
 }
 
 /* ════════════════════════════════════════════
-   포트폴리오 슬라이더 (화살표 페이징)
+   포트폴리오 슬라이더
 ════════════════════════════════════════════ */
 .portfolio-slider-wrap {
     display: flex;
@@ -1344,4 +1350,145 @@ a.filter-tab { display: inline-block; text-decoration: none; }
 @media (max-width: 600px) {
     .slider-arrow { width: 40px; }
     .slider-arrow svg { width: 32px; height: 54px; }
+}
+
+/* index 슬라이드 카드 */
+.fan-slider-section {
+    position: relative;
+    padding: 0px 0 80px;
+    overflow: hidden;
+}
+.fan-slider-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 760px;
+    overflow: hidden;
+}
+.fan-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    width: 52px;
+    height: 52px;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+.fan-arrow:hover { background: var(--text-dark); border-color: var(--text-dark); }
+.fan-arrow:hover img { filter: invert(1); }
+.fan-arrow img { width: 20px; height: 20px; }
+.fan-arrow-left  { left: clamp(8px, 3vw, 48px); }
+.fan-arrow-right { right: clamp(8px, 3vw, 48px); }
+
+/* 카드: 800×600 (기존 400×300의 두 배) */
+.fan-cards {
+    position: relative;
+    width: 800px;
+    height: 600px;
+}
+.fan-card {
+    position: absolute;
+    width: 800px;
+    height: 600px;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    left: 50%;
+    top: 50%;
+    margin-left: -400px;
+    margin-top: -300px;
+    background: var(--bg-cream);
+    border: 1px solid var(--border);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+    transition: transform 0.9s cubic-bezier(0.25, 0.1, 0.25, 1),
+    opacity 0.9s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform, opacity;
+}
+.fan-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.5s ease;
+}
+.fan-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+.fan-card-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 28px 32px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s, transform 0.4s;
+}
+.fan-card-info h3 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 6px;
+}
+.fan-card-info span { font-size: 14px; color: rgba(255,255,255,0.75); }
+.fan-card:hover .fan-card-overlay { opacity: 1; }
+.fan-card:hover .fan-card-info    { opacity: 1; transform: translateY(0); }
+.fan-card:hover > img             { transform: scale(1.04); }
+
+.fan-card-skeleton {
+    background: linear-gradient(90deg, #ede8e0 25%, #e8e0d4 50%, #ede8e0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease infinite;
+    cursor: default;
+}
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+.fan-more-btn { text-align: center; margin-top: 36px; }
+.fan-more-btn a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 32px;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-mid);
+    text-decoration: none;
+    transition: all 0.25s;
+}
+.fan-more-btn a:hover {
+    background: var(--text-dark);
+    color: #fff;
+    border-color: var(--text-dark);
+}
+
+@media (max-width: 900px) {
+    .fan-slider-wrap { height: 520px; }
+    .fan-cards { width: 560px; height: 420px; }
+    .fan-card  { width: 560px; height: 420px; margin-left: -280px; margin-top: -210px; }
+}
+@media (max-width: 600px) {
+    .fan-slider-wrap { height: 320px; }
+    .fan-cards { width: 260px; height: 195px; }
+    .fan-card  { width: 260px; height: 195px; margin-left: -130px; margin-top: -97px; }
+    .fan-arrow { width: 36px; height: 36px; }
+    .fan-arrow img { width: 14px; height: 14px; }
+    .fan-arrow-left  { left: 8px; }
+    .fan-arrow-right { right: 8px; }
 }

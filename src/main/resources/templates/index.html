@@ -8,16 +8,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+
+    </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav th:replace="~{fragments/layout :: navbar('hero-mode', '')}"></nav>
-
-<!-- 모바일 메뉴 -->
 <div th:replace="~{fragments/layout :: mobile-menu}"></div>
 
-<!-- HERO -->
 <section id="hero">
     <div class="hero-bg"></div>
     <div class="hero-img-sim"></div>
@@ -35,20 +34,6 @@
             <a href="#portfolio" class="btn-outline-white">포트폴리오 보기</a>
             <a th:href="@{/contact}" class="btn-filled-accent">견적 상담하기 &nbsp;→</a>
         </div>
-<!--        <div class="hero-stats">-->
-<!--            <div class="hero-stat-item">-->
-<!--                <div class="hero-stat-num">1,200+</div>-->
-<!--                <div class="hero-stat-label">완료 프로젝트</div>-->
-<!--            </div>-->
-<!--            <div class="hero-stat-item">-->
-<!--                <div class="hero-stat-num">20년+</div>-->
-<!--                <div class="hero-stat-label">업계 경력</div>-->
-<!--            </div>-->
-<!--            <div class="hero-stat-item">-->
-<!--                <div class="hero-stat-num">98%</div>-->
-<!--                <div class="hero-stat-label">고객 만족도</div>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
     <div class="hero-scroll">
         <span>SCROLL</span>
@@ -56,7 +41,6 @@
     </div>
 </section>
 
-<!-- ABOUT -->
 <section id="about">
     <div class="container">
         <div class="about-grid">
@@ -110,8 +94,6 @@
     </div>
 </section>
 
-<!-- PORTFOLIO -->
-<!-- 포트폴리오 목록 -->
 <section id="portfolio" style="padding-top: 80px;">
     <div class="container">
         <div class="portfolio-header reveal">
@@ -121,131 +103,201 @@
             </div>
             <p>다양한 공간에서 완성된 감각적인 디자인을 확인해 보세요.</p>
         </div>
-
-        <!-- 필터 탭 -->
-        <div class="filter-tabs reveal">
-            <button class="filter-tab active" data-filter="all">전체</button>
-            <button class="filter-tab" data-filter="20">20평대</button>
-            <button class="filter-tab" data-filter="30">30평대</button>
-            <button class="filter-tab" data-filter="40">40평대 이상</button>
+    </div>
+    <div class="fan-slider-section">
+        <div class="fan-slider-wrap">
+            <button class="fan-arrow fan-arrow-left" id="fanPrev">
+                <img th:src="@{/images/arrow-left.png}" alt="이전" />
+            </button>
+            <div class="fan-cards" id="fanCards"></div>
+            <button class="fan-arrow fan-arrow-right" id="fanNext">
+                <img th:src="@{/images/arrow-right.png}" alt="다음" />
+            </button>
         </div>
-
-        <!-- 슬라이더 영역 -->
-        <div class="portfolio-slider-wrap">
-
-            <!-- 카드 그리드 -->
-            <div class="portfolio-grid" id="portfolioGrid"></div>
-
-            <!-- 페이지 표시 -->
-            <div class="page-indicator" id="pageIndicator" style="display:none;">
-                <span id="pageText"></span>
-            </div>
-
+        <div class="fan-more-btn">
+            <a th:href="@{/portfolio}">포트폴리오 전체보기 &nbsp;→</a>
         </div>
-
-        <!-- 페이지 표시 -->
-        <div class="page-indicator" th:if="${totalPages > 0}">
-            <span th:text="${currentPage + 1} + ' / ' + ${totalPages}">1 / 3</span>
-        </div>
-
     </div>
 </section>
 
-<!-- FOOTER -->
 <footer th:replace="~{fragments/layout :: footer}"></footer>
-
-<!-- 플로팅 버튼 -->
 <div th:replace="~{fragments/layout :: floating-buttons}"></div>
 
 <script th:src="@{/js/main.js}"></script>
 <script>
-    let currentFilter = 'all';
-    let currentPage   = 0;
-    let totalPages    = 0;
+    const fanCards = document.getElementById('fanCards');
+    const fanPrev  = document.getElementById('fanPrev');
+    const fanNext  = document.getElementById('fanNext');
 
-    const grid          = document.getElementById('portfolioGrid');
-    const pageText      = document.getElementById('pageText');
-    const pageIndicator = document.getElementById('pageIndicator');
+    let allItems    = [];
+    let centerIdx   = 0;
+    let isAnimating = false;
 
-    // 스켈레톤 shimmer 애니메이션
-    const shimmerStyle = document.createElement('style');
-    shimmerStyle.textContent = `
-        @keyframes shimmer {
-            0%   { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-    `;
-    document.head.appendChild(shimmerStyle);
+    const isMobile  = () => window.innerWidth <= 600;
+    const isTablet  = () => window.innerWidth <= 900;
 
-    function showSkeleton() {
-        const skeletonBg = 'linear-gradient(90deg,#ede8e0 25%,#e8e0d4 50%,#ede8e0 75%)';
-        grid.innerHTML = Array(6).fill(`
-            <div class="portfolio-card" style="pointer-events:none;">
-                <div class="portfolio-thumb" style="background:${skeletonBg};background-size:200% 100%;animation:shimmer 1.4s ease infinite;"></div>
-                <div class="portfolio-info">
-                    <div style="height:15px;border-radius:6px;margin-bottom:10px;width:70%;background:${skeletonBg};background-size:200% 100%;animation:shimmer 1.4s ease infinite;"></div>
-                    <div style="height:12px;border-radius:6px;width:40%;background:${skeletonBg};background-size:200% 100%;animation:shimmer 1.4s ease infinite;"></div>
+    function wrap(i) {
+        const n = allItems.length;
+        return ((i % n) + n) % n;
+    }
+
+    function getPos(slot, expanded) {
+        const abs = Math.abs(slot);
+        const gap = expanded
+            ? (isMobile() ? 36 : isTablet() ? 90 : 160)
+            : (isMobile() ? 24 : isTablet() ? 56 : 96);
+        return {
+            x:       slot * gap,
+            y:       abs * 8,
+            scale:   1 - abs * 0.06,
+            z:       10 - abs,
+            opacity: 1 - abs * 0.06,
+        };
+    }
+
+    function applyPos(el, slot, expanded, instant) {
+        if (instant) el.style.transition = 'none';
+        else el.style.transition = 'transform 0.9s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)';
+        const p = getPos(slot, expanded);
+        el.style.transform = `translateX(${p.x}px) translateY(${p.y}px) scale(${p.scale})`;
+        el.style.zIndex    = p.z;
+        el.style.opacity   = p.opacity;
+    }
+
+    function makeCard(itemIdx) {
+        const item = allItems[itemIdx];
+        const card = document.createElement('div');
+        card.className = 'fan-card';
+        card.dataset.itemIdx = itemIdx;
+        if (item && item.id) {
+            card.innerHTML = `
+                ${item.thumbnailUrl
+                    ? `<img src="${item.thumbnailUrl}" alt="${item.title}" />`
+                    : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#ede8e0,#c8b89a);"></div>`
+                }
+                <div class="fan-card-overlay"></div>
+                <div class="fan-card-info">
+                    <h3>${item.title}</h3>
+                    <span>${item.areaPyeong}평대</span>
                 </div>
-            </div>
-        `).join('');
+            `;
+            card.addEventListener('click', () => location.href = '/portfolio/' + item.id);
+        }
+        return card;
     }
 
-    function renderCards(items) {
-        if (items.length === 0) {
-            grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:80px 0;color:#999;">등록된 포트폴리오가 없습니다.</div>`;
-            return;
-        }
-        grid.innerHTML = items.map(p => `
-            <div class="portfolio-card" onclick="location.href='/portfolio/${p.id}'" style="cursor:pointer;">
-                <div class="portfolio-thumb">
-                    ${p.thumbnailUrl
-            ? `<img src="${p.thumbnailUrl}" alt="${p.title}" class="portfolio-thumb-img" />`
-            : `<div class="portfolio-thumb-img pt-1"></div>`
-        }
-                </div>
-                <div class="portfolio-info">
-                    <h3>${p.title}</h3>
-                    <div class="portfolio-meta">${p.areaPyeong}평대</div>
-                </div>
-            </div>
-        `).join('');
+    function maxHalf() {
+        if (allItems.length >= 5) return 2;
+        if (allItems.length >= 3) return 1;
+        return 0;
     }
 
-    function updateControls() {
-        if (totalPages > 1) {
-            pageIndicator.style.display = 'block';
-            pageText.textContent = `${currentPage + 1} / ${totalPages}`;
-        } else {
-            pageIndicator.style.display = 'none';
+    function renderCards() {
+        fanCards.innerHTML = '';
+        const half = maxHalf();
+        for (let slot = -half; slot <= half; slot++) {
+            const itemIdx = wrap(centerIdx + slot);
+            const card = makeCard(itemIdx);
+            card.dataset.slot = slot;
+            applyPos(card, slot, false, true);
+            fanCards.appendChild(card);
         }
+        attachHover();
     }
 
-    async function loadPortfolios(filter, page) {
-        showSkeleton();  // 즉시 스켈레톤 표시
-        try {
-            const res  = await fetch(`/api/portfolios?filter=${filter}&page=${page}`);
-            const data = await res.json();
-            currentFilter = filter;
-            currentPage   = data.currentPage;
-            totalPages    = data.totalPages;
-            renderCards(data.items);
-            updateControls();
-        } catch (e) {
-            grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:80px 0;color:#999;">데이터를 불러오지 못했습니다.</div>`;
-        }
+    function attachHover() {
+        fanCards.onmouseenter = () => {
+            fanCards.querySelectorAll('.fan-card').forEach(c =>
+                applyPos(c, +c.dataset.slot, true, false));
+        };
+        fanCards.onmouseleave = () => {
+            fanCards.querySelectorAll('.fan-card').forEach(c =>
+                applyPos(c, +c.dataset.slot, false, false));
+        };
     }
 
-    // 필터 탭
-    document.querySelectorAll('.filter-tab').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            loadPortfolios(btn.dataset.filter, 0);
+    function slide(dir) {
+        if (isAnimating || allItems.length <= 1) return;
+        isAnimating = true;
+
+        const half  = maxHalf();
+        const cards = Array.from(fanCards.querySelectorAll('.fan-card'));
+        const offX  = dir > 0 ? 900 : -900;
+
+        const entrySlot    = dir > 0 ? half : -half;
+        const newCenterIdx = wrap(centerIdx + dir);
+        const entryItemIdx = wrap(newCenterIdx + entrySlot);
+
+        const newCard = makeCard(entryItemIdx);
+        newCard.dataset.slot = entrySlot;
+        newCard.style.transition = 'none';
+        newCard.style.transform  = `translateX(${offX}px) translateY(12px) scale(0.82)`;
+        newCard.style.opacity    = '0';
+        newCard.style.zIndex     = '0';
+        fanCards.appendChild(newCard);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                cards.forEach(card => {
+                    const newSlot = +card.dataset.slot - dir;
+                    card.dataset.slot = newSlot;
+                    if (Math.abs(newSlot) > half) {
+                        card.style.transition = 'transform 0.9s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)';
+                        const exitX = dir > 0 ? -900 : 900;
+                        card.style.transform = `translateX(${exitX}px) translateY(12px) scale(0.82)`;
+                        card.style.opacity   = '0';
+                    } else {
+                        applyPos(card, newSlot, false, false);
+                    }
+                });
+                applyPos(newCard, entrySlot, false, false);
+                centerIdx = newCenterIdx;
+            });
         });
-    });
 
-    // 초기 로드
-    loadPortfolios('all', 0);
+        setTimeout(() => {
+            cards.forEach(card => {
+                if (Math.abs(+card.dataset.slot) > half) card.remove();
+            });
+            attachHover();
+            isAnimating = false;
+        }, 950);
+    }
+
+    function renderSkeletons() {
+        fanCards.innerHTML = '';
+        for (let slot = -2; slot <= 2; slot++) {
+            const card = document.createElement('div');
+            card.className = 'fan-card fan-card-skeleton';
+            card.dataset.slot = slot;
+            applyPos(card, slot, false, true);
+            fanCards.appendChild(card);
+        }
+    }
+
+    async function loadAll() {
+        renderSkeletons();
+        try {
+            const res1  = await fetch('/api/portfolios?filter=all&page=0');
+            const data1 = await res1.json();
+            const total = data1.totalPages;
+            const promises = [];
+            for (let p = 0; p < total; p++) {
+                promises.push(fetch(`/api/portfolios?filter=all&page=${p}`).then(r => r.json()));
+            }
+            const results = await Promise.all(promises);
+            allItems  = results.flatMap(d => d.items);
+            centerIdx = 0;
+            renderCards();
+        } catch(e) {
+            fanCards.innerHTML = '';
+        }
+    }
+
+    fanPrev.addEventListener('click', () => slide(-1));
+    fanNext.addEventListener('click', () => slide(+1));
+
+    loadAll();
 </script>
 </body>
 </html>
