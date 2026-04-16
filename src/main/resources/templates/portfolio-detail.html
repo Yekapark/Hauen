@@ -30,8 +30,8 @@
             margin-bottom: 16px;
         }
         .detail-title span {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.65em;
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1em;
             font-weight: 400;
             color: var(--text-light);
             display: inline-block;
@@ -301,11 +301,16 @@
 <section class="detail-gallery">
     <div class="container">
 
-        <!-- 카테고리 필터 탭 -->
+        <!-- 카테고리 필터 탭 (thumbnail 제외한 이미지 수) -->
         <div class="cat-filter" id="catFilter">
             <button class="cat-btn active" data-cat="all">
                 전체
-                <span class="cat-count" th:text="'(' + ${portfolio.images.size()} + ')'"></span>
+                <span class="cat-count" th:text="'(' + ${portfolio.getImagesByCategory('before').size()
+                    + portfolio.getImagesByCategory('entrance').size()
+                    + portfolio.getImagesByCategory('living').size()
+                    + portfolio.getImagesByCategory('kitchen').size()
+                    + portfolio.getImagesByCategory('room').size()
+                    + portfolio.getImagesByCategory('bathroom').size()} + ')'"></span>
             </button>
             <button class="cat-btn" data-cat="before"
                     th:if="${!portfolio.getImagesByCategory('before').isEmpty()}">
@@ -339,9 +344,8 @@
             </button>
         </div>
 
-        <!-- 카테고리별 이미지 그룹 -->
+        <!-- 카테고리별 이미지 그룹 (thumbnail 제외) -->
         <div id="galleryContainer">
-
             <th:block th:each="group : ${groups}">
                 <th:block th:with="imgs=${portfolio.getImagesByCategory(group)}">
                     <div class="gallery-group"
@@ -383,7 +387,6 @@
                     </div>
                 </th:block>
             </th:block>
-
         </div>
     </div>
 </section>
@@ -405,7 +408,6 @@
 
 <script th:src="@{/js/main.js}"></script>
 <script>
-    // ── 카테고리 필터 ──
     const catBtns = document.querySelectorAll('.cat-btn');
     const groups  = document.querySelectorAll('.gallery-group');
 
@@ -413,9 +415,7 @@
         btn.addEventListener('click', () => {
             catBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
             const cat = btn.dataset.cat;
-
             groups.forEach(group => {
                 if (cat === 'all') {
                     group.classList.remove('hidden');
@@ -428,12 +428,10 @@
         });
     });
 
-    // ── 라이트박스 ──
     let allImages = [];
     let currentIndex = 0;
 
     function buildImageList() {
-        // 현재 보이는 그룹의 이미지만
         const visibleItems = document.querySelectorAll('.gallery-group:not(.hidden) .gallery-item');
         allImages = Array.from(visibleItems).map(el => el.dataset.src);
     }
@@ -463,12 +461,10 @@
         document.getElementById('lightboxCounter').textContent = (currentIndex + 1) + ' / ' + allImages.length;
     }
 
-    // 배경 클릭 시 닫기
     document.getElementById('lightbox').addEventListener('click', function(e) {
         if (e.target === this) closeLightbox();
     });
 
-    // 키보드 네비게이션
     document.addEventListener('keydown', e => {
         if (!document.getElementById('lightbox').classList.contains('open')) return;
         if (e.key === 'ArrowLeft')  lightboxNav(-1);
