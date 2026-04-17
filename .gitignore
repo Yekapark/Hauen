@@ -32,7 +32,10 @@ build/
 ### VS Code ###
 .vscode/
 
-### 환경변수 파일 (절대 커밋 금지) ###
+### 환경변수 파일 ###
 .env
 application-local.properties
 src/main/resources/application-local.properties
+
+##
+CLAUDE.md
