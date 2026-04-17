@@ -9,7 +9,139 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <style>
+        .card-slider-section {
+            position: relative;
+            padding: 40px 0 80px;
+        }
+        .card-slider-wrap {
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+        .card-arrow {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            z-index: 20;
+        }
+        .card-arrow:hover { background: var(--text-dark); border-color: var(--text-dark); }
+        .card-arrow:hover img { filter: invert(1); }
+        .card-arrow img { width: 18px; height: 18px; }
+        .card-arrow.disabled { opacity: 0.25; pointer-events: none; }
 
+        .card-track-wrap {
+            flex: 1;
+            overflow: hidden;
+            margin: 0 16px;
+            padding-top: 28px;
+            padding-bottom: 10px;
+        }
+        .card-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+            will-change: transform;
+        }
+
+        .c-card {
+            flex-shrink: 0;
+            width: 300px;
+            background: #fff;
+            border-radius: 16px;
+            overflow: visible;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1),
+                        box-shadow 0.35s;
+            z-index: 1;
+        }
+        .c-card:hover {
+            transform: translateY(-18px) scale(1.07);
+            z-index: 10;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.18);
+        }
+        .c-card-inner {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            background: #fff;
+        }
+        .c-card-thumb {
+            width: 100%;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            background: var(--bg-cream);
+        }
+        .c-card-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .c-card:hover .c-card-thumb img { transform: scale(1.06); }
+        .c-card-info { padding: 14px 16px 16px; }
+        .c-card-info h3 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .c-card-info p { font-size: 12px; color: var(--text-light); margin: 0; }
+
+        .c-card-skeleton .c-card-thumb {
+            background: linear-gradient(90deg, #ede8e0 25%, #e8e0d4 50%, #ede8e0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s ease infinite;
+        }
+        .c-card-skeleton .skel-text {
+            height: 13px; border-radius: 4px; margin-bottom: 6px;
+            background: linear-gradient(90deg, #ede8e0 25%, #e8e0d4 50%, #ede8e0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s ease infinite;
+        }
+        @keyframes shimmer {
+            0%   { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .card-more-btn { text-align: center; margin-top: 40px; }
+        .card-more-btn a {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 13px 32px;
+            border: 1.5px solid var(--border); border-radius: 100px;
+            font-size: 14px; font-weight: 500; color: var(--text-mid);
+            text-decoration: none; transition: all 0.25s;
+        }
+        .card-more-btn a:hover { background: var(--text-dark); color: #fff; border-color: var(--text-dark); }
+
+        @media (max-width: 900px) {
+            .card-slider-wrap { padding: 0 20px; }
+            .c-card { width: 240px; }
+        }
+        @media (max-width: 600px) {
+            .card-slider-wrap { padding: 0 12px; }
+            .c-card { width: 180px; }
+            .card-arrow { width: 36px; height: 36px; }
+            .card-arrow img { width: 14px; height: 14px; }
+            .card-track-wrap { margin: 0 8px; }
+        }
     </style>
 </head>
 <body>
@@ -104,17 +236,20 @@
             <p>다양한 공간에서 완성된 감각적인 디자인을 확인해 보세요.</p>
         </div>
     </div>
-    <div class="fan-slider-section">
-        <div class="fan-slider-wrap">
-            <button class="fan-arrow fan-arrow-left" id="fanPrev">
+
+    <div class="card-slider-section">
+        <div class="card-slider-wrap">
+            <button class="card-arrow disabled" id="cardPrev">
                 <img th:src="@{/images/arrow-left.png}" alt="이전" />
             </button>
-            <div class="fan-cards" id="fanCards"></div>
-            <button class="fan-arrow fan-arrow-right" id="fanNext">
+            <div class="card-track-wrap" id="cardTrackWrap">
+                <div class="card-track" id="cardTrack"></div>
+            </div>
+            <button class="card-arrow disabled" id="cardNext">
                 <img th:src="@{/images/arrow-right.png}" alt="다음" />
             </button>
         </div>
-        <div class="fan-more-btn">
+        <div class="card-more-btn">
             <a th:href="@{/portfolio}">포트폴리오 전체보기 &nbsp;→</a>
         </div>
     </div>
@@ -125,155 +260,135 @@
 
 <script th:src="@{/js/main.js}"></script>
 <script>
-    const fanCards = document.getElementById('fanCards');
-    const fanPrev  = document.getElementById('fanPrev');
-    const fanNext  = document.getElementById('fanNext');
+    const cardTrack     = document.getElementById('cardTrack');
+    const cardTrackWrap = document.getElementById('cardTrackWrap');
+    const cardPrev      = document.getElementById('cardPrev');
+    const cardNext      = document.getElementById('cardNext');
 
-    let allItems    = [];
-    let centerIdx   = 0;
-    let isAnimating = false;
+    let allItems   = [];
+    let currentIdx = 0;
 
-    const isMobile  = () => window.innerWidth <= 600;
-    const isTablet  = () => window.innerWidth <= 900;
+    const CARD_W  = () => window.innerWidth <= 600 ? 180 : window.innerWidth <= 900 ? 240 : 300;
+    const MAX_VIS = () => window.innerWidth <= 600 ? 3   : window.innerWidth <= 900 ? 4   : 6;
 
-    function wrap(i) {
-        const n = allItems.length;
-        return ((i % n) + n) % n;
+    // 핵심: 카드 수와 트랙 너비에 따라 겹침 동적 계산
+    function calcOverlap() {
+        const n       = allItems.length;
+        const visible = Math.min(n, MAX_VIS());
+        const trackW  = cardTrackWrap.offsetWidth;
+        const cardW   = CARD_W();
+
+        if (n <= 1) return 0;
+
+        // 카드 visible개가 트랙에 꽉 차도록 겹침 계산
+        // trackW = cardW + (visible-1) * (cardW - overlap)
+        // → overlap = cardW - (trackW - cardW) / (visible - 1)
+        const overlap = cardW - (trackW - cardW) / (visible - 1);
+
+        // 겹침 범위 제한: 최소 10px, 최대 카드 너비의 50%
+        return Math.max(10, Math.min(cardW * 0.5, overlap));
     }
 
-    function getPos(slot, expanded) {
-        const abs = Math.abs(slot);
-        const gap = expanded
-            ? (isMobile() ? 36 : isTablet() ? 90 : 160)
-            : (isMobile() ? 24 : isTablet() ? 56 : 96);
-        return {
-            x:       slot * gap,
-            y:       abs * 8,
-            scale:   1 - abs * 0.06,
-            z:       10 - abs,
-            opacity: 1 - abs * 0.06,
-        };
-    }
+    function applyLayout() {
+        const overlap = calcOverlap();
+        const n       = allItems.length;
+        const visible = Math.min(n, MAX_VIS());
+        const cardW   = CARD_W();
+        const trackW  = cardTrackWrap.offsetWidth;
 
-    function applyPos(el, slot, expanded, instant) {
-        if (instant) el.style.transition = 'none';
-        else el.style.transition = 'transform 0.9s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)';
-        const p = getPos(slot, expanded);
-        el.style.transform = `translateX(${p.x}px) translateY(${p.y}px) scale(${p.scale})`;
-        el.style.zIndex    = p.z;
-        el.style.opacity   = p.opacity;
-    }
+        const cards = cardTrack.querySelectorAll('.c-card');
+        cards.forEach((card, i) => {
+            card.style.width       = cardW + 'px';
+            card.style.marginRight = i < cards.length - 1 ? `-${overlap}px` : '0';
+        });
 
-    function makeCard(itemIdx) {
-        const item = allItems[itemIdx];
-        const card = document.createElement('div');
-        card.className = 'fan-card';
-        card.dataset.itemIdx = itemIdx;
-        if (item && item.id) {
-            card.innerHTML = `
-                ${item.thumbnailUrl
-                    ? `<img src="${item.thumbnailUrl}" alt="${item.title}" />`
-                    : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#ede8e0,#c8b89a);"></div>`
-                }
-                <div class="fan-card-overlay"></div>
-                <div class="fan-card-info">
-                    <h3>${item.title}</h3>
-                    <span>${item.areaPyeong}평대</span>
-                </div>
-            `;
-            card.addEventListener('click', () => location.href = '/portfolio/' + item.id);
+        // 카드가 트랙보다 좁으면 가운데 정렬
+        const totalWidth = cardW + (n - 1) * (cardW - overlap);
+        if (totalWidth < trackW) {
+            cardTrack.style.justifyContent = 'center';
+        } else {
+            cardTrack.style.justifyContent = 'flex-start';
         }
+
+        updateTrack();
+        updateArrows();
+    }
+
+    function stepWidth() {
+        const overlap = calcOverlap();
+        return CARD_W() - overlap;
+    }
+
+    function updateTrack() {
+        cardTrack.style.transform = `translateX(-${currentIdx * stepWidth()}px)`;
+    }
+
+    function updateArrows() {
+        const n       = allItems.length;
+        const visible = Math.min(n, MAX_VIS());
+        const maxIdx  = Math.max(0, n - visible);
+        cardPrev.classList.toggle('disabled', currentIdx <= 0);
+        cardNext.classList.toggle('disabled', currentIdx >= maxIdx);
+    }
+
+    function makeCard(item) {
+        const card = document.createElement('div');
+        card.className = 'c-card';
+        card.innerHTML = `
+            <div class="c-card-inner">
+                <div class="c-card-thumb">
+                    ${item.thumbnailUrl
+                        ? `<img src="${item.thumbnailUrl}" alt="${item.title}" loading="lazy" />`
+                        : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#ede8e0,#c8b89a);"></div>`
+                    }
+                </div>
+                <div class="c-card-info">
+                    <h3>${item.title}</h3>
+                    <p>${item.areaPyeong}평대</p>
+                </div>
+            </div>
+        `;
+        card.addEventListener('click', () => location.href = '/portfolio/' + item.id);
         return card;
     }
 
-    function maxHalf() {
-        if (allItems.length >= 5) return 2;
-        if (allItems.length >= 3) return 1;
-        return 0;
-    }
-
-    function renderCards() {
-        fanCards.innerHTML = '';
-        const half = maxHalf();
-        for (let slot = -half; slot <= half; slot++) {
-            const itemIdx = wrap(centerIdx + slot);
-            const card = makeCard(itemIdx);
-            card.dataset.slot = slot;
-            applyPos(card, slot, false, true);
-            fanCards.appendChild(card);
-        }
-        attachHover();
-    }
-
-    function attachHover() {
-        fanCards.onmouseenter = () => {
-            fanCards.querySelectorAll('.fan-card').forEach(c =>
-                applyPos(c, +c.dataset.slot, true, false));
-        };
-        fanCards.onmouseleave = () => {
-            fanCards.querySelectorAll('.fan-card').forEach(c =>
-                applyPos(c, +c.dataset.slot, false, false));
-        };
-    }
-
-    function slide(dir) {
-        if (isAnimating || allItems.length <= 1) return;
-        isAnimating = true;
-
-        const half  = maxHalf();
-        const cards = Array.from(fanCards.querySelectorAll('.fan-card'));
-        const offX  = dir > 0 ? 900 : -900;
-
-        const entrySlot    = dir > 0 ? half : -half;
-        const newCenterIdx = wrap(centerIdx + dir);
-        const entryItemIdx = wrap(newCenterIdx + entrySlot);
-
-        const newCard = makeCard(entryItemIdx);
-        newCard.dataset.slot = entrySlot;
-        newCard.style.transition = 'none';
-        newCard.style.transform  = `translateX(${offX}px) translateY(12px) scale(0.82)`;
-        newCard.style.opacity    = '0';
-        newCard.style.zIndex     = '0';
-        fanCards.appendChild(newCard);
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                cards.forEach(card => {
-                    const newSlot = +card.dataset.slot - dir;
-                    card.dataset.slot = newSlot;
-                    if (Math.abs(newSlot) > half) {
-                        card.style.transition = 'transform 0.9s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.9s cubic-bezier(0.25, 0.1, 0.25, 1)';
-                        const exitX = dir > 0 ? -900 : 900;
-                        card.style.transform = `translateX(${exitX}px) translateY(12px) scale(0.82)`;
-                        card.style.opacity   = '0';
-                    } else {
-                        applyPos(card, newSlot, false, false);
-                    }
-                });
-                applyPos(newCard, entrySlot, false, false);
-                centerIdx = newCenterIdx;
-            });
-        });
-
-        setTimeout(() => {
-            cards.forEach(card => {
-                if (Math.abs(+card.dataset.slot) > half) card.remove();
-            });
-            attachHover();
-            isAnimating = false;
-        }, 950);
+    function makeSkeletonCard() {
+        const card = document.createElement('div');
+        card.className = 'c-card c-card-skeleton';
+        card.innerHTML = `
+            <div class="c-card-inner">
+                <div class="c-card-thumb"></div>
+                <div class="c-card-info">
+                    <div class="skel-text" style="width:80%;"></div>
+                    <div class="skel-text" style="width:50%;height:10px;"></div>
+                </div>
+            </div>
+        `;
+        return card;
     }
 
     function renderSkeletons() {
-        fanCards.innerHTML = '';
-        for (let slot = -2; slot <= 2; slot++) {
-            const card = document.createElement('div');
-            card.className = 'fan-card fan-card-skeleton';
-            card.dataset.slot = slot;
-            applyPos(card, slot, false, true);
-            fanCards.appendChild(card);
-        }
+        cardTrack.innerHTML = '';
+        for (let i = 0; i < MAX_VIS(); i++) cardTrack.appendChild(makeSkeletonCard());
+        applyLayout();
     }
+
+    function renderCards() {
+        cardTrack.innerHTML = '';
+        allItems.forEach(item => cardTrack.appendChild(makeCard(item)));
+        currentIdx = 0;
+        applyLayout();
+    }
+
+    cardPrev.addEventListener('click', () => {
+        if (currentIdx > 0) { currentIdx--; updateTrack(); updateArrows(); }
+    });
+    cardNext.addEventListener('click', () => {
+        const maxIdx = Math.max(0, allItems.length - Math.min(allItems.length, MAX_VIS()));
+        if (currentIdx < maxIdx) { currentIdx++; updateTrack(); updateArrows(); }
+    });
+
+    window.addEventListener('resize', () => applyLayout());
 
     async function loadAll() {
         renderSkeletons();
@@ -286,16 +401,12 @@
                 promises.push(fetch(`/api/portfolios?filter=all&page=${p}`).then(r => r.json()));
             }
             const results = await Promise.all(promises);
-            allItems  = results.flatMap(d => d.items);
-            centerIdx = 0;
+            allItems = results.flatMap(d => d.items);
             renderCards();
         } catch(e) {
-            fanCards.innerHTML = '';
+            cardTrack.innerHTML = '';
         }
     }
-
-    fanPrev.addEventListener('click', () => slide(-1));
-    fanNext.addEventListener('click', () => slide(+1));
 
     loadAll();
 </script>
