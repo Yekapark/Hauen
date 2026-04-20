@@ -1,5 +1,8 @@
 package com.hauen.service;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -12,7 +15,9 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -39,10 +44,10 @@ public class R2Service {
         String ext = getExtension(file.getOriginalFilename());
         String key = dir + "/" + UUID.randomUUID() + "." + ext;
 
-        // 썸네일 제외하고 워터마크 합성 (썸네일은 원본 유지)
+        // 썸네일: orientation만 보정, 그 외: orientation 보정 후 워터마크 합성
         byte[] imageBytes;
         if ("thumbnail".equals(category)) {
-            imageBytes = file.getBytes();
+            imageBytes = correctOrientation(file.getBytes(), ext);
         } else {
             imageBytes = applyWatermark(file.getBytes(), ext);
         }
@@ -78,13 +83,13 @@ public class R2Service {
         keys.forEach(this::delete);
     }
 
-    // ── 워터마크 합성 ──
+    // ── EXIF orientation 보정 후 워터마크 합성 ──
     private byte[] applyWatermark(byte[] originalBytes, String ext) throws IOException {
-        BufferedImage original = ImageIO.read(new java.io.ByteArrayInputStream(originalBytes));
+        BufferedImage original = readWithOrientation(originalBytes);
         if (original == null) return originalBytes;
 
         BufferedImage wm = getWatermark();
-        if (wm == null) return originalBytes;
+        if (wm == null) return encodeImage(original, ext);
 
         int origW = original.getWidth();
         int origH = original.getHeight();
@@ -110,18 +115,78 @@ public class R2Service {
         g.drawImage(wm, x, y, wmTargetW, wmTargetH, null);
         g.dispose();
 
-        // 출력 포맷 결정 (jpg는 ARGB 불가 → RGB 변환)
-        String format = ext.equalsIgnoreCase("png") ? "png" : "jpg";
-        if (format.equals("jpg")) {
-            BufferedImage rgb = new BufferedImage(origW, origH, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2 = rgb.createGraphics();
-            g2.drawImage(result, 0, 0, Color.WHITE, null);
-            g2.dispose();
-            result = rgb;
+        return encodeImage(result, ext);
+    }
+
+    // EXIF orientation 보정만 (썸네일용)
+    private byte[] correctOrientation(byte[] originalBytes, String ext) throws IOException {
+        BufferedImage image = readWithOrientation(originalBytes);
+        if (image == null) return originalBytes;
+        return encodeImage(image, ext);
+    }
+
+    // EXIF orientation을 읽어 올바르게 회전된 BufferedImage 반환
+    private BufferedImage readWithOrientation(byte[] imageBytes) throws IOException {
+        BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
+        if (image == null) return null;
+
+        int orientation = 1;
+        try {
+            Metadata metadata = ImageMetadataReader.readMetadata(new ByteArrayInputStream(imageBytes));
+            ExifIFD0Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            if (directory != null && directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+            }
+        } catch (Exception ignored) {
         }
 
+        return applyOrientation(image, orientation);
+    }
+
+    // EXIF orientation 값에 따라 이미지 회전/반전
+    private BufferedImage applyOrientation(BufferedImage image, int orientation) {
+        if (orientation == 1) return image;
+
+        int w = image.getWidth();
+        int h = image.getHeight();
+        boolean swapDimensions = orientation >= 5;
+        int destW = swapDimensions ? h : w;
+        int destH = swapDimensions ? w : h;
+
+        AffineTransform transform = new AffineTransform();
+        switch (orientation) {
+            case 2 -> { transform.scale(-1, 1); transform.translate(-w, 0); }
+            case 3 -> { transform.translate(w, h); transform.rotate(Math.PI); }
+            case 4 -> { transform.scale(1, -1); transform.translate(0, -h); }
+            case 5 -> { transform.rotate(-Math.PI / 2); transform.scale(-1, 1); }
+            case 6 -> { transform.translate(h, 0); transform.rotate(Math.PI / 2); }
+            case 7 -> { transform.scale(-1, 1); transform.translate(-h, 0); transform.rotate(Math.PI / 2); }
+            case 8 -> { transform.translate(0, w); transform.rotate(-Math.PI / 2); }
+            default -> { return image; }
+        }
+
+        BufferedImage dest = new BufferedImage(destW, destH,
+                image.getType() != 0 ? image.getType() : BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = dest.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.transform(transform);
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+        return dest;
+    }
+
+    // 이미지를 바이트 배열로 인코딩 (jpg는 ARGB 불가 → RGB 변환)
+    private byte[] encodeImage(BufferedImage image, String ext) throws IOException {
+        String format = ext.equalsIgnoreCase("png") ? "png" : "jpg";
+        BufferedImage output = image;
+        if (format.equals("jpg") && image.getType() != BufferedImage.TYPE_INT_RGB) {
+            output = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = output.createGraphics();
+            g.drawImage(image, 0, 0, Color.WHITE, null);
+            g.dispose();
+        }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(result, format, baos);
+        ImageIO.write(output, format, baos);
         return baos.toByteArray();
     }
 

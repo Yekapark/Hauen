@@ -66,6 +66,12 @@
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!-- EXIF 메타데이터 (이미지 방향 보정) -->
+        <dependency>
+            <groupId>com.drewnoakes</groupId>
+            <artifactId>metadata-extractor</artifactId>
+            <version>2.19.0</version>
+        </dependency>
         <!-- AWS S3 SDK (Cloudflare R2 호환) -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
