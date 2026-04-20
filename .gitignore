@@ -37,5 +37,6 @@ build/
 application-local.properties
 src/main/resources/application-local.properties
 
-##
+## Claude 관련
 CLAUDE.md
+.claude/
