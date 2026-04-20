@@ -39,3 +39,4 @@ src/main/resources/application-local.properties
 
 ##
 CLAUDE.md
+.claude/
