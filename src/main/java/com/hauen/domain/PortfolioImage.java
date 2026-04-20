@@ -7,7 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "portfolio_image")
+@Table(name = "portfolio_image", indexes = {
+        @Index(name = "idx_portfolio_image_portfolio_id", columnList = "portfolio_id"),
+        @Index(name = "idx_portfolio_image_portfolio_category", columnList = "portfolio_id,category")
+})
 public class PortfolioImage {
 
     @Id

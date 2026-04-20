@@ -17,7 +17,11 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Integer> {
     Page<Portfolio> findByAreaPyeongBetween(int min, int max, Pageable pageable);
     Page<Portfolio> findByAreaPyeongGreaterThanEqual(int min, Pageable pageable);
 
-    // ID 목록으로 images 포함 조회 (썸네일용 - thumbnail 카테고리만)
-    @Query("SELECT DISTINCT p FROM Portfolio p LEFT JOIN FETCH p.images i WHERE p.id IN :ids AND i.category = 'thumbnail'")
-    List<Portfolio> findWithThumbnailsByIds(@Param("ids") List<Integer> ids);
+    // ID 목록으로 images 전체 JOIN FETCH (getThumbnailUrl()은 Java에서 필터)
+    @Query("SELECT DISTINCT p FROM Portfolio p LEFT JOIN FETCH p.images WHERE p.id IN :ids")
+    List<Portfolio> findWithImagesByIds(@Param("ids") List<Integer> ids);
+
+    // 상세 페이지용 - 이미지 전체 한 번에 로드
+    @Query("SELECT DISTINCT p FROM Portfolio p LEFT JOIN FETCH p.images WHERE p.id = :id")
+    java.util.Optional<Portfolio> findByIdWithImages(@Param("id") int id);
 }

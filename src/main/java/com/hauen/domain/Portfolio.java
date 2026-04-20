@@ -12,7 +12,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "portfolio")
+@Table(name = "portfolio", indexes = {
+        @Index(name = "idx_portfolio_area_pyeong", columnList = "area_pyeong")
+})
 public class Portfolio {
 
     @Id

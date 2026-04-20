@@ -24,8 +24,9 @@ public class PortFolioService {
     private final PortfolioImageRepository portfolioImageRepository;
     private final R2Service r2Service;
 
+    @Transactional(readOnly = true)
     public Page<Portfolio> findByFilter(String filter, Pageable pageable) {
-        // 1단계: 페이징으로 ID만 조회
+        // 1단계: 페이징으로 ID 조회 (컬렉션 fetch 없이 카운트/정렬만)
         Page<Portfolio> page = switch (filter) {
             case "20" -> portfolioRepository.findByAreaPyeongBetween(0, 29, pageable);
             case "30" -> portfolioRepository.findByAreaPyeongBetween(30, 39, pageable);
@@ -35,26 +36,23 @@ public class PortFolioService {
 
         if (page.isEmpty()) return page;
 
-        // 2단계: 썸네일만 한 번에 JOIN FETCH
+        // 2단계: 해당 ID들의 이미지 전체를 한 번에 JOIN FETCH (N+1 방지)
         List<Integer> ids = page.getContent().stream().map(Portfolio::getId).toList();
-        List<Portfolio> withThumbs = portfolioRepository.findWithThumbnailsByIds(ids);
-
-        // ID → Portfolio 맵으로 순서 유지
-        Map<Integer, Portfolio> map = withThumbs.stream()
+        Map<Integer, Portfolio> fetchedMap = portfolioRepository.findWithImagesByIds(ids).stream()
                 .collect(Collectors.toMap(Portfolio::getId, p -> p));
 
-        // 썸네일 없는 포트폴리오는 원본 유지
+        // 페이지 순서 유지
         List<Portfolio> ordered = ids.stream()
-                .map(id -> map.getOrDefault(id, page.getContent().stream()
-                        .filter(p -> p.getId() == id).findFirst().orElse(null)))
+                .map(fetchedMap::get)
                 .filter(p -> p != null)
                 .toList();
 
         return new org.springframework.data.domain.PageImpl<>(ordered, pageable, page.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     public Portfolio findById(int id) {
-        return portfolioRepository.findById(id)
+        return portfolioRepository.findByIdWithImages(id)
                 .orElseThrow(() -> new IllegalArgumentException("포트폴리오 없음: " + id));
     }
 
