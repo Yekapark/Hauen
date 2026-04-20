@@ -38,6 +38,61 @@
             pointer-events: none;
             animation: none;
         }
+
+        /* ── 페이지네이션 ── */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 56px;
+        }
+        .pagination-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #d6cfc4;
+            border-radius: 50%;
+            background: transparent;
+            color: #6b6257;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+            user-select: none;
+        }
+        .pagination-btn:hover:not(:disabled) {
+            background: #f5f0e8;
+            border-color: #b0a898;
+        }
+        .pagination-btn.active {
+            background: #8FB080;
+            border-color: #8FB080;
+            color: #fff;
+            font-weight: 600;
+        }
+        .pagination-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        .pagination-arrow {
+            font-size: 17px;
+            letter-spacing: 0;
+        }
+        .pagination-ellipsis {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 6px;
+            color: #b0a898;
+            font-size: 14px;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -84,10 +139,8 @@
             <!-- 카드 그리드 -->
             <div class="portfolio-grid" id="portfolioGrid"></div>
 
-            <!-- 페이지 표시 -->
-            <div class="page-indicator" id="pageIndicator" style="display:none;">
-                <span id="pageText"></span>
-            </div>
+            <!-- 페이지네이션 -->
+            <div class="pagination" id="pagination" style="display:none;"></div>
 
         </div>
     </div>
@@ -105,9 +158,8 @@
     let currentPage   = 0;
     let totalPages    = 0;
 
-    const grid          = document.getElementById('portfolioGrid');
-    const pageText      = document.getElementById('pageText');
-    const pageIndicator = document.getElementById('pageIndicator');
+    const grid       = document.getElementById('portfolioGrid');
+    const pagination = document.getElementById('pagination');
 
     // 스켈레톤 shimmer 애니메이션
     const shimmerStyle = document.createElement('style');
@@ -153,13 +205,40 @@
         `).join('');
     }
 
-    function updateControls() {
-        if (totalPages > 1) {
-            pageIndicator.style.display = 'block';
-            pageText.textContent = `${currentPage + 1} / ${totalPages}`;
-        } else {
-            pageIndicator.style.display = 'none';
+    function renderPagination() {
+        if (totalPages <= 1) { pagination.style.display = 'none'; return; }
+        pagination.style.display = 'flex';
+
+        // 표시할 페이지 번호 계산 (최대 7개 + 말줄임)
+        function pageRange(cur, total) {
+            if (total <= 7) return Array.from({length: total}, (_, i) => i);
+            const pages = [];
+            pages.push(0);
+            const left = Math.max(1, cur - 1);
+            const right = Math.min(total - 2, cur + 1);
+            if (left > 1) pages.push('…');
+            for (let i = left; i <= right; i++) pages.push(i);
+            if (right < total - 2) pages.push('…');
+            pages.push(total - 1);
+            return pages;
         }
+
+        const pages = pageRange(currentPage, totalPages);
+
+        pagination.innerHTML = `
+            <button class="pagination-btn pagination-arrow" ${currentPage === 0 ? 'disabled' : ''} onclick="goPage(${currentPage - 1})">&#8592;</button>
+            ${pages.map(p => p === '…'
+                ? `<div class="pagination-ellipsis">···</div>`
+                : `<button class="pagination-btn ${p === currentPage ? 'active' : ''}" onclick="goPage(${p})">${p + 1}</button>`
+            ).join('')}
+            <button class="pagination-btn pagination-arrow" ${currentPage === totalPages - 1 ? 'disabled' : ''} onclick="goPage(${currentPage + 1})">&#8594;</button>
+        `;
+    }
+
+    function goPage(page) {
+        if (page < 0 || page >= totalPages || page === currentPage) return;
+        loadPortfolios(currentFilter, page);
+        document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     async function loadPortfolios(filter, page) {
@@ -171,7 +250,7 @@
             currentPage   = data.currentPage;
             totalPages    = data.totalPages;
             renderCards(data.items);
-            updateControls();
+            renderPagination();
         } catch (e) {
             grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:80px 0;color:#999;">데이터를 불러오지 못했습니다.</div>`;
         }
