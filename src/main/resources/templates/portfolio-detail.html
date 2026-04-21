@@ -352,13 +352,13 @@
                          th:if="${!imgs.isEmpty()}"
                          th:data-cat="${group}">
                         <div class="gallery-group-title">
-<!--                            <span class="icon"-->
-<!--                                  th:text="${group == 'before'} ? '🏚️' :-->
-<!--                                           (${group == 'entrance'} ? '🚪' :-->
-<!--                                           (${group == 'living'} ? '🛋️' :-->
-<!--                                           (${group == 'kitchen'} ? '🍳' :-->
-<!--                                           (${group == 'room'} ? '🛏️' : '🚿'))))">-->
-<!--                            </span>-->
+                            <span class="icon"
+                                  th:text="${group == 'before'} ? '🏚️' :
+                                           (${group == 'entrance'} ? '🚪' :
+                                           (${group == 'living'} ? '🛋️' :
+                                           (${group == 'kitchen'} ? '🍳' :
+                                           (${group == 'room'} ? '🛏️' : '🚿'))))">
+                            </span>
                             <span th:text="${group == 'before'} ? '시공 전' :
                                           (${group == 'entrance'} ? '현관' :
                                           (${group == 'living'} ? '거실' :
