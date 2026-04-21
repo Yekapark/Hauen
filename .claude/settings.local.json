@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(find \"E:\\\\project\\\\Hauen\\\\.claude\\\\worktrees\\\\serene-sutherland-75046b/src\" -type f \\\\\\( -name \"*.java\" \\\\\\) -exec grep -l \"EXIF\\\\|orientation\\\\|rotation\\\\|rotate\\\\|BufferedImage\\\\|Canvas\" {} \\\\;)",
-      "Bash(xargs ls *)"
-    ]
-  }
-}
