@@ -128,11 +128,62 @@ function initCharCounter() {
 /* ─────────────────────────────────────────
    5. 상담 폼 제출 처리
 ───────────────────────────────────────── */
-function handleSubmit(btn) {
-    // 실제 프로젝트에서는 fetch/axios로 API 호출로 교체
-    btn.textContent = '✓ 신청이 완료되었습니다!';
-    btn.style.background = '#2D3E2A';
+async function handleSubmit(btn) {
+    const val = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+    const radio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
+
+    // 필수 항목 검증
+    if (!val('name') || !val('phone') || !val('location')) {
+        alert('성함, 연락처, 현장주소는 필수 항목입니다.');
+        return;
+    }
+
     btn.disabled = true;
+    btn.textContent = '전송 중...';
+
+    const body = {
+        name:         val('name'),
+        phone:        val('phone'),
+        location:     val('location'),
+        buildingType: val('buildingType'),
+        area:         val('area'),
+        jungmun:      radio('jungmun'),
+        expansion:    radio('expansion'),
+        bathroom:     radio('bathroom'),
+        sink:         radio('sink'),
+        builtin:      radio('builtin'),
+        budget:       val('budget'),
+        startDate:    val('startDate'),
+        moveInDate:   val('moveInDate'),
+        message:      val('msgArea'),
+    };
+
+    try {
+        const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+
+        if (res.ok) {
+            btn.textContent = '✓ 신청이 완료되었습니다!';
+            btn.style.background = '#2D3E2A';
+        } else if (res.status === 429) {
+            const data = await res.json();
+            alert(data.message || '잠시 후 다시 시도해 주세요.');
+            btn.textContent = '상담 신청하기 →';
+            btn.disabled = false;
+        } else if (res.status === 403) {
+            btn.textContent = '신청이 제한된 번호입니다.';
+            btn.style.background = '#999';
+        } else {
+            throw new Error('서버 오류');
+        }
+    } catch (e) {
+        alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        btn.textContent = '상담 신청하기 →';
+        btn.disabled = false;
+    }
 }
 
 /* ─────────────────────────────────────────
