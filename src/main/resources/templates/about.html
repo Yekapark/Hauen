@@ -9,14 +9,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <style>
-        .stores-section { margin-top: 100px; margin-bottom: 20px; }
+        .stores-section {
+            margin-top: 100px;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow: hidden;
+        }
         .stores-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
             gap: 48px;
             margin-top: 48px;
+            width: 100%;
+            box-sizing: border-box;
         }
-        .stores-grid > div { min-width: 0; overflow: hidden; }
+        .store-col {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
         .store-name {
             font-family: 'Cormorant Garamond', serif;
             font-size: 24px;
@@ -89,7 +99,7 @@
         .thumbs-2 { grid-template-columns: 1fr 1fr; }
         .thumbs-3 { grid-template-columns: 1fr 1fr 1fr; }
         @media (max-width: 768px) {
-            .stores-grid { grid-template-columns: 1fr; gap: 48px; }
+            .stores-grid { flex-direction: column; }
         }
     </style>
 </head>
@@ -173,7 +183,7 @@
             <div class="stores-grid">
 
                 <!-- A 매장: 서울 동작구 -->
-                <div class="reveal reveal-delay-1">
+                <div class="store-col">
                     <div class="store-name">서울점</div>
                     <div class="store-address">
                         서울 동작구 시흥대로 606<br>
@@ -189,7 +199,7 @@
                 </div>
 
                 <!-- B 매장: 인천 연수구 -->
-                <div class="reveal reveal-delay-2">
+                <div class="store-col">
                     <div class="store-name">인천점</div>
                     <div class="store-address">
                         인천 연수구 신송로 122<br>
