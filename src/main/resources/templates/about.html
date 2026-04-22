@@ -8,6 +8,52 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        .stores-section { margin-top: 100px; margin-bottom: 20px; }
+        .stores-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            margin-top: 48px;
+        }
+        .store-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: #3a3028;
+            margin-bottom: 8px;
+        }
+        .store-address {
+            font-size: 14px;
+            color: #7a6e62;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .store-photo-main img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .store-photo-thumbs {
+            display: grid;
+            gap: 10px;
+        }
+        .store-photo-thumbs img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+        }
+        .thumbs-2 { grid-template-columns: 1fr 1fr; }
+        .thumbs-3 { grid-template-columns: 1fr 1fr 1fr; }
+        @media (max-width: 768px) {
+            .stores-grid { grid-template-columns: 1fr; gap: 48px; }
+        }
+    </style>
 </head>
 <body>
 
@@ -79,6 +125,48 @@
                 <div class="feature-icon">🛡️</div>
                 <h3>A/S 보장</h3>
                 <p>시공 완료 후 2년간 무상 AS 및 유지보수 서비스 제공</p>
+            </div>
+        </div>
+
+        <!-- 매장 소개 -->
+        <div class="stores-section">
+            <div class="section-label reveal">OUR STORES</div>
+            <h2 class="section-title reveal">매장 안내</h2>
+            <div class="stores-grid">
+
+                <!-- A 매장: 서울 동작구 -->
+                <div class="reveal reveal-delay-1">
+                    <div class="store-name">서울점</div>
+                    <div class="store-address">
+                        서울 동작구 시흥대로 606<br>
+                        동작협성휴포레시그니처아파트 상가 2층 227호
+                    </div>
+                    <div class="store-photo-main">
+                        <img th:src="@{/images/interrior/A1.jpg}" alt="서울점" />
+                    </div>
+                    <div class="store-photo-thumbs thumbs-2">
+                        <img th:src="@{/images/interrior/A2.jpg}" alt="서울점" />
+                        <img th:src="@{/images/interrior/A3.jpg}" alt="서울점" />
+                    </div>
+                </div>
+
+                <!-- B 매장: 인천 연수구 -->
+                <div class="reveal reveal-delay-2">
+                    <div class="store-name">인천점</div>
+                    <div class="store-address">
+                        인천 연수구 신송로 122<br>
+                        송도프라자 204호
+                    </div>
+                    <div class="store-photo-main">
+                        <img th:src="@{/images/interrior/B1.jpg}" alt="인천점" />
+                    </div>
+                    <div class="store-photo-thumbs thumbs-3">
+                        <img th:src="@{/images/interrior/B2.jpg}" alt="인천점" />
+                        <img th:src="@{/images/interrior/B3.jpg}" alt="인천점" />
+                        <img th:src="@{/images/interrior/B4.jpg}" alt="인천점" />
+                    </div>
+                </div>
+
             </div>
         </div>
 
