@@ -3,6 +3,7 @@ package com.hauen.controller;
 import com.hauen.domain.Portfolio;
 import com.hauen.service.PortFolioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ public class MainController {
 
     private final PortFolioService portfolioService;
 
+    @Value("${kakao.map.api-key:}")
+    private String kakaoMapApiKey;
+
     private final int SIZE = 6;
 
     @GetMapping("/")
@@ -29,7 +33,8 @@ public class MainController {
     }
 
     @GetMapping("/about")
-    public String about() {
+    public String about(Model model) {
+        model.addAttribute("kakaoMapApiKey", kakaoMapApiKey);
         return "about";
     }
 
