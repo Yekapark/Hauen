@@ -771,8 +771,21 @@ footer {
 
 .footer-contact-list { display: flex; flex-direction: column; gap: 14px; }
 .footer-contact-item { display: flex; gap: 10px; align-items: center; }
-.footer-contact-item span:first-child { font-size: 14px; color: var(--accent); }
-.footer-contact-item span:last-child  { font-size: 13px; color: var(--text-mid); }
+.footer-contact-item span:first-child { font-size: 14px; }
+.footer-contact-item span:last-child  { font-size: 13px; }
+.footer-store-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    /*color: var(--accent);*/
+    margin-right: 6px;
+}
+.footer-addr-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin: 8px 0;
+}
 
 .footer-bottom {
     border-top: 1px solid var(--border);
