@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContactService {
 
-    private static final int IP_LIMIT        = 3;   // 1시간 내 IP당 최대 요청 수
+    private static final int IP_LIMIT        = 5;   // 1시간 내 IP당 최대 요청 수
     private static final int PHONE_LIMIT      = 2;   // 24시간 내 전화번호당 최대 요청 수
 
     private final ContactRequestRepository contactRepo;
