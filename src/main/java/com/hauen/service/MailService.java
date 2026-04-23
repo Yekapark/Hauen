@@ -27,7 +27,7 @@ public class MailService {
      */
     public void send(ContactRequest req) {
         if (fromEmail.isBlank() || toEmail.isBlank()) {
-            log.warn("[메일 미설정] 이메일 알림 미발송 - 신청자: {} / {}", req.getName(), req.getPhone());
+            log.info("[메일 미설정] 이메일 알림 미발송 - 신청자: {} / {}", req.getName(), req.getPhone());
             return;
         }
 
