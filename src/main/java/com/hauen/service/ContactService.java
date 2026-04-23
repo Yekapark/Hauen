@@ -20,7 +20,7 @@ public class ContactService {
 
     private final ContactRequestRepository contactRepo;
     private final BlockedPhoneRepository   blockedPhoneRepo;
-    private final BizppurioService         bizppurioService;
+    private final MailService              mailService;
 
     @Transactional
     public void submit(ContactRequest req, String clientIp) {
@@ -46,8 +46,8 @@ public class ContactService {
         req.setClientIp(clientIp);
         contactRepo.save(req);
 
-        // 5. 알림톡 발송 (실패해도 저장은 유지)
-        bizppurioService.send(req);
+        // 5. 이메일 발송 (실패해도 저장은 유지)
+        mailService.send(req);
     }
 
     // ── 관리자 기능 ──────────────────────────────────────────────────────────
