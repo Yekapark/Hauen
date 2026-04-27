@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>개인정보처리방침 | HAUEN 인테리어</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        .privacy-wrap {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px 100px;
+            color: #3a3028;
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.9;
+        }
+        .privacy-wrap h1 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: clamp(24px, 4vw, 36px);
+            font-weight: 700;
+            color: #2a2018;
+            margin-bottom: 8px;
+        }
+        .privacy-effective {
+            font-size: 14px;
+            color: #9a8e82;
+            margin-bottom: 48px;
+        }
+        .privacy-wrap h2 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2a2018;
+            margin: 40px 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e8e0d8;
+        }
+        .privacy-wrap p {
+            font-size: 15px;
+            color: #5a5048;
+            margin-bottom: 12px;
+        }
+        .privacy-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 12px 0 20px;
+        }
+        .privacy-wrap th {
+            background: #f5f0ea;
+            color: #2a2018;
+            font-weight: 600;
+            padding: 10px 14px;
+            border: 1px solid #ddd6ce;
+            text-align: left;
+        }
+        .privacy-wrap td {
+            padding: 10px 14px;
+            border: 1px solid #ddd6ce;
+            color: #5a5048;
+            vertical-align: top;
+        }
+        .privacy-wrap ul {
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+        .privacy-wrap li {
+            font-size: 15px;
+            color: #5a5048;
+            margin-bottom: 6px;
+        }
+        .privacy-contact-box {
+            background: #f9f5f0;
+            border: 1px solid #e8e0d8;
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-top: 12px;
+        }
+        .privacy-contact-box p {
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav th:replace="~{fragments/layout :: navbar('hero-mode', '')}"></nav>
+
+<!-- 모바일 메뉴 -->
+<div th:replace="~{fragments/layout :: mobile-menu}"></div>
+
+<!-- 페이지 헤더 -->
+<section class="page-header">
+    <div class="page-header-bg"></div>
+    <div class="page-header-overlay"></div>
+    <div class="page-header-content">
+        <div class="section-label" style="color:#8FB080;">PRIVACY</div>
+        <h1 class="page-header-title">개인정보처리방침</h1>
+        <p class="page-header-sub">고객의 개인정보를 소중하게 보호합니다</p>
+    </div>
+</section>
+
+<div class="privacy-wrap">
+    <h1>개인정보처리방침</h1>
+    <p class="privacy-effective">시행일: 2026년 4월 23일 &nbsp;|&nbsp; 최종 개정일: 2026년 4월 23일</p>
+
+    <p>하우엔 인테리어(이하 "회사")는 고객의 개인정보를 중요시하며, 「개인정보 보호법」 및 관련 법령을 준수합니다. 본 방침은 회사가 운영하는 웹사이트(이하 "사이트")를 통해 수집·이용·보관·파기하는 개인정보에 관한 사항을 안내합니다.</p>
+
+    <h2>제1조 수집하는 개인정보 항목 및 수집 방법</h2>
+    <p>회사는 무료 상담 신청 서비스 제공을 위해 아래 항목을 수집합니다.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>구분</th>
+                <th>수집 항목</th>
+                <th>수집 방법</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>필수</td>
+                <td>성함, 연락처, 현장 주소</td>
+                <td>상담 신청 폼 직접 입력</td>
+            </tr>
+            <tr>
+                <td>선택</td>
+                <td>건물 유형, 면적(평수), 중문·확장·욕실·싱크대·붙박이 여부, 예산, 공사 시작 희망일, 입주 예정일, 요청 사항</td>
+                <td>상담 신청 폼 직접 입력</td>
+            </tr>
+            <tr>
+                <td>자동 수집</td>
+                <td>접속 IP 주소</td>
+                <td>서비스 이용 과정에서 자동 생성·수집 (어뷰징 방지 목적)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>제2조 개인정보의 수집 및 이용 목적</h2>
+    <p>회사는 수집한 개인정보를 다음 목적에만 사용합니다.</p>
+    <ul>
+        <li>인테리어 무료 상담 신청 접수 및 담당자 연락</li>
+        <li>견적·시공 관련 안내 및 상담 진행</li>
+        <li>중복 신청 방지 및 어뷰징 차단</li>
+    </ul>
+
+    <h2>제3조 개인정보의 보유 및 이용 기간</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>항목</th>
+                <th>보유 기간</th>
+                <th>근거</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>상담 신청 정보 (성함·연락처·주소 등)</td>
+                <td>상담 완료 후 <strong>1년</strong></td>
+                <td>서비스 제공 목적 달성 시까지</td>
+            </tr>
+            <tr>
+                <td>접속 IP 주소</td>
+                <td>수집일로부터 <strong>90일</strong></td>
+                <td>어뷰징 방지</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>보유 기간이 경과하거나 처리 목적이 달성된 경우 해당 개인정보는 지체 없이 파기합니다.</p>
+
+    <h2>제4조 개인정보의 제3자 제공</h2>
+    <p>회사는 원칙적으로 수집한 개인정보를 제3자에게 제공하지 않습니다. 다만, 아래의 경우에는 예외로 합니다.</p>
+    <ul>
+        <li>정보주체의 동의를 받은 경우</li>
+        <li>법령의 규정에 의거하거나 수사 목적으로 법령에 정해진 절차와 방법에 따라 수사기관의 요구가 있는 경우</li>
+    </ul>
+
+    <h2>제5조 개인정보 처리의 위탁</h2>
+    <p>회사는 현재 개인정보 처리 업무를 외부에 위탁하고 있지 않습니다. 향후 위탁 계약 체결 시 본 방침을 통해 사전에 공지합니다.</p>
+
+    <h2>제6조 개인정보의 파기 절차 및 방법</h2>
+    <p>회사는 보유 기간 경과 또는 처리 목적 달성 시 개인정보를 파기합니다.</p>
+    <ul>
+        <li><strong>전자적 파일</strong>: 복구 불가능한 방법으로 영구 삭제</li>
+        <li><strong>종이 문서</strong>: 분쇄 또는 소각</li>
+    </ul>
+
+    <h2>제7조 정보주체의 권리·의무 및 행사 방법</h2>
+    <p>고객은 언제든지 아래 권리를 행사할 수 있습니다.</p>
+    <ul>
+        <li>본인의 개인정보 열람 요청</li>
+        <li>오류 등이 있을 경우 정정 요청</li>
+        <li>삭제 요청</li>
+        <li>처리 정지 요청</li>
+    </ul>
+    <p>권리 행사는 이메일 또는 전화로 요청하시면 지체 없이 처리합니다.</p>
+
+    <h2>제8조 개인정보의 안전성 확보 조치</h2>
+    <p>회사는 개인정보 보호를 위해 다음과 같은 조치를 취하고 있습니다.</p>
+    <ul>
+        <li>데이터베이스 접근 권한 최소화 및 비밀번호 관리</li>
+        <li>HTTPS(SSL/TLS)를 통한 전송 구간 암호화</li>
+        <li>IP 기반 어뷰징 방지 시스템 운영</li>
+    </ul>
+
+    <h2>제9조 쿠키(Cookie) 사용 여부</h2>
+    <p>본 사이트는 별도의 쿠키를 사용하지 않습니다.</p>
+
+    <h2>제10조 개인정보 보호책임자</h2>
+    <div class="privacy-contact-box">
+        <p><strong>업체명</strong>: 하우엔 인테리어</p>
+        <p><strong>담당자</strong>: 김다은</p>
+        <p><strong>연락처</strong>: 010-3377-0412</p>
+        <p><strong>이메일</strong>: hauen.interior@gmail.com</p>
+        <p><strong>주소</strong>: 인천시 연수구 신송로 122 송도프라자 204호</p>
+    </div>
+    <p style="margin-top:16px;">개인정보 침해에 관한 신고·상담은 아래 기관에 문의하실 수 있습니다.</p>
+    <ul>
+        <li>개인정보보호위원회 &nbsp;: <a href="https://www.privacy.go.kr" target="_blank" style="color:#8FB080;">www.privacy.go.kr</a> &nbsp;/ 국번 없이 182</li>
+        <li>대검찰청 사이버수사과 : <a href="https://www.spo.go.kr" target="_blank" style="color:#8FB080;">www.spo.go.kr</a> &nbsp;/ 국번 없이 1301</li>
+        <li>경찰청 사이버안전국 &nbsp;: <a href="https://ecrm.cyber.go.kr" target="_blank" style="color:#8FB080;">ecrm.cyber.go.kr</a> / 국번 없이 182</li>
+    </ul>
+
+    <h2>제11조 개인정보처리방침의 변경</h2>
+    <p>본 방침은 법령·정책 변경 또는 서비스 변경에 따라 개정될 수 있으며, 변경 시 사이트 내 공지사항을 통해 사전에 안내합니다.</p>
+</div>
+
+<!-- FOOTER -->
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<!-- 플로팅 버튼 -->
+<div th:replace="~{fragments/layout :: floating-buttons}"></div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

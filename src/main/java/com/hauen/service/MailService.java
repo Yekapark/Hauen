@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -22,9 +23,10 @@ public class MailService {
     private String toEmail;
 
     /**
-     * 상담 신청 정보를 이메일로 발송
+     * 상담 신청 정보를 이메일로 발송 (비동기 — HTTP 응답을 블로킹하지 않음)
      * 설정이 없으면 로그만 출력하고 통과 (신청 저장을 막지 않음)
      */
+    @Async
     public void send(ContactRequest req) {
         if (fromEmail.isBlank() || toEmail.isBlank()) {
             log.info("[메일 미설정] 이메일 알림 미발송 - 신청자: {} / {}", req.getName(), req.getPhone());

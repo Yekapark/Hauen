@@ -116,6 +116,29 @@ function initPortfolioFilter() {
 }
 
 /* ─────────────────────────────────────────
+   4-0. 연락처 자동 하이픈
+───────────────────────────────────────── */
+function initPhoneFormat() {
+    const input = document.getElementById('phone');
+    if (!input) return;
+
+    input.addEventListener('input', () => {
+        const digits = input.value.replace(/\D/g, '').slice(0, 11);
+        let formatted = digits;
+
+        if (digits.length <= 3) {
+            formatted = digits;
+        } else if (digits.length <= 7) {
+            formatted = digits.slice(0, 3) + '-' + digits.slice(3);
+        } else {
+            formatted = digits.slice(0, 3) + '-' + digits.slice(3, 7) + '-' + digits.slice(7);
+        }
+
+        input.value = formatted;
+    });
+}
+
+/* ─────────────────────────────────────────
    4. 상담 폼 글자 수 카운터
 ───────────────────────────────────────── */
 function initCharCounter() {
@@ -230,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavbar();
     initScrollReveal();
     initPortfolioFilter();
+    initPhoneFormat();
     initCharCounter();
     initHamburger();
 });
