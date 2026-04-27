@@ -1,49 +1,63 @@
 package com.hauen.service;
 
 import com.hauen.domain.ContactRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class MailService {
 
-    private final JavaMailSender mailSender;
+    @Value("${resend.api-key:}")
+    private String apiKey;
 
-    @Value("${spring.mail.username:}")
-    private String fromEmail;
+    @Value("${resend.from:}")
+    private String fromAddress;
 
     @Value("${notification.email:}")
     private String toEmail;
 
+    private final RestClient restClient = RestClient.builder()
+            .baseUrl("https://api.resend.com")
+            .build();
+
     /**
-     * 상담 신청 정보를 이메일로 발송 (비동기 — HTTP 응답을 블로킹하지 않음)
+     * Resend HTTP API로 이메일 발송 (비동기 — HTTP 응답을 블로킹하지 않음)
      * 설정이 없으면 로그만 출력하고 통과 (신청 저장을 막지 않음)
      */
     @Async
     public void send(ContactRequest req) {
-        if (fromEmail.isBlank() || toEmail.isBlank()) {
-            log.info("[메일 미설정] 이메일 알림 미발송 - 신청자: {} / {}", req.getName(), req.getPhone());
+        if (apiKey.isBlank() || toEmail.isBlank()) {
+            log.info("[Resend 미설정] 이메일 알림 미발송 - 신청자: {} / {}", req.getName(), req.getPhone());
             return;
         }
 
         try {
-            SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setFrom(fromEmail);
-            msg.setTo(toEmail);
-            msg.setSubject("[하우엔] 상담 신청 - " + req.getName());
-            msg.setText(buildBody(req));
-            mailSender.send(msg);
-            log.info("[메일] 상담 신청 이메일 발송 성공 - {}", req.getPhone());
+            Map<String, Object> body = Map.of(
+                    "from",    fromAddress.isBlank() ? "onboarding@resend.dev" : fromAddress,
+                    "to",      List.of(toEmail),
+                    "subject", "[하우엔] 상담 신청 - " + req.getName(),
+                    "text",    buildBody(req)
+            );
+
+            restClient.post()
+                    .uri("/emails")
+                    .header("Authorization", "Bearer " + apiKey)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(body)
+                    .retrieve()
+                    .toBodilessEntity();
+
+            log.info("[Resend] 이메일 발송 성공 - {}", req.getPhone());
         } catch (Exception e) {
-            // 이메일 실패해도 신청 저장은 유지
-            log.error("[메일] 이메일 발송 실패 - {}: {}", req.getPhone(), e.getMessage());
+            log.error("[Resend] 이메일 발송 실패 - {}: {}", req.getPhone(), e.getMessage());
         }
     }
 
