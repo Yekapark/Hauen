@@ -168,6 +168,14 @@ async function handleSubmit(btn) {
         return;
     }
 
+    // 연락처 유효성 검사 (010-XXXX-XXXX 형식)
+    const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
+    if (!phoneRegex.test(val('phone'))) {
+        alert('연락처를 올바르게 입력해 주세요.');
+        document.getElementById('phone').focus();
+        return;
+    }
+
     btn.disabled = true;
     btn.textContent = '전송 중...';
 

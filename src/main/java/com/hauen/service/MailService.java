@@ -43,7 +43,7 @@ public class MailService {
             Map<String, Object> body = Map.of(
                     "from",    fromAddress.isBlank() ? "onboarding@resend.dev" : fromAddress,
                     "to",      List.of(toEmail),
-                    "subject", "[하우엔] 상담 신청 - " + req.getName(),
+                    "subject", "[HAUEN] 상담 신청 - " + req.getArea() + " " + req.getBuildingType() + " " + req.getName(),
                     "text",    buildBody(req)
             );
 
