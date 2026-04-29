@@ -62,11 +62,15 @@ public class MailService {
     }
 
     private String buildBody(ContactRequest req) {
+        String refLine = (req.getRefPortfolioUrl() != null && !req.getRefPortfolioUrl().isBlank())
+                ? "\n▶ 참고 포트폴리오 : " + req.getRefPortfolioUrl() + "\n"
+                : "";
+
         return String.format("""
                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                 📋 하우엔 인테리어 상담 신청
                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+                %s
                 ▶ 성함       : %s
                 ▶ 연락처     : %s
                 ▶ 현장주소   : %s
@@ -80,6 +84,7 @@ public class MailService {
 
                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                 """,
+                refLine,
                 req.getName(),
                 req.getPhone(),
                 req.getLocation(),

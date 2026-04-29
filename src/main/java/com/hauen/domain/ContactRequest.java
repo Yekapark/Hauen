@@ -42,6 +42,9 @@ public class ContactRequest {
     @Column(length = 1000)
     private String message;
 
+    /** 포트폴리오 상담신청 버튼에서 유입 시 해당 포트폴리오 URL */
+    private String refPortfolioUrl;
+
     @Column(name = "client_ip")
     private String clientIp;
 

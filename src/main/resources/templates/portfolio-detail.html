@@ -266,7 +266,8 @@
                     위 프로젝트와 유사한 인테리어를 원하시나요?<br/>
                     간편 상담 신청을 통해 HAUEN과 함께 인테리어의 모든 순간을 함께 하시기 바랍니다.
                 </p>
-                <a th:href="@{/contact}" class="detail-cta">이 프로젝트로 상담신청 →</a>
+                <a th:href="@{/contact(refId=${portfolio.id}, refTitle=${portfolio.title}, refArea=${portfolio.areaPyeong})}"
+                   class="detail-cta">이 프로젝트로 상담신청 →</a>
             </div>
 
             <!-- 우측: 스펙 테이블 -->

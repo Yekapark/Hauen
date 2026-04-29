@@ -194,6 +194,11 @@ async function handleSubmit(btn) {
         startDate:    val('startDate'),
         moveInDate:   val('moveInDate'),
         message:      val('msgArea'),
+        refPortfolioUrl: (() => {
+            const p = new URLSearchParams(window.location.search);
+            const refId = p.get('refId');
+            return refId ? `${window.location.origin}/portfolio/${refId}` : '';
+        })(),
     };
 
     try {
@@ -255,6 +260,24 @@ function initHamburger() {
 }
 
 /* ─────────────────────────────────────────
+   7. 포트폴리오 참고 사례 표시
+───────────────────────────────────────── */
+function initRefNote() {
+    const refNote = document.getElementById('refNote');
+    if (!refNote) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const refId    = params.get('refId');
+    const refTitle = params.get('refTitle');
+    const refArea  = params.get('refArea');
+
+    if (refId && refTitle) {
+        refNote.textContent = `참고 시공사례 - ${refTitle} ${refArea ? refArea + '평형' : ''}`.trim();
+        refNote.style.display = 'block';
+    }
+}
+
+/* ─────────────────────────────────────────
    초기화 진입점
 ───────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -264,4 +287,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initPhoneFormat();
     initCharCounter();
     initHamburger();
+    initRefNote();
 });
