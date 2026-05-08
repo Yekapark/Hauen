@@ -322,8 +322,8 @@
     // 좌/우 화살표 이벤트 - 순환 슬라이드이므로 disabled 처리 없음
     cardPrev.classList.remove('disabled');
     cardNext.classList.remove('disabled');
-    cardPrev.addEventListener('click', () => spin(-1));   // 왼쪽 버튼 → 카드 왼쪽으로 한 칸
-    cardNext.addEventListener('click', () => spin(+1));   // 오른쪽 버튼 → 카드 오른쪽으로 한 칸
+    cardPrev.addEventListener('click', () => spin(+1));   // 왼쪽 버튼 → 카드 오른쪽으로 한 칸
+    cardNext.addEventListener('click', () => spin(-1));   // 오른쪽 버튼 → 카드 왼쪽으로 한 칸
 
     /* 포트폴리오 데이터 로드 → 최신 5개만 추출해서 캐러셀 구성 */
     async function loadAll() {
