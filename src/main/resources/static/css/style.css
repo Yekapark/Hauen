@@ -323,15 +323,17 @@ section { padding: 100px 0; }
 }
 .about-nums {
     display: flex;
-    gap: 40px;
+    gap: 24px;
     margin: 36px 0;
+    flex-wrap: nowrap;
 }
 .about-num-val {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 36px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16px;
     font-weight: 600;
     color: var(--text-dark);
     line-height: 1;
+    white-space: nowrap;
 }
 .about-num-label {
     font-size: 12px;
