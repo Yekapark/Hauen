@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,7 +51,8 @@ public class MainController {
             @RequestParam(defaultValue = "all") String filter,
             @RequestParam(defaultValue = "0") int page) {
 
-        Page<Portfolio> result = portfolioService.findByFilter(filter, PageRequest.of(page, SIZE));
+        Page<Portfolio> result = portfolioService.findByFilter(filter,
+                PageRequest.of(page, SIZE, Sort.by(Sort.Direction.DESC, "id")));
 
         var items = result.getContent().stream().map(p -> java.util.Map.of(
                 "id", p.getId(),
