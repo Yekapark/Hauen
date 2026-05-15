@@ -83,10 +83,34 @@ public class R2Service {
         keys.forEach(this::delete);
     }
 
+    // 최대 해상도 (한 변 기준)
+    private static final int MAX_DIMENSION = 2000;
+
+    // 이미지가 MAX_DIMENSION 초과 시 비율 유지하며 축소
+    private BufferedImage resizeIfNeeded(BufferedImage img) {
+        int w = img.getWidth();
+        int h = img.getHeight();
+        if (w <= MAX_DIMENSION && h <= MAX_DIMENSION) return img;
+
+        double scale = (double) MAX_DIMENSION / Math.max(w, h);
+        int newW = (int) (w * scale);
+        int newH = (int) (h * scale);
+
+        BufferedImage resized = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = resized.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g.drawImage(img, 0, 0, newW, newH, null);
+        g.dispose();
+        img.flush(); // 원본 메모리 즉시 해제
+        return resized;
+    }
+
     // ── EXIF orientation 보정 후 워터마크 합성 ──
     private byte[] applyWatermark(byte[] originalBytes, String ext) throws IOException {
         BufferedImage original = readWithOrientation(originalBytes);
         if (original == null) return originalBytes;
+        original = resizeIfNeeded(original); // ← 리사이즈 먼저
 
         BufferedImage wm = getWatermark();
         if (wm == null) return encodeImage(original, ext);
@@ -122,6 +146,7 @@ public class R2Service {
     private byte[] correctOrientation(byte[] originalBytes, String ext) throws IOException {
         BufferedImage image = readWithOrientation(originalBytes);
         if (image == null) return originalBytes;
+        image = resizeIfNeeded(image); // ← 리사이즈 먼저
         return encodeImage(image, ext);
     }
 
@@ -184,9 +209,11 @@ public class R2Service {
             Graphics2D g = output.createGraphics();
             g.drawImage(image, 0, 0, Color.WHITE, null);
             g.dispose();
+            image.flush(); // 변환 후 원본 ARGB 버퍼 해제
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(output, format, baos);
+        output.flush();
         return baos.toByteArray();
     }
 
