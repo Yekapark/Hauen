@@ -36,6 +36,7 @@ public class EditController {
             @RequestParam(value = "kitchen",   required = false) List<MultipartFile> kitchen,
             @RequestParam(value = "room",      required = false) List<MultipartFile> room,
             @RequestParam(value = "bathroom",  required = false) List<MultipartFile> bathroom,
+            @RequestParam(value = "balcony",   required = false) List<MultipartFile> balcony,
             @RequestParam(value = "deleteImageIds", required = false) List<Integer> deleteImageIds
     ) throws Exception {
 
@@ -46,7 +47,8 @@ public class EditController {
                 "living",    orEmpty(living),
                 "kitchen",   orEmpty(kitchen),
                 "room",      orEmpty(room),
-                "bathroom",  orEmpty(bathroom)
+                "bathroom",  orEmpty(bathroom),
+                "balcony",   orEmpty(balcony)
         );
 
         portFolioService.update(pk, form, categoryFiles, deleteImageIds);

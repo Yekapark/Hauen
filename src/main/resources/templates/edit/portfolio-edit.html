@@ -339,6 +339,27 @@
 
             <hr class="divider" />
 
+            <!-- ── 발코니 ── -->
+            <div class="category-section-title">발코니 <span class="badge">선택</span></div>
+            <div th:with="imgs=${portfolio.getImagesByCategory('balcony')}">
+                <div class="existing-grid" th:if="${!imgs.isEmpty()}">
+                    <div th:each="img, stat : ${imgs}" class="existing-item" th:id="'img-' + ${img.id}" th:onclick="'toggleDelete(' + ${img.id} + ')'">
+                        <img th:src="${img.imageUrl}" th:alt="'발코니 ' + ${stat.index+1}" />
+                        <div class="cat-badge" th:id="'badge-' + ${img.id}" th:text="${stat.index+1}"></div>
+                        <button type="button" class="delete-x">✕</button>
+                    </div>
+                </div>
+                <p class="no-image-msg" th:if="${imgs.isEmpty()}">등록된 이미지가 없습니다.</p>
+            </div>
+            <div class="dropzone" id="dz-balcony">
+                <input type="file" name="balcony" id="input-balcony" accept="image/*" multiple />
+                <div class="dropzone-text"><strong>클릭</strong>하거나 이미지를 끌어다 놓으세요</div>
+            </div>
+            <div class="preview-grid" id="preview-balcony"></div>
+            <div class="preview-count" id="count-balcony"></div>
+
+            <hr class="divider" />
+
             <button type="submit" class="btn-submit">수정 저장</button>
         </form>
 
@@ -396,7 +417,7 @@
     }
 
     // ── 카테고리별 드롭존 ──
-    const categories = ['before', 'entrance', 'living', 'kitchen', 'room', 'bathroom'];
+    const categories = ['before', 'entrance', 'living', 'kitchen', 'room', 'bathroom', 'balcony'];
     const fileStore = {};
     categories.forEach(cat => fileStore[cat] = []);
 

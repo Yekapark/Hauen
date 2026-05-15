@@ -311,7 +311,8 @@
                     + portfolio.getImagesByCategory('living').size()
                     + portfolio.getImagesByCategory('kitchen').size()
                     + portfolio.getImagesByCategory('room').size()
-                    + portfolio.getImagesByCategory('bathroom').size()} + ')'"></span>
+                    + portfolio.getImagesByCategory('bathroom').size()
+                    + portfolio.getImagesByCategory('balcony').size()} + ')'"></span>
             </button>
             <button class="cat-btn" data-cat="before"
                     th:if="${!portfolio.getImagesByCategory('before').isEmpty()}">
@@ -343,6 +344,11 @@
                 욕실
                 <span class="cat-count" th:text="'(' + ${portfolio.getImagesByCategory('bathroom').size()} + ')'"></span>
             </button>
+            <button class="cat-btn" data-cat="balcony"
+                    th:if="${!portfolio.getImagesByCategory('balcony').isEmpty()}">
+                발코니
+                <span class="cat-count" th:text="'(' + ${portfolio.getImagesByCategory('balcony').size()} + ')'"></span>
+            </button>
         </div>
 
         <!-- 카테고리별 이미지 그룹 (thumbnail 제외) -->
@@ -364,7 +370,8 @@
                                           (${group == 'entrance'} ? '현관' :
                                           (${group == 'living'} ? '거실' :
                                           (${group == 'kitchen'} ? '주방' :
-                                          (${group == 'room'} ? '방' : '욕실'))))">
+                                          (${group == 'room'} ? '방' :
+                                          (${group == 'bathroom'} ? '욕실' : '발코니')))))">
                             </span>
                             <span class="gcount" th:text="${imgs.size()} + '장'"></span>
                         </div>
@@ -381,7 +388,8 @@
                                                (${group == 'entrance'} ? '현관' :
                                                (${group == 'living'} ? '거실' :
                                                (${group == 'kitchen'} ? '주방' :
-                                               (${group == 'room'} ? '방' : '욕실'))))">
+                                               (${group == 'room'} ? '방' :
+                                               (${group == 'bathroom'} ? '욕실' : '발코니')))))">
                                 </span>
                             </div>
                         </div>
