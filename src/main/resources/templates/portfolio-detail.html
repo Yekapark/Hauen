@@ -124,21 +124,22 @@
 
         /* 이미지 그리드 */
         .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            display: flex;
+            flex-wrap: wrap;
             gap: 12px;
+            align-items: flex-start;
         }
         .gallery-item {
             height: 260px;
+            flex: 1 0 auto;
             border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
             position: relative;
         }
         .gallery-item img {
-            width: 100%;
             height: 100%;
-            object-fit: cover;
+            width: auto;
             display: block;
             transition: transform 0.4s ease;
         }
@@ -230,15 +231,15 @@
 
         @media (max-width: 900px) {
             .detail-header-inner { grid-template-columns: 1fr; gap: 40px; }
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-item { height: 200px; }
         }
         @media (max-width: 600px) {
             .detail-header { padding: 100px 0 40px; }
             .spec-row { grid-template-columns: 1fr; }
             .spec-cell:first-child { border-right: none; padding-right: 0; border-bottom: 1px solid var(--border); }
             .spec-cell:last-child { padding-left: 0; }
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-            .gallery-item { height: 180px; }
+            .gallery-grid { gap: 8px; }
+            .gallery-item { height: 160px; }
             .lightbox-prev { left: 8px; }
             .lightbox-next { right: 8px; }
         }
