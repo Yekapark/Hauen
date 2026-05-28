@@ -379,18 +379,18 @@ section { padding: 100px 0; }
             linear-gradient(to bottom right, rgba(255,220,150,0.08) 0%, transparent 50%),
             radial-gradient(ellipse at 30% 70%, rgba(180,130,60,0.2) 0%, transparent 60%);
 }
-.about-img-main::after {
-    content: 'AWARD WINNING';
-    position: absolute;
-    top: 20px; left: 20px;
-    background: rgba(0,0,0,0.5);
-    color: #fff;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    padding: 6px 12px;
-    border-radius: 100px;
-}
+/*.about-img-main::after {*/
+/*    content: 'AWARD WINNING';*/
+/*    position: absolute;*/
+/*    top: 20px; left: 20px;*/
+/*    background: rgba(0,0,0,0.5);*/
+/*    color: #fff;*/
+/*    font-size: 10px;*/
+/*    font-weight: 600;*/
+/*    letter-spacing: 2px;*/
+/*    padding: 6px 12px;*/
+/*    border-radius: 100px;*/
+/*}*/
 .about-award-badge {
     position: absolute;
     bottom: 20px; left: 20px; right: 20px;

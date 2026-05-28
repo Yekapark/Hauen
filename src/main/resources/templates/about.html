@@ -149,11 +149,17 @@
                 <a th:href="@{/contact}" class="btn-primary">상담 문의하기 &nbsp;→</a>
             </div>
             <div class="about-image-wrap reveal reveal-delay-2">
-                <div class="about-img-main" style="min-height:460px;"></div>
-                <div class="about-award-badge">
-                    <h4>2024 인테리어 대상 수상</h4>
-                    <p>한국 인테리어 디자인 협회 선정</p>
+                <div class="about-img-main" style="min-height:460px;">
+                    <picture>
+                        <source media="(max-width: 768px)" th:srcset="@{/images/main_img_mobile.png}" />
+                        <img th:src="@{/images/main_img.jpg}" alt="하우엔 인테리어"
+                             style="width:100%;height:100%;object-fit:cover;display:block;" />
+                    </picture>
                 </div>
+<!--                <div class="about-award-badge">-->
+<!--                    <h4>2024 인테리어 대상 수상</h4>-->
+<!--                    <p>한국 인테리어 디자인 협회 선정</p>-->
+<!--                </div>-->
             </div>
         </div>
 
