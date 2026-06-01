@@ -73,7 +73,11 @@
             position:relative; aspect-ratio:1;
             border-radius:8px; overflow:hidden;
             border:1px solid #e0d8cc;
+            cursor: grab;
+            touch-action: none;
         }
+        .preview-item.sortable-drag { opacity: 0.4; }
+        .preview-item.sortable-ghost { opacity: 0.4; }
         .preview-item img { width:100%; height:100%; object-fit:cover; }
         .preview-item .remove-btn {
             position:absolute; top:3px; right:3px;
@@ -253,6 +257,7 @@
         <a th:href="@{/portfolio}" class="btn-cancel">← 목록으로 돌아가기</a>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
 <script>
     const fileStore = { before: [], entrance: [], living: [], kitchen: [], room: [], bathroom: [], balcony: [] };
@@ -309,15 +314,29 @@
         fileStore[cat].forEach((file, i) => {
             const item = document.createElement('div');
             item.className = 'preview-item';
+            item.dataset.index = i;
             const img = document.createElement('img');
             img.src = URL.createObjectURL(file);
             const btn = document.createElement('button');
             btn.className = 'remove-btn'; btn.type = 'button'; btn.textContent = '✕';
-            btn.onclick = () => removeFile(cat, i);
+            btn.onclick = (e) => { e.stopPropagation(); removeFile(cat, parseInt(item.dataset.index)); };
             item.appendChild(img); item.appendChild(btn);
             grid.appendChild(item);
         });
         count.textContent = fileStore[cat].length > 0 ? `${fileStore[cat].length}장 선택됨` : '';
+
+        // Sortable 초기화
+        if (grid._sortable) grid._sortable.destroy();
+        grid._sortable = Sortable.create(grid, {
+            animation: 150,
+            delay: 200,
+            delayOnTouchOnly: true,
+            onEnd: () => {
+                const newOrder = Array.from(grid.children).map(el => parseInt(el.dataset.index));
+                fileStore[cat] = newOrder.map(i => fileStore[cat][i]);
+                renderPreviews(cat);
+            }
+        });
     }
 
     // ── 폼 제출 ──

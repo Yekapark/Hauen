@@ -67,7 +67,8 @@ public class PortFolioService {
 
     // 수정 (기존 정보 업데이트 + 새 이미지 추가)
     @Transactional
-    public void update(int id, Portfolio form, Map<String, List<MultipartFile>> categoryFiles, List<Integer> deleteImageIds) throws IOException {
+    public void update(int id, Portfolio form, Map<String, List<MultipartFile>> categoryFiles,
+                       List<Integer> deleteImageIds, List<Integer> imageOrderIds) throws IOException {
         Portfolio portfolio = findById(id);
 
         portfolio.setTitle(form.getTitle());
@@ -83,6 +84,18 @@ public class PortFolioService {
             toDelete.forEach(img -> r2Service.delete(img.getImageKey()));
             portfolio.getImages().removeAll(toDelete);
             portfolioImageRepository.deleteAllById(deleteImageIds);
+        }
+
+        // 기존 이미지 순서 업데이트 (리스트 index = 새 sortOrder)
+        if (imageOrderIds != null && !imageOrderIds.isEmpty()) {
+            Map<Integer, Integer> orderMap = new java.util.HashMap<>();
+            for (int i = 0; i < imageOrderIds.size(); i++) {
+                orderMap.put(imageOrderIds.get(i), i);
+            }
+            portfolio.getImages().forEach(img -> {
+                Integer newOrder = orderMap.get(img.getId());
+                if (newOrder != null) img.setSortOrder(newOrder);
+            });
         }
 
         if (categoryFiles != null) {

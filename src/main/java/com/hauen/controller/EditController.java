@@ -37,7 +37,8 @@ public class EditController {
             @RequestParam(value = "room",      required = false) List<MultipartFile> room,
             @RequestParam(value = "bathroom",  required = false) List<MultipartFile> bathroom,
             @RequestParam(value = "balcony",   required = false) List<MultipartFile> balcony,
-            @RequestParam(value = "deleteImageIds", required = false) List<Integer> deleteImageIds
+            @RequestParam(value = "deleteImageIds", required = false) List<Integer> deleteImageIds,
+            @RequestParam(value = "imageOrderIds", required = false) List<Integer> imageOrderIds
     ) throws Exception {
 
         Map<String, List<MultipartFile>> categoryFiles = Map.of(
@@ -51,7 +52,7 @@ public class EditController {
                 "balcony",   orEmpty(balcony)
         );
 
-        portFolioService.update(pk, form, categoryFiles, deleteImageIds);
+        portFolioService.update(pk, form, categoryFiles, deleteImageIds, imageOrderIds);
         return "redirect:/portfolio";
     }
 
