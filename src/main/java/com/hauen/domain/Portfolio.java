@@ -36,6 +36,9 @@ public class Portfolio {
     @Column(name = "construction_duration_days")
     private Integer constructionDurationDays;
 
+    @Column(name = "youtube_url")
+    private String youtubeUrl;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

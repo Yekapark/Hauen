@@ -231,9 +231,27 @@
         /* 빈 카테고리 숨김 */
         .gallery-group.hidden { display: none; }
 
+        /* 유튜브 영상 */
+        .youtube-box {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+        }
+        .youtube-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        .youtube-mobile { display: none; }
+
         @media (max-width: 900px) {
             .detail-header-inner { grid-template-columns: 1fr; gap: 40px; }
             .gallery-item { height: 160px; }
+            .youtube-mobile { display: block; margin-top: 24px; }
+            .youtube-desktop { display: none; }
         }
         @media (max-width: 600px) {
             .detail-header { padding: 100px 0 40px; }
@@ -273,31 +291,44 @@
                 </p>
                 <a th:href="@{/contact(refId=${portfolio.id}, refTitle=${portfolio.title}, refArea=${portfolio.areaPyeong})}"
                    class="detail-cta">이 프로젝트로 상담신청 →</a>
+
+                <!-- 모바일: CTA 버튼 아래 영상 -->
+                <div class="youtube-box youtube-mobile"
+                     th:if="${portfolio.youtubeUrl != null and !#strings.isEmpty(portfolio.youtubeUrl)}"
+                     th:data-youtube="${portfolio.youtubeUrl}"></div>
             </div>
 
-            <!-- 우측: 스펙 테이블 -->
-            <div class="spec-table">
-                <div class="spec-row">
-                    <div class="spec-cell">
-                        <span class="spec-label">평형</span>
-                        <span class="spec-value" th:text="${portfolio.areaPyeong} + '평형'"></span>
+            <!-- 우측: 스펙 테이블 + PC 영상 -->
+            <div>
+                <div class="spec-table">
+                    <div class="spec-row">
+                        <div class="spec-cell">
+                            <span class="spec-label">평형</span>
+                            <span class="spec-value" th:text="${portfolio.areaPyeong} + '평형'"></span>
+                        </div>
+                        <div class="spec-cell">
+                            <span class="spec-label">준공연도</span>
+                            <span class="spec-value" th:text="${portfolio.completionYear} + '년'"></span>
+                        </div>
                     </div>
-                    <div class="spec-cell">
-                        <span class="spec-label">준공연도</span>
-                        <span class="spec-value" th:text="${portfolio.completionYear} + '년'"></span>
+                    <div class="spec-row">
+                        <div class="spec-cell">
+                            <span class="spec-label">시공연월</span>
+                            <span class="spec-value" th:text="${#temporals.format(portfolio.constructionStartDate, 'yyyy-MM')}"></span>
+                        </div>
+                        <div class="spec-cell">
+                            <span class="spec-label">시공기간</span>
+                            <span class="spec-value"
+                                  th:text="${portfolio.constructionDurationDays != null} ? ${portfolio.constructionDurationDays} + '일' : '-'"></span>
+                        </div>
                     </div>
                 </div>
-                <div class="spec-row">
-                    <div class="spec-cell">
-                        <span class="spec-label">시공연월</span>
-                        <span class="spec-value" th:text="${#temporals.format(portfolio.constructionStartDate, 'yyyy-MM')}"></span>
-                    </div>
-                    <div class="spec-cell">
-                        <span class="spec-label">시공기간</span>
-                        <span class="spec-value"
-                              th:text="${portfolio.constructionDurationDays != null} ? ${portfolio.constructionDurationDays} + '일' : '-'"></span>
-                    </div>
-                </div>
+
+                <!-- PC: 스펙 테이블 아래 영상 -->
+                <div class="youtube-box youtube-desktop"
+                     style="margin-top: 24px;"
+                     th:if="${portfolio.youtubeUrl != null and !#strings.isEmpty(portfolio.youtubeUrl)}"
+                     th:data-youtube="${portfolio.youtubeUrl}"></div>
             </div>
         </div>
     </div>
@@ -484,6 +515,31 @@
         if (e.key === 'ArrowLeft')  lightboxNav(-1);
         if (e.key === 'ArrowRight') lightboxNav(1);
         if (e.key === 'Escape')     closeLightbox();
+    });
+
+    // ── YouTube 영상 삽입 ──
+    function getYouTubeId(url) {
+        if (!url) return null;
+        const patterns = [
+            /[?&]v=([^&#]+)/,
+            /youtu\.be\/([^?&#]+)/,
+            /\/embed\/([^?&#]+)/
+        ];
+        for (const p of patterns) {
+            const m = url.match(p);
+            if (m) return m[1];
+        }
+        return null;
+    }
+    document.querySelectorAll('.youtube-box[data-youtube]').forEach(box => {
+        const id = getYouTubeId(box.dataset.youtube);
+        if (id) {
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${id}`;
+            iframe.allowFullscreen = true;
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            box.appendChild(iframe);
+        }
     });
 
     // ── Justified Gallery: 이미지 자연 비율로 flex-basis 설정 ──

@@ -251,6 +251,14 @@
 
             <hr class="divider" />
 
+            <!-- 유튜브 링크 -->
+            <div class="form-group">
+                <label>유튜브 링크</label>
+                <input type="url" th:field="*{youtubeUrl}" placeholder="예) https://www.youtube.com/watch?v=..." />
+            </div>
+
+            <hr class="divider" />
+
             <button type="submit" class="btn-submit" id="submitBtn">등록하기</button>
         </form>
 
@@ -263,6 +271,41 @@
     const fileStore = { before: [], entrance: [], living: [], kitchen: [], room: [], bathroom: [], balcony: [] };
     const categories = ['before', 'entrance', 'living', 'kitchen', 'room', 'bathroom', 'balcony'];
     let thumbnailFile = null;
+    let compressingCount = 0;
+
+    // ── 업로드 전 이미지 압축 (최대 2000px / JPEG 품질 0.85) ──
+    async function compressImage(file, maxDim = 2000, quality = 0.85) {
+        if (!file.type.startsWith('image/') || file.type === 'image/gif') return file;
+        try {
+            const dataUrl = await new Promise((res, rej) => {
+                const r = new FileReader();
+                r.onload = e => res(e.target.result);
+                r.onerror = rej;
+                r.readAsDataURL(file);
+            });
+            const img = await new Promise((res, rej) => {
+                const im = new Image();
+                im.onload = () => res(im);
+                im.onerror = rej;
+                im.src = dataUrl;
+            });
+            const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+            // 이미 작고(2000px 이하) 용량도 10MB 이하면 원본 유지
+            if (scale === 1 && file.size <= 10 * 1024 * 1024) return file;
+            const w = Math.round(img.width * scale);
+            const h = Math.round(img.height * scale);
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', quality));
+            if (!blob || blob.size >= file.size) return file;
+            const name = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+            return new File([blob], name, { type: 'image/jpeg', lastModified: Date.now() });
+        } catch (e) {
+            console.warn('이미지 압축 실패, 원본 사용:', e);
+            return file;
+        }
+    }
 
     // ── 썸네일 ──
     const inputThumb = document.getElementById('input-thumbnail');
@@ -271,11 +314,13 @@
     const submitBtn = document.getElementById('submitBtn');
 
     document.getElementById('dz-thumbnail').addEventListener('click', () => inputThumb.click());
-    inputThumb.addEventListener('change', () => {
+    inputThumb.addEventListener('change', async () => {
         const file = inputThumb.files[0];
         if (!file) return;
-        thumbnailFile = file;
-        thumbImg.src = URL.createObjectURL(file);
+        compressingCount++;
+        thumbnailFile = await compressImage(file);
+        compressingCount--;
+        thumbImg.src = URL.createObjectURL(thumbnailFile);
         previewThumb.style.display = 'block';
     });
 
@@ -297,9 +342,15 @@
         input.addEventListener('change', () => { addFiles(cat, Array.from(input.files)); input.value = ''; });
     });
 
-    function addFiles(cat, files) {
-        fileStore[cat] = [...fileStore[cat], ...files.filter(f => f.type.startsWith('image/'))];
-        renderPreviews(cat);
+    async function addFiles(cat, files) {
+        const imageFiles = files.filter(f => f.type.startsWith('image/'));
+        compressingCount += imageFiles.length;
+        for (const f of imageFiles) {
+            const compressed = await compressImage(f);
+            fileStore[cat].push(compressed);
+            compressingCount--;
+            renderPreviews(cat);
+        }
     }
 
     function removeFile(cat, index) {
@@ -341,6 +392,11 @@
 
     // ── 폼 제출 ──
     document.getElementById('regForm').addEventListener('submit', function(e) {
+        if (compressingCount > 0) {
+            e.preventDefault();
+            alert('이미지 처리 중입니다. 잠시 후 다시 눌러주세요.');
+            return;
+        }
         if (!thumbnailFile) {
             e.preventDefault();
             alert('썸네일 이미지를 선택해주세요.');

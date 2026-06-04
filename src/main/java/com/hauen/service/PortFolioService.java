@@ -76,6 +76,7 @@ public class PortFolioService {
         portfolio.setConstructionStartDate(form.getConstructionStartDate());
         portfolio.setCompletionYear(form.getCompletionYear());
         portfolio.setConstructionDurationDays(form.getConstructionDurationDays());
+        portfolio.setYoutubeUrl(form.getYoutubeUrl());
 
         if (deleteImageIds != null && !deleteImageIds.isEmpty()) {
             List<PortfolioImage> toDelete = portfolio.getImages().stream()
