@@ -76,6 +76,11 @@ public class MailService {
                 ▶ 현장주소   : %s
                 ▶ 건물유형   : %s
                 ▶ 면적       : %s
+                ▶ 중문       : %s
+                ▶ 확장       : %s
+                ▶ 욕실       : %s
+                ▶ 싱크대     : %s
+                ▶ 붙박이     : %s
                 ▶ 예산       : %s
                 ▶ 공사시작   : %s
                 ▶ 입주예정   : %s
@@ -90,6 +95,11 @@ public class MailService {
                 req.getLocation(),
                 nullSafe(req.getBuildingType()),
                 nullSafe(req.getArea()),
+                nullSafe(req.getJungmun()),
+                nullSafe(req.getExpansion()),
+                nullSafe(req.getBathroom()),
+                nullSafe(req.getSink()),
+                nullSafe(req.getBuiltin()),
                 nullSafe(req.getBudget()),
                 nullSafe(req.getStartDate()),
                 nullSafe(req.getMoveInDate()),

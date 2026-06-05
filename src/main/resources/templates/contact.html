@@ -78,6 +78,24 @@
         .flatpickr-input { cursor: pointer; }
         .flatpickr-input.active { border-color: var(--accent) !important; }
 
+        /* 주소 검색 */
+        .addr-row { display: flex; gap: 8px; }
+        .addr-row #location { flex: 1; cursor: pointer; }
+        .addr-search-btn {
+            flex-shrink: 0;
+            padding: 0 18px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Noto Sans KR', sans-serif;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+        .addr-search-btn:hover { opacity: 0.88; }
     </style>
 </head>
 <body>
@@ -153,7 +171,12 @@
                 <!-- 현장주소 -->
                 <div class="form-group">
                     <label>현장주소 <span class="req">*</span></label>
-                    <input type="text" id="location" placeholder="예: 서울시 강남구 테헤란로 123" />
+                    <div class="addr-row">
+                        <input type="text" id="location" placeholder="주소 검색 버튼을 눌러주세요"
+                               readonly onclick="openAddressSearch()" />
+                        <button type="button" class="addr-search-btn" onclick="openAddressSearch()">주소 검색</button>
+                    </div>
+                    <input type="text" id="locationDetail" placeholder="상세주소 (동/호수 등)" style="margin-top:8px;" />
                 </div>
 
                 <!-- 건물유형 -->
@@ -292,6 +315,22 @@
             appendTo: document.body,
             position: "auto"
         });
+    </script>
+
+    <!-- 다음(카카오) 우편번호 서비스 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function openAddressSearch() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 도로명 주소 우선, 없으면 지번 주소
+                    const addr = data.roadAddress || data.jibunAddress;
+                    document.getElementById('location').value = addr;
+                    // 상세주소 입력으로 포커스 이동
+                    document.getElementById('locationDetail').focus();
+                }
+            }).open();
+        }
     </script>
 </body>
 </html>

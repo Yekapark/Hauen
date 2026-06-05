@@ -182,7 +182,7 @@ async function handleSubmit(btn) {
     const body = {
         name:         val('name'),
         phone:        val('phone'),
-        location:     val('location'),
+        location:     [val('location'), val('locationDetail')].filter(Boolean).join(' '),
         buildingType: val('buildingType'),
         area:         val('area'),
         jungmun:      radio('jungmun'),
