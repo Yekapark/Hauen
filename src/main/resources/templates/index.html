@@ -40,23 +40,30 @@
         }
         .notice-popup-inner {
             position: relative;
-            max-width: 90vw;
-            max-height: 85vh;
+            display: inline-block;
+        }
+        /* 좌우 흰 여백 대칭 크롭: 원본 833×986 → 좌우 90px씩 잘라 653×986 비율로 표시
+           (object-fit:cover + 중앙 정렬로 좌우만 잘리고 세로는 그대로) */
+        .notice-popup-imgwrap {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+            aspect-ratio: 653 / 986;
+            width: min(90vw, calc(85vh * 653 / 986));
         }
         .notice-popup-img {
             display: block;
-            max-width: 100%;
-            max-height: 85vh;
-            width: auto;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
-        /* '예약 문의하기' 버튼(갈색 바) 위 투명 클릭 영역 — 이미지 비율 기준 % 배치 */
+        /* '예약 문의하기' 버튼(갈색 바) 위 투명 클릭 영역 — 크롭된 표시영역(653px) 기준 % 배치 */
         .notice-popup-cta {
             position: absolute;
-            left: 11%;
-            width: 78%;
+            left: 1.5%;
+            width: 97.2%;
             top: 78.3%;
             height: 5.5%;
             display: block;
@@ -118,9 +125,12 @@
 <div id="noticePopup" class="notice-popup-overlay">
     <div class="notice-popup-inner">
         <button type="button" id="noticeClose" class="notice-popup-close" aria-label="공지 닫기">&times;</button>
-        <img th:src="@{/images/notice.png}" alt="하우엔 공지사항" class="notice-popup-img" />
-        <!-- '예약 문의하기' 버튼 영역에 투명 링크 오버레이 → 상담 페이지로 이동 -->
-        <a th:href="@{/contact}" class="notice-popup-cta" aria-label="예약 문의하기"></a>
+        <!-- 좌우 흰 여백을 CSS로 대칭 크롭하는 래퍼 -->
+        <div class="notice-popup-imgwrap">
+            <img th:src="@{/images/notice.png}" alt="하우엔 공지사항" class="notice-popup-img" />
+            <!-- '예약 문의하기' 버튼 영역에 투명 링크 오버레이 → 상담 페이지로 이동 -->
+            <a th:href="@{/contact}" class="notice-popup-cta" aria-label="예약 문의하기"></a>
+        </div>
         <button type="button" id="noticeHideToday" class="notice-popup-hidetoday">오늘 하루 보지 않기</button>
     </div>
 </div>
@@ -480,6 +490,10 @@
     (function initNoticePopup() {
         const popup = document.getElementById('noticePopup');
         if (!popup) return;
+
+        // 공지 만료: 2026년 7월 3일 자정(현지 시각) 이후에는 노출하지 않음
+        const EXPIRE = new Date(2026, 6, 3, 0, 0, 0); // month는 0-base → 6 = 7월
+        if (new Date() >= EXPIRE) return;
 
         const KEY = 'noticeHideUntil';
         const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
