@@ -4,6 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${portfolio.title} + ' | HAUEN 인테리어'">포트폴리오 상세 | HAUEN</title>
+
+    <!-- SEO / 공유 미리보기 설명 (페이지 본문 대신 이 문구가 사용됨) -->
+    <meta name="description"
+          th:content="${portfolio.areaPyeong} + '평형 · ' + ${portfolio.completionYear} + '년 준공 시공사례 | 하우엔(HAUEN) 인테리어'" />
+
+    <!-- Open Graph (카카오톡/블로그/페이스북 공유 미리보기) -->
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="HAUEN 인테리어" />
+    <meta property="og:title" th:content="${portfolio.title} + ' | HAUEN 인테리어'" />
+    <meta property="og:description"
+          th:content="${portfolio.areaPyeong} + '평형 · ' + ${portfolio.completionYear} + '년 준공 시공사례 | 하우엔(HAUEN) 인테리어'" />
+    <meta property="og:image"
+          th:content="${portfolio.thumbnailUrl != null ? portfolio.thumbnailUrl : 'https://hauen.co.kr/images/og-image.png'}" />
+    <meta property="og:url" th:content="'https://hauen.co.kr/portfolio/' + ${portfolio.id}" />
+
+    <!-- Twitter 카드 -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" th:content="${portfolio.title} + ' | HAUEN 인테리어'" />
+    <meta name="twitter:description"
+          th:content="${portfolio.areaPyeong} + '평형 · ' + ${portfolio.completionYear} + '년 준공 시공사례 | 하우엔(HAUEN) 인테리어'" />
+    <meta name="twitter:image"
+          th:content="${portfolio.thumbnailUrl != null ? portfolio.thumbnailUrl : 'https://hauen.co.kr/images/og-image.png'}" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
