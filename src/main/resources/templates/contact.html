@@ -324,7 +324,11 @@
             new daum.Postcode({
                 oncomplete: function (data) {
                     // 도로명 주소 우선, 없으면 지번 주소
-                    const addr = data.roadAddress || data.jibunAddress;
+                    let addr = data.roadAddress || data.jibunAddress;
+                    // 건물명(아파트/오피스텔 등)이 있으면 괄호로 덧붙임
+                    if (data.buildingName) {
+                        addr += ' (' + data.buildingName + ')';
+                    }
                     document.getElementById('location').value = addr;
                     // 상세주소 입력으로 포커스 이동
                     document.getElementById('locationDetail').focus();
